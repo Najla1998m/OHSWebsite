@@ -1,0 +1,35 @@
+<div class="card shadow mb-3">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Add Subscription Terms</div>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="attachmentForm" (ngSubmit)="onSubmit()" #form="ngForm">
+      <div class="row">
+        <div class="col-12">
+          <div style="height: 300px">
+            <ckeditor
+              style="height: 100%"
+              formControlName="termsContent"
+              data="<p>Description</p>"
+            ></ckeditor>
+          </div>
+          <div
+            *ngIf="TermsContent.hasError('required') && form.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            TermsContent is Required
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-success rounded-pill w-200px px-4 py-2 mx-auto my-5"
+        >
+          Add
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

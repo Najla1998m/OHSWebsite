@@ -1,0 +1,70 @@
+<div class="card">
+  <div class="card-body">
+    <div *ngIf="!listDepts.length" class="d-flex justify-content-center">
+      <img src="assets/images/noDepartment.svg" class="w-50" />
+    </div>
+    <div class="row mb-3 r-gap">
+      <div class="col-3" *ngFor="let item of listDepts">
+        <div class="card bg-gray shadow-sm rounded-16">
+          <div class="card-body">
+            <div class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-center align-content-center
+              ">
+              <div class="
+                  stauts
+                  d-flex
+                  justify-content-center
+                  align-items-center
+                  my-2
+                ">
+                <i class="far fa-building font-s-25"></i>
+              </div>
+              <div>{{ item?.name }}</div>
+              <div class="d-flex gap">
+                <span> Employees Number : </span>
+                <span>{{ item?.userDepartments.length }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-table #dt class="text-nowrap mt-4" [value]="listRequests" [rows]="10" [paginator]="true"
+      responsiveLayout="scroll" [rowHover]="true" dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Id">Order Id</th>
+          <th>Order</th>
+          <th>Date</th>
+          <th pSortableColumn="Name">Name</th>
+
+          <th pSortableColumn="Emali">Emali</th>
+
+          <th pSortableColumn="Mobile">Mobile</th>
+          <th>Company Name</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-req>
+        <tr>
+          <td>{{req?.id}}</td>
+          <td>{{req?.orderTitle}}</td>
+          <td>{{ convert(req?.orderStartDate)}}</td>
+          <td>{{ req?.owner?.username }}</td>
+          <td>{{ req?.owner?.email }}</td>
+          <td>{{ req?.owner?.phoneNumber }}</td>
+          <td>{{ req?.owner?.company?.name }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listRequests ? listRequests.length : 0 }} Requestes.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -1,0 +1,163 @@
+.logo {
+  height: 60px;
+}
+
+.scrolled {
+  background-color: #ddd;
+  box-shadow: 0 1px 1px #ddd;
+
+  width: 100%;
+  top: 0;
+}
+
+.active {
+  color: #b58d2e !important;
+}
+
+.nav-link:hover {
+  color: #b58d2e !important;
+}
+
+@media screen and (max-width: 768px) {
+  .logo {
+    height: 50px;
+  }
+
+  .nav-link {
+    width: 100%;
+  }
+
+  .nav-item {
+    text-align: center;
+    border-bottom: 1px solid #b9b9b9;
+  }
+
+  .border-bottom-0 {
+    border-bottom: 0 !important;
+  }
+
+  ul {
+    padding-inline-start: 0;
+  }
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .logo {
+    height: 40px;
+  }
+
+  .navbar-nav.gap-lg-3 {
+    grid-gap: 0.5rem !important;
+    gap: 0.5rem !important;
+  }
+}
+
+.arrow {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+::ng-deep {
+  html:lang(en) .arrow {
+    transform: scale(-1);
+  }
+
+  html:lang(ar) .dropdown-toggle::after {
+    margin-left: 0;
+    margin-right: 0.255rem;
+  }
+}
+
+.dropdown-menu[data-bs-popper] {
+  background-color: #b58d2e;
+}
+
+.dropdown-item {
+  color: white;
+  cursor: pointer;
+  font-weight: 300;
+  text-align: start;
+}
+
+.dropdown-item:hover {
+  background-color: #b58d2e;
+}
+
+.dropdown-header {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.1rem;
+}
+
+.scrolled {
+  background-color: white;
+  box-shadow: 0 1px 1px #ddd;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: transparent;
+  color: white !important;
+}
+
+.form-check-input[type="radio"] {
+  display: none;
+}
+
+.account-type {
+  background-color: #303030;
+  color: white;
+  font-family: "Droid Arabic Kufi";
+  cursor: pointer;
+}
+
+.account-icon {
+  fill: #d7be69;
+  margin: auto;
+}
+
+@media (max-width: 550px) {
+  .account-icon {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+input[type="radio"]:checked + label .account-type {
+  background-color: #d7be69;
+  .account-icon {
+    fill: white;
+  }
+}
+
+.modal .form-check {
+  padding: 0 1ex !important;
+}
+
+.modal .form-check label,
+.modal .form-check label .card {
+  height: 100%;
+}
+
+.nav {
+  z-index: 50;
+}
+
+@media (max-width: 992px) {
+  .nav-item {
+    width: 100%;
+
+    .nav-link {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+.navbar {
+  z-index: 100 !important;
+}

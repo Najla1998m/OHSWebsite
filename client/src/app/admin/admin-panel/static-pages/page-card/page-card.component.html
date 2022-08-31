@@ -1,0 +1,62 @@
+<div class="card h-100">
+  <div
+    class="
+      card-header
+      bg-success
+      text-white
+      d-flex
+      justify-content-between
+      pr-1
+    "
+  >
+    <h4 class="card-title m-0">{{ data.title }}</h4>
+    <button
+      type="button"
+      (click)="onDelete(data.id)"
+      class="btn rounded-circle text-white"
+    >
+      <i class="fas fa-trash"></i>
+    </button>
+  </div>
+  <div class="card-body position-relative pb-5">
+    <div class="row">
+      <div class="col-4">
+        <img [src]="data.image" class="img-fluid img-thumbnail rounded-3" />
+      </div>
+      <div class="col-8">
+        <p class="card-text lines-3">
+          {{ data.minDescription }}
+        </p>
+        <div class="row mb-2">
+          <div class="col d-flex align-items-center gap">
+            <i
+              class="fa"
+              aria-hidden="true"
+              [ngClass]="{
+                'fa-eye text-primary': data.isVisible,
+                'fa-eye-slash text-danger': !data.isVisible
+              }"
+            ></i>
+            <span class="m-0">
+              {{ data.isVisible ? "Visible" : "Invisible" }}
+            </span>
+          </div>
+          <div class="col d-flex align-items-center gap">
+            <i class="fas fa-sort-amount-down-alt text-warning"></i>
+            <span class="m-0">Order: {{ data.order }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end bottom">
+      <button
+        type="button"
+        class="btn btn-warning setting"
+        (click)="onEdit(data.id)"
+      >
+        <i class="fas fa-sliders-h"></i>
+      </button>
+    </div>
+  </div>
+</div>

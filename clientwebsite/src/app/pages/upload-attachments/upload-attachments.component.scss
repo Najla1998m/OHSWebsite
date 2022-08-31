@@ -1,0 +1,45 @@
+#upload-docs {
+  height: 200px;
+  background-color: #f9f9f9;
+}
+
+#upload-docs {
+  height: 125px;
+}
+
+@media screen and (max-width: 768px) {
+  #upload-docs {
+    height: fit-content;
+    padding: 1rem;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+.upload-icon {
+  width: 55px;
+  height: 55px;
+  stroke-width: 1px;
+}
+
+input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+
+@media (min-width: 768px) and (max-width: 1022px) {
+  #container {
+    padding-left: 2em !important;
+    padding-right: 2em !important;
+  }
+}
+
+.dashed-borders {
+  border: 2px dashed #bcbcbc;
+  border-radius: 16px;
+}

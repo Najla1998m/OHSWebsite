@@ -1,0 +1,314 @@
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <button
+      pButton
+      pRipple
+      label="New"
+      icon="pi pi-plus"
+      class="p-button-success p-mr-2 me-2"
+      (click)="openNew()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      [label]="'Delete'"
+      icon="pi pi-trash"
+      class="p-button-danger"
+      (click)="deleteSelectedUsers()"
+      [disabled]="!selectedUsers || !selectedUsers.length"
+    ></button>
+  </ng-template>
+
+  <!-- <ng-template pTemplate="right">
+          <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block"></p-fileUpload>
+          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+      </ng-template> -->
+</p-toolbar>
+
+<p-table
+  class="text-nowrap"
+  #dt
+  [lazy]="true"
+  (onLazyLoad)="loadUsers($event)"
+  [value]="users"
+  [rows]="pageSize"
+  [paginator]="true"
+  [totalRecords]="totalCount"
+  [globalFilterFields]="['userName', 'email']"
+  [(selection)]="selectedUsers"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+  sortMode="multiple"
+>
+  <ng-template pTemplate="caption">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      <h5 class="p-m-0">Manage Users</h5>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="filterGlobal($event, 'contains')"
+          placeholder="Search..."
+        />
+        <!-- <input pInputText type="text"  placeholder="Search..." /> -->
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th pSortableColumn="Username">
+        Name <p-sortIcon field="Username"></p-sortIcon>
+      </th>
+      <th pSortableColumn="Email">
+        Email <p-sortIcon field="Email"></p-sortIcon>
+      </th>
+      <th pSortableColumnDisabled="true">Phone Number</th>
+      <th pSortableColumn="IsActive">
+        Status <p-sortIcon field="IsActive"></p-sortIcon>
+      </th>
+      <th>IsTeamManager</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="user"></p-tableCheckbox>
+      </td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.phoneNumber }}</td>
+
+      <td>
+        <!-- <span class="p-column-title">Status</span> -->
+        <span [class]="'customer-badge status-' + user.isActive">{{
+          user.isActive
+        }}</span>
+      </td>
+      <td>
+        <div class="form-check custom-checkbox">
+          <input
+            #check
+            type="checkbox"
+            class="form-check-input"
+            name=""
+            id=""
+            [value]="user.id"
+            [checked]="user.isTeamManager"
+            (change)="isManger(user.id, check)"
+          />
+        </div>
+      </td>
+      <td>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-warning p-mr-2"
+          (click)="editUser(user)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-danger"
+          (click)="deleteUser(user)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-plus"
+          class="p-button-rounded p-button-success"
+          (click)="addDepartment(user)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      In total there are {{ totalCount }} users.
+    </div>
+  </ng-template>
+</p-table>
+<form (ngSubmit)="saveUser()" #userForm="ngForm" [formGroup]="formUserGroup">
+  <p-dialog
+    [(visible)]="productDialog"
+    [style]="{ width: '450px' }"
+    header="User Details"
+    [modal]="true"
+    styleClass="p-fluid"
+  >
+    <ng-template pTemplate="content">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          pInputText
+          id="name"
+          name="username"
+          [(ngModel)]="user.fullName"
+          #username="ngModel"
+          required
+          autofocus
+        />
+        <small
+          class="p-error"
+          *ngIf="
+            (username.errors?.required && username.touched) ||
+            (username.errors?.required && submitted)
+          "
+          >Name is required.</small
+        >
+      </div>
+
+      <div class="p-field">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          pInputText
+          id="name"
+          name="email"
+          [(ngModel)]="user.email"
+          #email="ngModel"
+          required
+          email
+          autofocus
+        />
+        <small
+          class="p-error"
+          *ngIf="
+            (email.errors?.required && email.touched) ||
+            (email.errors?.required && submitted)
+          "
+          >Email is required.</small
+        >
+        <small
+          class="p-error"
+          *ngIf="
+            (email.errors?.email && email.touched) ||
+            (email.errors?.email && submitted)
+          "
+          >Invalid email.</small
+        >
+      </div>
+      <div class="p-field">
+        <label for="phoneNumber">Phone Number</label>
+        <input
+          type="tel"
+          pInputText
+          id="name"
+          name="phoneNumber"
+          #phoneNumber="ngModel"
+          [(ngModel)]="user.phoneNumber"
+          required
+          autofocus
+        />
+        <small
+          class="p-error"
+          *ngIf="
+            (phoneNumber.errors?.required && phoneNumber.touched) ||
+            (phoneNumber.errors?.required && submitted)
+          "
+          >Phone Number is required.</small
+        >
+      </div>
+
+      <div class="p-field">
+        <label for="">Role</label>
+
+        <p-dropdown
+          [options]="roles"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="roleName"
+          placeholder="Select Role"
+        ></p-dropdown>
+      </div>
+      <div class="p-field">
+        <label for="password">Departement</label>
+
+        <p-dropdown
+          [options]="departments"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="departementId"
+          placeholder="Select Department"
+        ></p-dropdown>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
+        type="button"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-text"
+        type="submit"
+      ></button>
+    </ng-template>
+  </p-dialog>
+</form>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<p-dialog
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form
+    (ngSubmit)="addUserIndepts()"
+    #formAddUser="ngForm"
+    [formGroup]="addUserDeptForm"
+  >
+    <p-dropdown
+      header="Add User in Department"
+      [options]="departments"
+      optionLabel="name"
+      optionValue="id"
+      formControlName="departementId"
+      placeholder="Select Department"
+    ></p-dropdown>
+
+    <div class="d-flex justify-content-center my-2">
+      <button type="submit" class="btn btn-success">Add</button>
+    </div>
+  </form>
+
+  <table class="table table-bordered mt-2">
+    <thead class="thead-dark">
+      <tr>
+        <th>Id</th>
+        <th>Department</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listDepts">
+        <td>
+          {{ item?.id }}
+        </td>
+        <td>
+          {{ item?.name }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</p-dialog>

@@ -1,0 +1,36 @@
+.card {
+  height: 170px;
+  transition: all 0.25s ease-in-out;
+}
+
+.card-img-top {
+  transition: all 0.25s ease-in-out;
+}
+
+.card-body {
+  width: 100%;
+  bottom: 0;
+}
+
+.card:hover {
+  height: 180px;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .card {
+    height: 160px;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .card:hover {
+    height: 170px;
+  }
+}
+
+.w-250px {
+  width: 230px;
+}
+
+.py-2 {
+  padding: 0.8rem 0 !important;
+}

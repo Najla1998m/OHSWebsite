@@ -1,0 +1,19 @@
+.mt-6 {
+  margin-top: 86px;
+}
+
+.cont {
+  height: 100vh;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mt-6 {
+    margin-top: 66px;
+  }
+}
+
+@media (max-width: 767px) {
+  .mt-6 {
+    margin-top: 76px;
+  }
+}

@@ -1,0 +1,50 @@
+.bg {
+  background: url("../../assets/images/bgs/b3.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+form {
+  font-family: "Karla", sans-serif;
+}
+
+.fs-24 {
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+.custom-form-control {
+  margin-top: 0.5em;
+  padding: 3ex;
+  border-radius: 5rem;
+}
+
+.form-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 0;
+}
+
+.ms-1 {
+  margin-inline-start: 0.5rem;
+}
+
+.login {
+  padding: 1.5ex;
+}
+
+.h-100vh {
+  height: 100vh;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ms-sm {
+  margin: 0.2rem;
+}

@@ -1,0 +1,1118 @@
+<div class="h-100 droid-font bg-efefef">
+  <div class="py-5 bg-header">
+    <!-- ------------------------------- header -------------------------------- -->
+    <div class="container">
+      <div
+        class="flex-wrap gap-3 d-flex justify-content-lg-between align-items-center h-100"
+      >
+        <div
+          class="flex-wrap gap-3 d-flex justify-content-center justify-content-sm-start align-items-center"
+        >
+          <div
+            class="order-1 cursor-pointer order-md-0 logo-preview d-flex justify-content-center align-items-center flex-grow-1 flex-sm-grow-0"
+            (click)="navigateToDash()"
+          >
+            <img
+              [src]="userDetails?.user?.company?.logo"
+              class="img-fluid"
+              [alt]="userDetails?.user?.company?.name"
+              onerror="this.src='assets/images/dashboard/logo-placeholder.png';"
+            />
+          </div>
+
+          <div class="text-white order-0 order-md-1">
+            <div class="fs-lg-28 fs-22">
+              شركة
+              <span class="text-b58d2e">{{
+                userDetails?.user?.company?.name
+              }}</span>
+            </div>
+            <div class="mt-2 fs-18">لوحة المعلومات</div>
+          </div>
+        </div>
+
+        <div
+          class="gap-3 mt-3 justify-content-center d-flex"
+          *ngIf="isInRiskManagement"
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-3">
+    <!-- ----------------------------- header bar ------------------------------ -->
+    <div class="border-0 card rounded-8">
+      <div class="card-body p-md-2">
+        <div
+          class="flex-wrap gap-2 d-flex justify-content-center justify-content-lg-between align-items-center"
+        >
+          <div class="gap-1 d-flex align-items-center">
+            <div
+              class="avatar-circle"
+              [style.backgroundImage]="
+                'url(' +
+                userDetails?.user?.userPhoto +
+                '),url(https://image.pngaaa.com/260/1721260-middle.png' +
+                ')'
+              "
+            ></div>
+
+            <div class="fs-16">
+              مرحبا /
+              <span class="d-inline-block">{{
+                userDetails?.user?.fullName
+              }}</span>
+              <span *ngIf="role == 'Company Admin'" class="ms-3 text-b58d2e">
+                مدير شركة
+              </span>
+              <span
+                *ngIf="role == 'Company Delegated Admin'"
+                class="ms-3 text-b58d2e"
+                >نائب مدير</span
+              >
+              <span
+                *ngIf="role == 'Company Departement Manager'"
+                class="ms-3 text-b58d2e"
+              >
+                مدير إدارة
+              </span>
+              <span
+                *ngIf="role == 'Company Supervisor'"
+                class="ms-3 text-b58d2e"
+              >
+                مدير قسم
+              </span>
+            </div>
+          </div>
+
+          <div class="flex-wrap gap-2 d-flex justify-content-end">
+            <button
+              mat-icon-button
+              color="accent"
+              aria-label="Example icon-button with a heart icon"
+              id="info-btn"
+            ></button>
+            <button
+              mat-icon-button
+              color="accent"
+              id="notify-btn"
+              aria-label="Example icon-button with a heart icon"
+              (click)="op.toggle($event)"
+            >
+              <div class="notify-badge badge">
+                <span>{{ allNotifications?.unReadedCount }}</span>
+              </div>
+            </button>
+            <button
+              type="button"
+              class="gap-2 px-4 py-1 btn btn-outline-dark rounded-8 d-flex align-items-center text-wrap"
+              data-bs-toggle="modal"
+              data-bs-target="#deputyDirectorModal"
+              *ngIf="role == 'Company Admin'"
+            >
+              <svg-icon
+                src="assets/images/icons/add-contact.svg"
+                svgClass="add-icon"
+              ></svg-icon>
+              <span>تفويض مساعد</span>
+            </button>
+            <button
+              type="button"
+              class="px-3 btn btn-gold rounded-8 text-wrap"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              (click)="onUpdateFormOpen()"
+            >
+              إدارة حسابي
+            </button>
+            <button
+              type="button"
+              class="px-3 btn btn-gold rounded-8 text-wrap"
+              [routerLink]="['/company-dashboard/dashboard-operations']"
+            >
+              داشبورد العناصر
+            </button>
+            <button
+              *ngIf="isInRiskManagement()"
+              type="button"
+              (click)="onSurveysOpen()"
+              class="btn btn-gold rounded-8"
+            >
+              الاستبيانات
+            </button>
+            <button
+              *ngIf="isInRiskManagement() && isRiskManger()"
+              type="button"
+              (click)="loadDefaultPolls()"
+              class="btn btn-gold rounded-8"
+            >
+              دراسة المخاطر المحتملة
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- -------------------------------- hints --------------------------------- -->
+  <div
+    class="mt-3"
+    *ngIf="
+      !userDetails?.user?.allAttachmentsUploaded &&
+      !userDetails?.user?.isVerified &&
+      !router.url.includes('upload-attachments')
+    "
+  >
+    <app-hint
+      class="mt-3"
+      [hasAction]="true"
+      [actionName]="'الذهاب لمرفقات'"
+      [content]="attachments"
+      (onAction)="navigateToAttachments()"
+    ></app-hint>
+  </div>
+
+  <div class="container mt-3">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<button hidden data-bs-dismiss="modal" #deputyDirector></button>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="deputyDirectorModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title droid-font" id="exampleModalLabel">
+          إضافة مفوض
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body droid-font">
+        <form (ngSubmit)="onSubmit()" #form="ngForm" [formGroup]="employeForm">
+          <div class="gap-3 d-flex flex-column">
+            <!-- -------------------------------- name --------------------------------- -->
+            <div class="row align-items-center">
+              <label class="col-4 text-dark" for="fullName"> إسم المفوض</label>
+
+              <div class="form-group col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="fullName"
+                  formControlName="fullName"
+                  id="fullName"
+                  aria-describedby="helpId"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="offset-4 col-8">
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="Name.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                إسم المفوض مطلوب
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Name.errors?.minlength && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اقل عدد للأحرف هو
+                <span class="mx-1">{{
+                  Name.errors?.minlength.requiredLength
+                }}</span>
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Name.errors?.maxlength && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اكثر عدد للأحرف هو
+                <span class="mx-1">{{
+                  Name.errors?.maxlength.requiredLength
+                }}</span>
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+            </div>
+
+            <!-- -------------------------------- email -------------------------------- -->
+            <div class="row align-items-center g-2">
+              <label class="col-4 text-dark" for="email"
+                >البريد الالكترونى</label
+              >
+              <div class="form-group col-8">
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  id="email"
+                  formControlName="email"
+                  aria-describedby="helpId"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="offset-4 col-8">
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="Email.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                البريد الألكتروني مطلوب
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Email.errors?.pattern && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                من فضلك ادخل بريد الالكترونى صحيح
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+            </div>
+
+            <!-- -------------------------------- phone -------------------------------- -->
+            <div class="row align-items-center g-2">
+              <label class="col-4 text-dark" for="phoneNumber">
+                رقم الجوال</label
+              >
+
+              <div class="form-group col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="phoneNumber"
+                  id="phoneNumber"
+                  formControlName="phoneNumber"
+                  aria-describedby="helpId"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="offset-4 col-8">
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="Phone.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                رقم الجوال مطلوب
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Phone.errors?.pattern && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                رقم الجوال غير صحيح
+              </div>
+            </div>
+            <!-- --------------------------------- btn --------------------------------- -->
+
+            <button type="submit" class="btn btn-dark btn-block">اضافه</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button
+  hidden
+  data-bs-toggle="modal"
+  data-bs-target="#successAddModal"
+  #success
+></button>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="successAddModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body droid-font">
+        <button
+          type="button"
+          class="btn-close"
+          id="closeModel"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+        <div class="row">
+          <div class="col-3 align-self-center">
+            <img
+              src="assets/images/dashboard/New message-amico.svg"
+              class="img-fluid"
+              alt=""
+            />
+          </div>
+          <div class="col-9">
+            <div class="py-3 fs-20 text-d7be69">تمت الإضافة بنجاح</div>
+            <p class="text-black fs-12">
+              وسيتم إرسال بريد تفعيل للمستخدم الجديد لتفعيل حسابه والدخول علي
+              الموقع يرجي مراجعة ال Junk Mail في حالة عدم وصول البريد إلي inbox
+            </p>
+            <p class="text-d7be69 fs-20">{{ delegatedUser?.email }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ----------------------------- templates ------------------------------ -->
+
+<ng-template #attachments>
+  <div class="text-black fs-18">
+    حسابك غير مفعل حتي الآن , من فضلك قم برفع المرفقات المطلوبة لمراجعتها
+  </div>
+  <ul class="mt-2">
+    <li *ngFor="let item of userDetails?.attachmentWithSubscriptionTypeId">
+      {{ item?.attachment?.name }}
+    </li>
+  </ul>
+</ng-template>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#surveysModal"
+  #surveys
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="surveysModal"
+  tabindex="-1"
+  aria-labelledby="surveysModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered droid-font modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="surveysModalLabel">
+          الجودة والتميز في إدارة المخاطر
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closePolls
+        ></button>
+      </div>
+      <div class="modal-body">
+        <img
+          src="assets/images/icons/nodata.png"
+          class="p-5 m-auto img-fluid col-lg-4 d-block"
+          alt=""
+          *ngIf="pollItems.length == 0"
+        />
+
+        <div
+          id="polls"
+          class="mb-4 row row-cols-lg-6 row-cols-md-4 row-cols-2 g-4"
+        >
+          <div *ngFor="let item of pollItems">
+            <div
+              class="rounded-10 card"
+              [routerLink]="[
+                '/company-dashboard/poll-details',
+                item.id,
+                item.totalEmployees
+              ]"
+              (click)="closePolls.click()"
+            >
+              <div class="text-center card-body">
+                <span> {{ item.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="m-auto btn btn-gold d-block">
+          إرسال الإستبيان للكل
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#surveysModal2"
+  #surveys2
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="surveysModal2"
+  tabindex="-1"
+  aria-labelledby="surveysModal2Label"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered droid-font modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="surveysModal2Label">
+          الجودة والتميز في إدارة المخاطر
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <img
+          src="assets/images/icons/nodata.png"
+          class="p-5 m-auto img-fluid col-lg-4 d-block"
+          alt=""
+          *ngIf="defaultPolls.length == 0"
+        />
+
+        <div
+          id="polls"
+          class="mb-4 row row-cols-lg-6 row-cols-md-4 row-cols-2 g-4"
+        >
+          <div *ngFor="let item of defaultPolls">
+            <div class="rounded-10 card">
+              <div class="text-center card-body">
+                <span> {{ item.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="m-auto btn btn-gold d-block"
+          (click)="createPoll.click()"
+        >
+          إرسال الإستبيان للكل
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#staticBackdrop"
+  #createPoll
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title droid-font" id="staticBackdropLabel">
+          إنشاء إستبيان
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closePollCreate
+        ></button>
+      </div>
+      <div class="modal-body droid-font">
+        <form
+          [formGroup]="pollForm"
+          (ngSubmit)="onCreatePoll()"
+          #pollFormD="ngForm"
+        >
+          <div class="form-group">
+            <label class="mb-3">اسم الاستبيان</label>
+            <input
+              type="text"
+              class="form-control"
+              name="poll"
+              id="poll"
+              formControlName="name"
+            />
+
+            <div
+              *ngIf="
+                pollForm.get('name')?.hasError('required') &&
+                pollFormD.submitted
+              "
+              class="p-1 error-msg small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              إسم الاستبيان مطلوب
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            (click)="closePollCreate.click(); onSurveysOpen()"
+            class="m-auto mt-4 btn btn-gold d-block"
+          >
+            إرسال الإستبيان للكل
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--======================================================================================================================-->
+<!--========================================== Risk Team ==========================================-->
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#riskTeam"
+  #riskTeamBtn
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade droid-font"
+  id="riskTeam"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="riskTeamLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="riskTeamLabel">تعيين فريق تقييم المخاطر</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row align-items-center">
+          <label class="col-lg-3 col-md-4 col-12" for="name"
+            >موظفي الإدارة</label
+          >
+          <div class="form-group col">
+            <p-dropdown
+              [options]="employees"
+              placeholder="اختر"
+              optionLabel="fullName"
+            ></p-dropdown>
+          </div>
+        </div>
+        <table class="table mt-3 text-nowrap">
+          <thead class="thead-dark">
+            <tr>
+              <th>الموظف</th>
+              <th>المهنة</th>
+              <th>القسم</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="tbody">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--========================================= Notifications =========================================-->
+
+<p-overlayPanel #op>
+  <ng-template pTemplate>
+    <div
+      *ngIf="notifications"
+      (click)="op.hide()"
+      class="notifcations droid-font"
+    >
+      <h6>الاشعارات</h6>
+      <ng-container *ngFor="let item of notifications">
+        <div
+          (click)="onNotificationClick(item)"
+          class="notify"
+          *ngIf="!item.isRead"
+        >
+          <div class="gap-3 d-flex">
+            <div
+              class="notifcation-vector"
+              [ngClass]="{
+                poll: item?.notificationTypeId == 11,
+                task:
+                  item?.notificationTypeId == 5 ||
+                  item?.notificationTypeId == 10,
+                details:
+                  item.notificationTypeId != 11 &&
+                  item.notificationTypeId != 5 &&
+                  item.notificationTypeId != 10
+              }"
+            >
+              <i
+                class="text-white fas fa-file-alt"
+                *ngIf="item?.notificationTypeId == 11"
+              ></i>
+              <i
+                class="text-white fas fa-tasks"
+                *ngIf="
+                  item.notificationTypeId == 5 || item.notificationTypeId == 10
+                "
+              ></i>
+            </div>
+            <div>
+              <div class="text-gray-500 small">
+                {{ item.dateTime | date: "MMM dd yyyy hh:mm a" }}
+              </div>
+              <span class="font-weight-bold d-block">{{ item?.title }}</span>
+              <span class="font-w-400 fs-16">{{ item?.body }}</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<!--====================================================== Task Details ======================================================-->
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#TaskUpdate"
+  hidden
+  #taskUpdate
+>
+  Launch demo modal
+</button>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="TaskUpdate"
+  tabindex="-1"
+  aria-labelledby="TaskUpdateLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl modal-dialog-centered droid-font">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="TaskUpdateLabel">
+          المهمه {{ selectedNotify?.tasks?.number }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closeUpdate
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 text-center fs-20">
+          تم الانشاء بواسطة {{ selectedNotify?.tasks?.creator?.fullName }}
+        </div>
+        <div class="flex-wrap gap-4 d-flex">
+          <div class="flex-grow-0 col-lg-5">
+            <form
+              [formGroup]="updateForm"
+              (ngSubmit)="onTaskUpdated()"
+              #tform="ngForm"
+            >
+              <div class="gap-3 d-flex flex-column">
+                <div class="row align-items-start">
+                  <label class="col-md-4 text-dark" for="assignedToId">
+                    تفويض الي</label
+                  >
+
+                  <div class="form-group col-md-8">
+                    <p-dropdown
+                      [options]="assignList"
+                      [filter]="true"
+                      optionLabel="displayName"
+                      placeholder="اختر"
+                      formControlName="assignedToId"
+                    ></p-dropdown>
+
+                    <div
+                      *ngIf="
+                        AssignedToId.hasError('required') && tform.submitted
+                      "
+                      class="p-1 error-msg small"
+                      role="alert"
+                    >
+                      <i class="fas fa-times-circle me-2"></i>
+                      مطلوب
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row align-items-start">
+                  <label class="col-md-4 text-dark" for="assignedToId">
+                    مستوي المهمه</label
+                  >
+
+                  <div class="form-group col-md-8">
+                    <input
+                      type="text"
+                      [value]="getTaskLevelName(selectedNotify?.tasks)"
+                      class="form-control"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="row align-items-start">
+                  <label class="col-md-4 text-dark" for="assignedToId">
+                    حالة المهمه</label
+                  >
+
+                  <div class="form-group col-md-8">
+                    <p-dropdown
+                      [options]="taskStatus"
+                      [filter]="true"
+                      optionLabel="name"
+                      optionValue="id"
+                      placeholder="اختر"
+                      formControlName="tasksStatusId"
+                      (ngModelChange)="toggleAssignValidator($event)"
+                    ></p-dropdown>
+
+                    <div
+                      *ngIf="
+                        TasksStatusId.hasError('required') && tform.submitted
+                      "
+                      class="p-1 error-msg small"
+                      role="alert"
+                    >
+                      <i class="fas fa-times-circle me-2"></i>
+                      مطلوب
+                    </div>
+                  </div>
+                </div>
+
+                <!-- --------------------------- task details ---------------------------- -->
+                <div class="row align-items-start">
+                  <label class="col-md-4 text-dark" for="taskDet">
+                    وصف المهمه
+                  </label>
+
+                  <div class="form-group col-md-8">
+                    <textarea
+                      class="form-control"
+                      name="Recommendation"
+                      id="Recommendation"
+                      rows="4"
+                      formControlName="description"
+                    ></textarea>
+                    <div
+                      *ngIf="
+                        Description.hasError('required') && tform.submitted
+                      "
+                      class="p-1 error-msg small"
+                      role="alert"
+                    >
+                      <i class="fas fa-times-circle me-2"></i>
+                      مطلوب
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="mt-4 btn btn-dark d-block w-100">
+                تحديث
+              </button>
+            </form>
+          </div>
+          <div
+            class="flex-grow-1"
+            *ngIf="selectedNotify?.tasks?.extraFields != {}"
+          >
+            <div class="fs-18">موقع العملية</div>
+
+            <div class="my-3">
+              <span *ngIf="!selectedNotify?.tasks?.taskLocation"
+                >غير متوفر</span
+              >
+              <agm-map
+                style="height: 150px"
+                *ngIf="selectedNotify?.tasks?.taskLocation"
+                [latitude]="selectedNotify?.tasks?.taskLocation.latitude"
+                [longitude]="selectedNotify?.tasks?.taskLocation.longitude"
+                [zoom]="selectedNotify?.tasks?.taskLocation.zoom"
+                [fullscreenControl]="true"
+                [scaleControl]="true"
+                [panControl]="true"
+                [lang]="'ar'"
+              >
+                <agm-marker
+                  [latitude]="selectedNotify?.tasks?.taskLocation.latitude"
+                  [longitude]="selectedNotify?.tasks?.taskLocation.longitude"
+                  [markerDraggable]="false"
+                ></agm-marker>
+              </agm-map>
+            </div>
+            <div class="fs-18">التفاصيل الأضافية</div>
+            <div class="overflow-auto">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>العنوان</th>
+                    <th>المحتوي</th>
+                  </tr>
+                </thead>
+                <tbody class="tbody">
+                  <tr>
+                    <td>التاريخ المستهدف</td>
+                    <td>
+                      {{
+                        convertDateToLocal(selectedNotify?.tasks?.targetDate)
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>الوقت المستهدف</td>
+                    <td>
+                      {{
+                        selectedNotify?.tasks?.targetTime
+                          ? (selectedNotify?.tasks?.targetTime
+                            | date: "hh:mm a")
+                          : "غير متوفر"
+                      }}
+                    </td>
+                  </tr>
+                  <tr
+                    *ngFor="
+                      let item of selectedNotify?.tasks?.extraFields | keyvalue
+                    "
+                  >
+                    <td>{{ item?.key }}</td>
+                    <td *ngIf="item?.value != true && item?.value != false">
+                      {{ item?.value }}
+                    </td>
+
+                    <td *ngIf="item?.value == true">نعم</td>
+                    <td *ngIf="item?.value == false">لا</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------- manage account form ------------------------- -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered droid-font">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">إدارة الحساب</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closeUserUpdate
+          (click)="userUpdateform.resetForm()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- -------------------------------- logo --------------------------------- -->
+
+        <form
+          [formGroup]="userForm"
+          (ngSubmit)="onUserUpdate(closeUserUpdate)"
+          #userUpdateform="ngForm"
+        >
+          <div class="avatar">
+            <div
+              class="w-100 h-100 rounded-circle d-flex justify-content-center align-items-center overflow-hidden"
+            >
+              <img
+                [src]="userPhotoUrl"
+                class="img-fluid"
+                [alt]="userDetails?.user?.company?.name"
+                onerror="this.src='assets/images/dashboard/logo-placeholder.png';"
+              />
+            </div>
+            <button
+              *ngIf="role != allRoles[11]"
+              type="button"
+              class="btn btn-dark upload"
+              (click)="logo.click()"
+            >
+              <i class="fas fa-cloud-upload-alt"></i>
+              <input
+                type="file"
+                #logo
+                hidden
+                (change)="onUserImageUpload($event)"
+              />
+            </button>
+          </div>
+          <div class="row mt-5" style="row-gap: 1rem">
+            <div class="col-lg-6">
+              <label for="fullName" class="form-label">الأسم</label>
+              <input
+                type="text"
+                class="form-control"
+                id="fullName"
+                formControlName="fullName"
+              />
+              <div
+                *ngIf="
+                  FullName.hasError('required') && userUpdateform.submitted
+                "
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                مطلوب
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <label for="username" class="form-label">اسم المستخدم</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                formControlName="username"
+              />
+              <div
+                *ngIf="
+                  Username.hasError('required') && userUpdateform.submitted
+                "
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                مطلوب
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <label for="email" class="form-label">البريد الألكتروني</label>
+              <input
+                readonly
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+              />
+              <div
+                *ngIf="Email2.hasError('required') && userUpdateform.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                مطلوب
+              </div>
+
+              <div
+                *ngIf="Email2.errors?.pattern && userUpdateform.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                من فضلك ادخل بريد الالكترونى صحيح
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <label for="phone" class="form-label">رقم الجوال</label>
+              <input
+                type="number"
+                class="form-control"
+                id="phone"
+                formControlName="phoneNumber"
+              />
+              <div
+                *ngIf="
+                  PhoneNumber.hasError('required') && userUpdateform.submitted
+                "
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                مطلوب
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-dark w-100 mt-4">تحديث</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

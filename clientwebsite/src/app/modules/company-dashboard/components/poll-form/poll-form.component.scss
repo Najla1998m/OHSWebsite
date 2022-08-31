@@ -1,0 +1,30 @@
+#polls .card {
+  min-height: 100px;
+  cursor: pointer;
+  border-radius: 8px;
+
+  .card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.form-check-input {
+  display: none !important;
+}
+
+.form-check-input:checked + .form-check-label .card {
+  border-color: #d7be69;
+  background-color: #fff8e1;
+  color: #b58d2e;
+  position: relative;
+}
+
+.form-check-input:checked + .form-check-label .card img {
+  display: block !important;
+}
+
+.form-check {
+  padding: 0;
+}

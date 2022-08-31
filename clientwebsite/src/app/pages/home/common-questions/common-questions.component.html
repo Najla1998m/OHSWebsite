@@ -1,0 +1,154 @@
+<section class="py-5" id="common-questions">
+  <div class="container">
+    <div class="text-center fs-28 droid-font font-w-600">أسئلة متكررة</div>
+    <div class="mt-5">
+      <ul class="nav justify-content-center droid-font fs-18">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            data-bs-toggle="tab"
+            data-bs-target="#componies"
+            type="button"
+            role="tab"
+            aria-controls="componies"
+            aria-selected="false"
+            >شركات محترفة</a
+          >
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#providers"
+            type="button"
+            role="tab"
+            aria-controls="providers"
+            aria-selected="false"
+            >مزودين خدمات</a
+          >
+        </li>
+      </ul>
+
+      <div class="mt-4 tab-content" id="myTabContent">
+        <div
+          class="tab-pane fade show active"
+          id="componies"
+          role="tabpanel"
+          aria-labelledby="componies-tab"
+        >
+          <div
+            class="gap-4 accordion d-flex flex-column droid-font"
+            *ngFor="let item of companiesQuestions; let i = index"
+          >
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button
+                  class="accordion-button collapsed fs-lg-18 fs-16 font-w-500"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#ques' + i"
+                  aria-expanded="false"
+                  [attr.aria-controls]="'ques' + i"
+                >
+                  {{ item.question }}
+                </button>
+              </h2>
+              <div
+                [id]="'ques' + i"
+                class="accordion-collapse collapse"
+                aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample"
+              >
+                <div class="accordion-body">
+                  {{ item.answer }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--=============================== Loader =============================-->
+          <div *ngIf="isLoading" class="gap-3 d-flex flex-column">
+            <div
+              class="p-1 border-0 shadow-sm card rounded-8"
+              *ngFor="let item of [0, 0, 0, 0]"
+            >
+              <div class="p-1 card-body">
+                <div class="d-flex justify-content-between">
+                  <p-skeleton
+                    class="col-11 rounded-3"
+                    height="25px"
+                  ></p-skeleton>
+                  <p-skeleton
+                    width="25px"
+                    height="25px"
+                    shape="circle"
+                  ></p-skeleton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="providers"
+          role="tabpanel"
+          aria-labelledby="providers-tab"
+        >
+          <div class="gap-4 accordion d-flex flex-column droid-font">
+            <div
+              class="accordion-item"
+              *ngFor="let item of providerQuestions; let i = index"
+            >
+              <h2 class="accordion-header" id="headingOne">
+                <button
+                  class="accordion-button collapsed fs-lg-18 fs-16 font-w-500"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#ques' + i"
+                  aria-expanded="false"
+                  [attr.aria-controls]="'ques' + i"
+                >
+                  {{ item.question }}
+                </button>
+              </h2>
+              <div
+                [id]="'ques' + i"
+                class="accordion-collapse collapse"
+                aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample"
+              >
+                <div class="accordion-body">
+                  {{ item.answer }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--=============================== Loader =============================-->
+          <div *ngIf="isLoading" class="gap-3 d-flex flex-column">
+            <div
+              class="p-1 border-0 shadow-sm card rounded-8"
+              *ngFor="let item of [0, 0, 0, 0]"
+            >
+              <div class="p-1 card-body">
+                <div class="d-flex justify-content-between">
+                  <p-skeleton
+                    class="col-11 rounded-3"
+                    height="25px"
+                  ></p-skeleton>
+                  <p-skeleton
+                    width="25px"
+                    height="25px"
+                    shape="circle"
+                  ></p-skeleton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,106 @@
+<div class="card border-0 shadow">
+  <div class="card-header">
+    <div class="font-weight-bold text-primary">Attchments</div>
+  </div>
+  <div class="card-body">
+    <ng-container *ngIf="displayReject">
+      <form (ngSubmit)="rejectAttach()" [formGroup]="rejectForm" #form="ngForm" class="my-3 px-5">
+        <p-dropdown [options]="listRejects" optionLabel="name" optionValue="name" formControlName="rejectReason"
+          placeholder="Select Reject Reason"></p-dropdown>
+
+        <div *ngIf="RejectReason.errors?.required && form.submitted" class="error-msg p-1 small" role="alert">
+          <i class="fas fa-times-circle me-2"></i>
+          Must Selected Reason is Required
+        </div>
+        <div class="d-flex justify-content-center">
+          <button type="submit" [disabled]="!form.form.valid" class="btn btn-success mt-3 rounded-pill py-2 px-4">
+            Sumit
+          </button>
+        </div>
+      </form>
+    </ng-container>
+
+    <ng-container *ngIf="displayAccept">
+      <form (ngSubmit)="AcceptAttach()" [formGroup]="acceptForm" #form="ngForm" class="my-3 px-5">
+        <p-dropdown [options]="listDepts" optionLabel="name" optionValue="id" formControlName="correspondingDeptId"
+          placeholder="Select Department"></p-dropdown>
+
+        <div *ngIf="CorrespondingDeptId.errors?.required && form.submitted" class="error-msg p-1 small" role="alert">
+          <i class="fas fa-times-circle me-2"></i>
+          Must Selected Department is Required
+        </div>
+        <div class="d-flex justify-content-center">
+          <button type="submit" [disabled]="!form.form.valid" class="btn btn-success mt-3 rounded-pill py-2 px-4">
+            Sumit
+          </button>
+        </div>
+      </form>
+    </ng-container>
+
+    <div class="d-flex justify-content-center">
+      <img src="assets/images/No data-cuate.svg" *ngIf="listAttach.length==0"
+        class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="">
+    </div>
+
+    <p-table #dt [rows]="10" [value]="listAttach" *ngIf="listAttach.length >0" [paginator]="true"
+      responsiveLayout="scroll" [rowHover]="true" dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <ng-template pTemplate="caption">
+        <div class="d-flex gap justify-content-end">
+          <p-button label="Accept" icon="pi pi-check" styleClass="p-button-success p-mr-2" (click)="showAccept()">
+          </p-button>
+
+          <p-button label="Reject" icon="pi pi-times" styleClass="p-button-danger p-mr-2" (click)="showReject()">
+          </p-button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th></th>
+          <th>Attach Image</th>
+          <th pSortableColumn="Name">
+            <div class="d-flex">
+              <span>Name</span>
+              <p-sortIcon field="Name"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="IsOptional">
+            <div class="d-flex">
+              <span>Is Optional</span>
+              <p-sortIcon field="IsOptional"></p-sortIcon>
+            </div>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-attch>
+        <tr>
+          <td>
+            <form [formGroup]="rejectForm" #form="ngForm">
+              <p-checkbox [value]="attch?.id" formControlName="subscriptionTypeAttachmentList" inputId="ny">
+              </p-checkbox>
+            </form>
+          </td>
+          <td>
+            <p-image [src]=" attch?.imageUrl" alt="Image" height="80" width="80" [preview]="true"></p-image>
+          </td>
+          <td>
+            {{ attch?.subscriptionTypeAttachmentMapping?.attachment?.name }}
+          </td>
+          <td>
+            {{
+            attch?.subscriptionTypeAttachmentMapping?.attachment?.isOptional
+            }}
+          </td>
+          <td></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listAttach ? listAttach.length : 0 }} Attachments.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

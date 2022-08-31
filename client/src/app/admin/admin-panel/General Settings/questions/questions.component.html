@@ -1,0 +1,203 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Questions</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [value]="questions"
+      [rows]="10"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+      class="text-nowrap"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Question">
+            Question <p-sortIcon field="Question"></p-sortIcon>
+          </th>
+
+          <th pSortableColumn="Answer">
+            Answer <p-sortIcon field="Answer"></p-sortIcon>
+          </th>
+          <th pSortableColumn="IsVisible">
+            IsVisible <p-sortIcon field="IsVisible"></p-sortIcon>
+          </th>
+          <!-- <th pSortableColumn="IsDeleted">
+            IsDeleted <p-sortIcon field="IsDeleted"></p-sortIcon>
+          </th> -->
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-question>
+        <tr>
+          <td>{{ question.question }}</td>
+          <td>{{ question.answer | slice: 0:100 }}</td>
+          <td>{{ question.isVisible }}</td>
+          <!-- <td>{{ question.isDeleted }}</td> -->
+          <td class="d-flex gap">
+            <button
+              pButton
+              pRipple
+              (click)="showForm(question)"
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-warning p-mr-2"
+            ></button>
+            <button
+              pButton
+              pRipple
+              (click)="onDelete(question.id)"
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ questions ? questions.length : 0 }} questions.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Question Form"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="questionsForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-group">
+      <label for="question">Question</label>
+      <input
+        type="text"
+        class="form-control"
+        name="question"
+        id="question"
+        placeholder="Question"
+        formControlName="question"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Question.hasError('required') && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Question is Required
+      </div>
+
+      <div
+        *ngIf="Question.errors?.minlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Question minimum length is
+        {{ Question.errors.minlength.requiredLength }}
+      </div>
+
+      <div
+        *ngIf="Question.errors?.maxlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Question maximum length is
+        {{ Question.errors.maxlength.requiredLength }}
+      </div>
+    </div>
+    <!-- -------------------------------- type --------------------------------- -->
+    <div class="form-group">
+      <p-dropdown
+        [options]="questionType"
+        optionLabel="name"
+        optionValue="value"
+        formControlName="questionType"
+        placeholder="Select Type Question"
+      ></p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="answer">Answer</label>
+      <textarea
+        class="form-control"
+        name="answer"
+        id="answer"
+        rows="3"
+        formControlName="answer"
+      ></textarea>
+
+      <!--! error Message --->
+      <div
+        *ngIf="Answer.hasError('required') && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Answer is Required
+      </div>
+
+      <div
+        *ngIf="Answer.errors?.minlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Answer minimum length is {{ Answer.errors.minlength.requiredLength }}
+      </div>
+
+      <div
+        *ngIf="Answer.errors?.maxlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Answer maximum length is {{ Answer.errors.maxlength.requiredLength }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 my-3">
+        <div class="d-flex gap">
+          <label class="fs-large">Is Visible</label>
+          <p-inputSwitch formControlName="isVisible"></p-inputSwitch>
+        </div>
+      </div>
+      <!-- <div class="col-6 my-3">
+        <div class="d-flex gap">
+          <label class="fs-large">Is Deleted</label>
+          <p-inputSwitch formControlName="isDeleted"></p-inputSwitch>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-success mt-3 rounded-pill py-2 px-4">
+        Add Question
+      </button>
+    </div>
+  </form>
+</p-dialog>

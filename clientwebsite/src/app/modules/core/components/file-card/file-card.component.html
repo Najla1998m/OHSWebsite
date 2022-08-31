@@ -1,0 +1,35 @@
+<div class="card border-0 custom-shadow rounded-16">
+  <div class="card-body">
+    <div class="d-flex justify-content-between gap-4 px-2">
+      <svg-icon
+        src="assets/images/icons/google-docs.svg"
+        svgClass="icon"
+      ></svg-icon>
+      <div class="col-10">
+        <div class="d-flex justify-content-between gap-3">
+          <div class="text-black col-9 fs-18 text-truncate">
+            {{ info?.name }}
+          </div>
+          <div class="fs-16">{{ formatBytes(info?.size) }}</div>
+        </div>
+        <div class="mt-2">
+          <div class="progress">
+            <div
+              class="progress-bar bg-50ca27"
+              role="progressbar"
+              [style.width]="info?.progress + '%'"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <svg-icon
+        (click)="onClicked()"
+        src="assets/images/icons/trash.svg"
+        svgClass="icon"
+        style="cursor: pointer"
+      ></svg-icon>
+    </div>
+  </div>
+</div>

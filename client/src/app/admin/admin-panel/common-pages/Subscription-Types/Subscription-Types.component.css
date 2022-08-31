@@ -1,0 +1,16 @@
+.row-gap {
+  row-gap: 12px;
+}
+
+.gap {
+  gap: 2ex;
+}
+
+.cke_reset:ng-deep,
+.cke_contents::ng-deep {
+  height: 300px !important;
+}
+
+.content {
+  word-break: break-all;
+}

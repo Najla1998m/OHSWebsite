@@ -1,0 +1,13 @@
+.gap {
+  gap: 25px;
+}
+
+.fs-large {
+  font-size: larger;
+}
+
+.w-200px {
+  width: 200px;
+  padding: 1ex 4ex;
+  font-size: larger;
+}

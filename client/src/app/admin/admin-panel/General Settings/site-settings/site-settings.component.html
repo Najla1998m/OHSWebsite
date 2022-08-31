@@ -1,0 +1,150 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Site Settings</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="siteSettings"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <!-- <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div> -->
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="key">
+            Key <p-sortIcon field="key"></p-sortIcon>
+          </th>
+          <th pSortableColumn="value">
+            Value <p-sortIcon field="value"></p-sortIcon>
+          </th>
+
+          <th pSortableColumn="IsVisible">
+            IsVisible <p-sortIcon field="IsVisible"></p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-siteSetting>
+        <tr>
+          <td>{{ siteSetting.key }}</td>
+          <td>{{ siteSetting.value }}</td>
+          <td>
+            <i
+              *ngIf="siteSetting.isVisible"
+              class="fa fa-eye text-success fs-20"
+              aria-hidden="true"
+            ></i>
+
+            <i
+              *ngIf="!siteSetting.isVisible"
+              class="fa fa-eye-slash text-danger fs-20"
+              aria-hidden="true"
+            ></i>
+          </td>
+          <td>
+            <div class="d-flex gap">
+              <button
+                pButton
+                pRipple
+                icon="pi pi-pencil"
+                (click)="showForm(siteSetting)"
+                class="p-button-rounded p-button-warning p-mr-2"
+              ></button>
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                (click)="onDelete(siteSetting.id)"
+                class="p-button-rounded p-button-danger"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ siteSettings ? siteSettings.length : 0 }} Site Settings.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  [header]="selected ? 'Edit Setting' : 'Add setting'"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="siteSettingForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <!-- -------------------------------- value -------------------------------- -->
+    <div class="form-group">
+      <label for="value">Value</label>
+      <input
+        type="text"
+        class="form-control"
+        name="value"
+        id="value"
+        placeholder="value..."
+        formControlName="value"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Value.errors?.required && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Value is Required
+      </div>
+    </div>
+
+    <!-- ----------------------------- is visible ------------------------------ -->
+    <div class="col-6 my-3">
+      <div class="d-flex gap">
+        <label class="fs-large">Is Visible</label>
+        <p-inputSwitch formControlName="isVisible"></p-inputSwitch>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+      <button
+        *ngIf="!selected"
+        type="submit"
+        class="btn btn-success rounded-pill px-4"
+      >
+        Add
+      </button>
+
+      <button
+        *ngIf="selected"
+        type="submit"
+        class="btn btn-primary rounded-pill px-4"
+      >
+        Edit
+      </button>
+    </div>
+  </form>
+</p-dialog>

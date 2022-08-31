@@ -1,0 +1,166 @@
+.btn-outline-dark:hover .add-icon {
+  fill: white !important;
+}
+
+.mat-icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#notify-btn {
+  background-image: url("../../../../../assets/images/icons/bell.svg") !important;
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+}
+
+.notify-badge {
+  width: 18px;
+  height: 18px;
+  background-color: #f74d4d;
+  border-radius: 5rem;
+  position: absolute;
+  color: black;
+  top: 2px;
+  right: 1px;
+  text-align: center;
+  padding: 0;
+  font-size: smaller;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-weight: 500;
+}
+
+#info-btn {
+  background: url("../../../../../assets/images/icons/question.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  background-size: 75%;
+}
+
+#main-card {
+  background: url("../../../../../assets/images/dashboard/dash-card1.jpg");
+  background-size: cover;
+  color: white;
+}
+
+#dept-card {
+  background: url("../../../../../assets/images/dashboard/dash-card3.jpg");
+  background-size: cover;
+  color: white;
+  background-position: center;
+}
+
+#managments-card {
+  background: url("../../../../../assets/images/dashboard/dash-card2.jpg");
+  background-size: cover;
+  color: white;
+  background-position: center;
+}
+
+#requests-card {
+  background: url("../../../../../assets/images/dashboard/dash-card3.jpg");
+  background-size: cover;
+  color: white;
+  background-position: center;
+}
+
+::ng-deep {
+  #dash .p-dropdown {
+    background-color: transparent;
+    color: white !important;
+  }
+
+  #dash .pi-chevron-down:before {
+    color: white;
+  }
+
+  #dash .p-dropdown .p-dropdown-label.p-placeholder {
+    color: white;
+  }
+}
+
+::ng-deep {
+  .advanced-pie-legend .legend-items-container .legend-items {
+    overflow-y: hidden !important;
+    overflow-x: auto !important;
+  }
+
+  .advanced-pie-legend
+    .legend-items-container
+    .legend-items
+    .legend-item
+    .item-value {
+    font-size: medium !important;
+  }
+
+  .advanced-pie-legend
+    .legend-items-container
+    .legend-items
+    .legend-item
+    .item-percent {
+    font-size: medium !important;
+  }
+
+  .total-label {
+    display: none !important;
+  }
+
+  .advanced-pie-legend .total-value {
+    display: none !important;
+  }
+
+  #dash .p-dropdown .p-dropdown-label {
+    color: white;
+  }
+
+  text {
+    color: white !important;
+    fill: white !important;
+  }
+}
+
+#closeModel {
+  background: transparent
+    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e")
+    center/1em auto no-repeat;
+  background-color: #333;
+  padding: 1.3ex;
+  border-radius: 5rem;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  left: auto;
+  transform: translate(40%, -40%);
+  background-color: #ff4848;
+  opacity: 1;
+  position: absolute;
+}
+::ng-deep {
+  html:lang(ar) #closeModel {
+    margin: -0.5rem auto -0.5rem -0.5rem !important;
+  }
+
+  html:lang(ar) #closeModel {
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: translate(-35%, -35%);
+  }
+}
+#closeModel :focus,
+#closeModel :hover {
+  opacity: 1 !important;
+}
+.h-450 {
+  height: 450px;
+}
+
+.row-gap-3 {
+  row-gap: 1rem;
+}

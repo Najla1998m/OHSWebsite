@@ -1,0 +1,171 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Options Drop Downs Form</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="listOptions"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button type="button" class="btn btn-success" (click)="showForm()">
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Id">
+            <div class="d-flex">
+              <span>Id</span>
+              <p-sortIcon field="Id"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="Name">
+            <div class="d-flex">
+              <span>Name</span>
+              <p-sortIcon field="Name"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="valueAR">
+            <div class="d-flex">
+              <span>value AR</span>
+              <p-sortIcon field="valueAR"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="valueEN">
+            <div class="d-flex">
+              <span>value EN</span>
+              <p-sortIcon field="valueEN"></p-sortIcon>
+            </div>
+          </th>
+
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-drop>
+        <tr>
+          <td>{{ drop?.id }}</td>
+          <td>{{ drop?.name }}</td>
+          <td>{{ drop?.valueAR }}</td>
+          <td>{{ drop?.valueEN }}</td>
+
+          <td>
+            <div class="d-flex gap justify-content-end">
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger"
+                (click)="onDelete(drop?.id)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listOptions ? listOptions.length : 0 }} Forms.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Options Dropdown Form"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="optionForm" (ngSubmit)="onSubmit()" #form2="ngForm">
+    <div class="form-group">
+      <label for="Name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Enter  Name.."
+        formControlName="name"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Name.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name For Dropdown Form is Required
+      </div>
+    </div>
+
+    <!---Name AR-->
+    <div class="form-group">
+      <label for="valueAR"> Value AR </label>
+      <input
+        type="text"
+        class="form-control"
+        name="valueAR"
+        id="valueAR"
+        placeholder="Enter Dropdown Form Arabic Name.."
+        formControlName="valueAR"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="ValueAR.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name with Arabic For Option Dropdown Form is Required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="valueEN">Value EN</label>
+      <input
+        type="text"
+        class="form-control"
+        name="valueEN"
+        id="valueEN"
+        placeholder="Enter Option Dropdown Form Name.."
+        formControlName="valueEN"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="ValueEN.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name With English For Option Dropdown Form is Required
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-success mt-3 rounded-pill py-2 px-4">
+        Add
+      </button>
+    </div>
+  </form>
+</p-dialog>

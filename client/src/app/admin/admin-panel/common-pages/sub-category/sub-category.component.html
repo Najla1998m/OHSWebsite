@@ -1,0 +1,151 @@
+<div class="card border-0 shadow">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Categories</div>
+  </div>
+  <div class="card-body">
+    <p-table [value]="subCategories" #dt [rows]="10" [paginator]="true" responsiveLayout="scroll" [rowHover]="true"
+      dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true">
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button type="button" class="btn btn-success" (click)="showForm(null)">
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Name">
+            Name
+            <p-sortIcon field="Name"></p-sortIcon>
+            <p-columnFilter type="text" field="name" display="menu" class="p-ml-auto"></p-columnFilter>
+          </th>
+          <th>
+            Is Visible
+          </th>
+          <th>
+            For Contact
+          </th>
+          <th>
+            For Orders
+          </th>
+          <th>
+            Main Category
+            <p-sortIcon field="main"></p-sortIcon>
+            <p-columnFilter type="text" field="main" display="menu" class="p-ml-auto"></p-columnFilter>
+          </th>
+          <th>
+            Department
+            <p-sortIcon field="Department"></p-sortIcon>
+            <p-columnFilter type="text" field="Department" display="menu" class="p-ml-auto"></p-columnFilter>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-category>
+        <tr>
+          <td>{{ category.name }}</td>
+          <td>
+            <i *ngIf="category.isVisible" class="fa fa-eye text-success" aria-hidden="true"></i>
+            <i *ngIf="!category.isVisible" class="fa fa-eye-slash text-danger" aria-hidden="true"></i>
+          </td>
+          <td>
+            <i *ngIf="category.forContact" class="fas fa-check text-success"></i>
+            <i *ngIf="!category.forContact" class="fas fa-times text-danger"></i>
+          </td>
+          <td>
+            <i *ngIf="category.forOrders " class="fas fa-check text-success"></i>
+            <i *ngIf="!category.forOrders " class="fas fa-times text-danger"></i>
+          </td>
+          <td>
+            {{getMainCategory(category).name}}
+          </td>
+          <td>
+            {{getMainCategory(category).departement.name}}
+          </td>
+          <td class="d-flex gap justify-content-end">
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"
+              (click)="showForm(category)"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+              (click)="onDelete(category.id)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ categoriesList ? categoriesList.length : 0 }} categoriesList.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+
+<p-dialog header="Add Package" [(visible)]="displayForm" [modal]="true" [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" (onHide)="resetForm()">
+
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-group">
+      <label for="name">Category Name</label>
+      <input type="text" class="form-control" name="name" id="name" placeholder="name" formControlName="name">
+    </div>
+
+    <!--! error Message --->
+    <div *ngIf="Name?.errors?.required && form.submitted" class="error-msg p-1 small" role="alert">
+      <i class="fas fa-times-circle me-2"></i>
+      Name is Required
+    </div>
+
+
+    <p-dropdown [options]="categoriesList" formControlName="parentId" optionLabel="name" [filter]="true" filterBy="name"
+      [showClear]="true" placeholder="Select a Main Category">
+      <ng-template pTemplate="selectedItem">
+        <div class="country-item country-item-value" *ngIf="ParentId">
+          <div>{{ParentId.value.name}}</div>
+        </div>
+      </ng-template>
+      <ng-template let-dept pTemplate="item">
+        <div class="country-item">
+          <div>{{dept.name}}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
+
+    <!--! error Message --->
+    <div *ngIf="Name?.errors?.required && form.submitted" class="error-msg p-1 small my-2" role="alert">
+      <i class="fas fa-times-circle me-2"></i>
+      dept is Required
+    </div>
+
+    <div class="row my-4">
+      <div class="col-6">
+        <div class="d-flex gap">
+          <label class="fs-large">For Contact</label>
+          <p-inputSwitch formControlName="forContact"></p-inputSwitch>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="d-flex gap">
+          <label class="fs-large">For Order</label>
+          <p-inputSwitch formControlName="forOrders"></p-inputSwitch>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="d-flex gap">
+          <label class="fs-large">Is Visible</label>
+          <p-inputSwitch formControlName="isVisible"></p-inputSwitch>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn rounded-pill px-4"
+        [ngClass]="{ 'btn-success': !selected, 'btn-info': selected }">
+        {{ selected ? "edit" : "add" }}
+      </button>
+    </div>
+  </form>
+</p-dialog>

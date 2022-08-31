@@ -1,0 +1,206 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Notifications</div>
+  </div>
+  <div class="card-body">
+    <p-table #dt class="text-nowrap" [value]="listNotification" [rows]="10" [paginator]="true" responsiveLayout="scroll"
+      [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Date">
+            Date
+          </th>
+
+          <th pSortableColumn="Title">
+            Title
+          <th pSortableColumn="Body">
+            Body
+          </th>
+
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-notify>
+        <tr [class.notRead]="!notify?.isRead">
+          <td>{{ convertDate(notify) }}</td>
+          <td>{{ notify.title | slice: 0:30 }}...</td>
+          <td>{{ notify.body | slice: 0:90 }}...</td>
+          <td class="d-flex gap">
+
+            <button pButton pRipple (click)="showForm(notify)" icon="fa fa-eye text-white fs-20"
+              class="p-button-rounded p-button-success p-mr-2"></button>
+
+
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+              (click)="onDelete(notify.id)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listNotification ? listNotification.length : 0 }} Notification.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog [(visible)]="displayModel" [modal]="true" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }"
+  [draggable]="false" [resizable]="false" [scrollTop]="true" (onHide)="resetForm()">
+  <h5 class="d-flex justify-content-center"> TSK_number:{{ selected?.tasks?.number}}</h5>
+  <table class="table">
+    <thead class="thead-light text-dark">
+      <tr>
+        <th scope="col ">Company Name : </th>
+        <th> {{selected?.tasks?.company?.name ? selected?.tasks?.company?.name : "Not Available" }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <!-- ----------------------------------------------------------------------- -->
+  <table class="table">
+    <thead class=" text-dark">
+      <tr>
+        <th scope="col ">Department Name : </th>
+        <th> {{selected?.tasks?.departement?.name ?selected?.tasks?.departement?.name: "Not Available" }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <!-- ----------------------------------------------------------------------- -->
+  <form (ngSubmit)="onSubmit()" #form="ngForm" [formGroup]="taskForm">
+    <table class="table">
+      <thead class=" text-dark">
+        <tr>
+          <th scope="col ">
+            <div class="pb-2">
+              <span>Assign to :</span>
+            </div>
+          </th>
+          <th>
+            <p-dropdown [options]="ListUsers" optionLabel="fullName" optionValue="id" placeholder="assign to "
+              formControlName='assignedToId'>
+            </p-dropdown>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <!-- ----------------------------------------------------------------------- -->
+    <table class="table">
+      <thead class=" text-dark">
+        <tr>
+          <th scope="col ">
+            <div class="pb-2">
+              <span>Task Status :</span>
+            </div>
+          </th>
+          <th>
+            <p-dropdown [options]="listTaskStatus" optionLabel="name" optionValue="id" placeholder="Task Status "
+              formControlName='tasksStatusId'>
+            </p-dropdown>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </form>
+  <!-- ----------------------------------------------------------------------- -->
+  <table class="table">
+    <thead class="thead-light text-dark">
+      <tr>
+        <th scope="col ">Task Level : </th>
+        <th> {{selected?.tasks?.tasksLevel ? selected?.tasks?.tasksLevel : "Not Available" }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <!-- ----------------------------------------------------------------------- -->
+  <table class="table">
+    <thead class=" text-dark">
+      <tr>
+        <th scope="col ">Task Statuse : </th>
+        <th> {{selected?.tasks?.tasksStatus ? selected?.tasks?.tasksStatus : "Not Available" }}</th>
+
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <!-- ----------------------------------------------------------------------- -->
+  <form [formGroup]="taskForm" #form="ngForm" (ngSubmit)="onSubmit()">
+    <table class="table">
+      <thead class=" text-dark">
+        <tr>
+          <th scope="col ">Task Describtion : </th>
+          <th>
+            <input type="text" formControlName='description' class="form-control ">
+            <!-- {{selected?.tasks?.description ? selected?.tasks?.description : "Not Available" }} -->
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="!form.form.valid">
+      Updated
+    </button>
+  </form>
+</p-dialog>
+<!-- ----------------------------------------------------------------------- -->
+
+
+<p-dialog [(visible)]="displayDetails" [modal]="true" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }"
+  [draggable]="false" [resizable]="false">
+  <div class="card-body">
+    <div class="media">
+      <div class="avatar">
+        <div>
+          {{ selected?.user?.fullName?.charAt(0) }}
+        </div>
+      </div>
+      <div class="media-body mx-2">
+        <h5 class="mt-0">{{ selected?.user?.fullName }}</h5>
+        <div>
+          {{ selected?.user?.email }}
+        </div>
+        <div class="text-muted fs-12 p-1">{{selected?.date}}</div>
+      </div>
+    </div>
+
+
+  </div>
+  <!-- ----------------------------------------------------------------------- -->
+  <table class="table">
+    <thead class="thead-light text-dark">
+      <tr>
+        <th scope="col "> Title </th>
+        <th> {{selected?.title ? selected?.title : "Not Available" }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <!-- ----------------------------------------------------------------------- -->
+  <table class="table">
+    <thead class=" text-dark">
+      <tr>
+        <th scope="col  " class="pb-4s"> Message </th>
+        <th> {{selected?.body ? selected?.body : "Not Available" }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+
+</p-dialog>

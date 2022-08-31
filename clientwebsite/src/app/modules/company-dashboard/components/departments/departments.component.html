@@ -1,0 +1,576 @@
+<div class="mb-5">
+  <div class="border-0 shadow-sm card rounded-8 droid-font">
+    <div class="p-0 card-body">
+      <!-- ------------------------------- header -------------------------------- -->
+      <div
+        class="flex-wrap gap-3 d-flex justify-content-center justify-content-md-between align-items-center border-bottom"
+      >
+        <div class="gap-3 d-flex">
+          <svg-icon src="assets/images/icons/depts.svg"></svg-icon>
+          <div class="fs-18">الأقسام</div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <!-- <div id="search" class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="بحث"
+              aria-describedby="button-addon2"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="button-addon2"
+            >
+              <svg-icon src="assets/images/icons/loupe.svg"></svg-icon>
+            </button>
+          </div> -->
+          <button
+            type="button"
+            class="btn btn-gold custom-size rounded-3"
+            (click)="loadData()"
+          >
+            <i class="fas fa-redo-alt"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-gold custom-size rounded-3"
+            (click)="navigationService.back()"
+          >
+            <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="overflow-auto">
+          <table class="table text-nowrap">
+            <thead class="thead-dark">
+              <tr>
+                <th>اسم القسم</th>
+
+                <th>الموقع الخاص به</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody class="tbody">
+              <tr
+                *ngFor="
+                  let item of Deptlist
+                    | paginate
+                      : {
+                          id: 'prevVisits',
+                          itemsPerPage: pageSize,
+                          currentPage: pageNumber,
+                          totalItems: totalCount
+                        }
+                "
+              >
+                <td scope="row">{{ item.name }}</td>
+
+                <td>
+                  <span *ngIf="!item.departementLocation">
+                    هذه المعلومة غير متوفرة</span
+                  >
+                  <span
+                    >{{
+                      item.departementLocation.address | slice: 0:50
+                    }}...</span
+                  >
+                </td>
+                <td>
+                  <div class="d-flex justify-content-end gap-3">
+                    <button
+                      class="btn btn-gold rounded-3 px-3 py-1"
+                      (click)="selectedAddress = item; locOpen.click()"
+                    >
+                      تفاصيل الموقع
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-gold custom-size rounded-3"
+                      data-bs-toggle="modal"
+                      data-bs-target="#mangerModal"
+                      (click)="selectedDept = item"
+                    >
+                      <i class="fas fa-user-plus"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          class="flex-wrap d-flex justify-content-center justify-content-md-between align-itmes-center"
+        >
+          <pagination-controls
+            id="prevVisits"
+            class="mt-3 align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+            previousLabel="السابق"
+            nextLabel="التالي"
+            (pageChange)="paginate($event)"
+            [autoHide]="true"
+          ></pagination-controls>
+
+          <div class="d-flex align-items-center">
+            <button
+              type="button"
+              class="btn btn-gold flex-grow-1 rounded-8"
+              data-bs-toggle="modal"
+              data-bs-target="#addDepartment"
+            >
+              أضف جديد
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="addDepartment"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">إضافة قسم جديد</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #close
+          (click)="deptform.resetForm()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" #deptForm="ngForm">
+          <div class="gap-3 d-flex flex-column">
+            <!-- ----------------------------- managements ------------------------------ -->
+            <div
+              class="row align-items-center"
+              *ngIf="userRole != 'Company Departement Manager'"
+            >
+              <label class="col-4" for="Managements">الإدارة</label>
+              <div class="form-group col-8">
+                <p-dropdown
+                  id="Managements"
+                  [options]="listMangs"
+                  optionLabel="name"
+                  optionValue="id"
+                  formControlName="parentId"
+                  placeholder="اختر"
+                ></p-dropdown>
+              </div>
+            </div>
+
+            <!-- -------------------------------- name --------------------------------- -->
+            <div class="row align-items-center">
+              <label class="col-4" for="name">اسم القسم</label>
+              <div class="form-group col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="name"
+                  id="name"
+                  formControlName="name"
+                />
+              </div>
+            </div>
+
+            <!--! error messages --->
+            <div
+              *ngIf="Name.invalid && deptForm.submitted"
+              class="offset-4 col-8"
+            >
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="Name.hasError('required') && deptForm.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اسم القسم مطلوب
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Name.errors?.minlength && deptForm.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اقل عدد للأحرف هو
+                <span class="mx-1">{{
+                  Name.errors?.minlength.requiredLength
+                }}</span>
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Name.errors?.maxlength && deptForm.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اكثر عدد للأحرف هو
+                <span class="mx-1">{{
+                  Name.errors?.maxlength.requiredLength
+                }}</span>
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+            </div>
+
+            <!-- ------------------------------ location ------------------------------- -->
+            <div class="row align-items-center">
+              <label class="col-4" for="loaction">الموقع الخاص بها</label>
+              <div class="form-group col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="fullTitle"
+                  id="fullTitle"
+                  (keydown.enter)="$event.preventDefault()"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="off"
+                  type="text"
+                  #search
+                />
+              </div>
+            </div>
+
+            <!--! error messages --->
+            <div
+              *ngIf="Location.invalid && deptForm.submitted"
+              class="offset-4 col-8"
+            >
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="Location.hasError('required') && deptForm.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                الموقع مطلوب
+              </div>
+            </div>
+
+            <agm-map
+              [latitude]="latitude"
+              [longitude]="longitude"
+              [zoom]="zoom"
+              [fullscreenControl]="true"
+              [mapTypeControl]="true"
+              [scaleControl]="true"
+              [panControl]="true"
+              [lang]="'ar'"
+            >
+              <agm-marker
+                [latitude]="latitude"
+                [longitude]="longitude"
+                [markerDraggable]="true"
+                (dragEnd)="markerDragEnd($event)"
+              ></agm-marker>
+            </agm-map>
+
+            <button type="submit" class="btn btn-dark">إضافة</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------ AddManger ------------------------------ -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="mangerModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">اضافه مدير</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="addManger.resetForm()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          (ngSubmit)="onSubmit2()"
+          #addManger="ngForm"
+          [formGroup]="mangerForm"
+        >
+          <div class="gap-3 d-flex flex-column">
+            <!-- -------------------------------- name --------------------------------- -->
+            <div class="row align-items-center">
+              <label class="col-4 text-dark" for="fullName">
+                الاسم الموظف</label
+              >
+
+              <div class="form-group col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="fullName"
+                  formControlName="fullName"
+                  id="fullName"
+                  aria-describedby="helpId"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="offset-4 col-8">
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="FName.hasError('required') && addManger.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اسم الموظف مطلوب
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="FName.errors?.minlength && addManger.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اقل عدد للأحرف هو
+                <span class="mx-1">{{
+                  FName.errors?.minlength.requiredLength
+                }}</span>
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="FName.errors?.maxlength && addManger.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اكثر عدد للأحرف هو
+                <span class="mx-1">{{
+                  FName.errors?.maxlength.requiredLength
+                }}</span>
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+            </div>
+
+            <!-- -------------------------------- email -------------------------------- -->
+            <div class="row align-items-center g-2">
+              <label class="col-4 text-dark" for="email"
+                >البريد الالكترونى</label
+              >
+              <div class="form-group col-8">
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  id="email"
+                  formControlName="email"
+                  aria-describedby="helpId"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="offset-4 col-8">
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="Email.hasError('required') && addManger.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                البريد الألكتروني مطلوب
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Email.errors?.pattern && addManger.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                من فضلك ادخل بريد الالكترونى صحيح
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+            </div>
+
+            <!-- -------------------------------- phone -------------------------------- -->
+            <div class="row align-items-center g-2">
+              <label class="col-4 text-dark" for="phoneNumber">
+                رقم الجوال</label
+              >
+
+              <div class="form-group col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="phoneNumber"
+                  id="phoneNumber"
+                  formControlName="phoneNumber"
+                  aria-describedby="helpId"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="offset-4 col-8">
+              <!-- ------------------------------ error-msg ------------------------------ -->
+              <div
+                *ngIf="Phone.hasError('required') && addManger.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                رقم الجوال مطلوب
+              </div>
+              <!-- ----------------------------------------------------------------------- -->
+              <div
+                *ngIf="Phone.errors?.pattern && addManger.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                رقم الجوال غير صحيح
+              </div>
+            </div>
+            <!-- --------------------------------- btn --------------------------------- -->
+
+            <button type="submit" class="btn btn-dark btn-block">اضافه</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button
+  hidden
+  data-bs-toggle="modal"
+  data-bs-target="#successAddModal"
+  #successM
+></button>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="successAddModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button
+          type="button"
+          class="btn-close"
+          id="closeModel"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+        <div class="row">
+          <div class="col-3 align-self-center">
+            <img
+              src="assets/images/dashboard/New message-amico.svg"
+              class="img-fluid"
+              alt=""
+            />
+          </div>
+          <div class="col-9">
+            <div class="py-3 fs-20 text-d7be69">تمت الإضافة بنجاح</div>
+            <p class="text-black fs-12">
+              وسيتم إرسال بريد تفعيل للمستخدم الجديد لتفعيل حسابه والدخول علي
+              الموقع يرجي مراجعة ال Junk Mail في حالة عدم وصول البريد إلي inbox
+            </p>
+            <p class="text-d7be69 fs-20">{{ manager?.email }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ----------------------------------------------------------------------- -->
+<button
+  #locOpen
+  data-bs-toggle="modal"
+  data-bs-target="#location"
+  hidden
+></button>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="location"
+  tabindex="-1"
+  aria-labelledby="locationLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="locationLabel">
+          تفاصيل موقع قسم {{ selectedAddress?.name }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <input
+          type="text"
+          class="form-control mb-3"
+          id="input1"
+          readonly
+          [value]="selectedAddress?.departementLocation.address"
+        />
+
+        <agm-map
+          *ngIf="selectedAddress?.departementLocation"
+          [latitude]="selectedAddress?.departementLocation.latitude"
+          [longitude]="selectedAddress?.departementLocation.longitude"
+          [zoom]="selectedAddress?.departementLocation.zoom"
+          [fullscreenControl]="true"
+          [fullscreenControl]="true"
+          [mapTypeControl]="true"
+          [scaleControl]="true"
+          [panControl]="true"
+          [lang]="'ar'"
+        >
+          <agm-marker
+            [latitude]="selectedAddress?.departementLocation.latitude"
+            [longitude]="selectedAddress?.departementLocation.longitude"
+            [markerDraggable]="false"
+          ></agm-marker>
+        </agm-map>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary d-block m-auto"
+          data-bs-dismiss="modal"
+        >
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

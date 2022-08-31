@@ -1,0 +1,82 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex justify-content-between flex-wrap">
+      <div class="text-primary font-weight-bold">Managers</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="listManger"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Username">
+            Full Name <p-sortIcon field="fullName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Email">
+            Email <p-sortIcon field="Email"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Phone">
+            Phone <p-sortIcon field="Phone"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Role">
+            Role <p-sortIcon field="Role"></p-sortIcon>
+          </th>
+          <th pSortableColumn="dept">
+            الإدارة / قسم <p-sortIcon field="dept"></p-sortIcon>
+          </th>
+          <th pSortableColumn="IsActive">
+            IsActive <p-sortIcon field="IsActive"></p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-employee>
+        <tr>
+          <td>{{ employee?.fullName }}</td>
+          <td>{{ employee?.email }}</td>
+          <td>{{ employee?.phoneNumber }}</td>
+          <td>{{ employee?.userRoles[0]?.name }}</td>
+          <td>{{ employee?.userDepartments[0].name }}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <i
+                class="fas fa-circle"
+                [ngClass]="{
+                  'text-danger': !employee?.isActive,
+                  'text-success': employee?.isActive
+                }"
+              ></i>
+              <span class="mx-2">
+                {{ !employee?.isActive ? "غير مفعل" : "مفعل" }}</span
+              >
+            </div>
+          </td>
+          <td>
+            <button
+              *ngIf="!employee?.isActive"
+              pButton
+              pRipple
+              icon="pi pi-book"
+              (click)="showAttach(employee?.id)"
+              class="p-button-rounded p-button-primary"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ listManger ? listManger.length : 0 }} Managers.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -1,0 +1,266 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Teams</div>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="deptForm" class="">
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 pb-4">
+          <p-dropdown
+            [options]="listDepts"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="parentId"
+            placeholder="Select Department"
+            (ngModelChange)="load()"
+          ></p-dropdown>
+        </div>
+      </div>
+    </form>
+
+    <p-table
+      #dt
+      *ngIf="Department.value"
+      [rows]="10"
+      [value]="listTeams"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Id">
+            <div class="d-flex">
+              <span>Id</span>
+              <p-sortIcon field="Id"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="Name">
+            <div class="d-flex">
+              <span>Name</span>
+              <p-sortIcon field="Name"></p-sortIcon>
+            </div>
+          </th>
+
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-team>
+        <tr>
+          <td>{{ team.id }}</td>
+          <td>{{ team.name }}</td>
+          <td class="d-flex gap justify-content-end">
+            <button
+              pButton
+              pRipple
+              (click)="showFormUser(team)"
+              icon="pi pi-user"
+              class="p-button-rounded p-button-success p-mr-2"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-info"
+              class="p-button-rounded p-button-info p-mr-2"
+              (click)="showDetails(team?.id)"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-warning p-mr-2"
+              (click)="showForm(team)"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              (click)="onDelete(team.id)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listTeams ? listTeams.length : 0 }} Teams.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Teams Form"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="teamsForm" (ngSubmit)="onSubmit()" #formAddTeam="ngForm">
+    <div class="form-group">
+      <label for="Name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Enter Team Name.."
+        formControlName="name"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Name.hasError('required') && formAddTeam.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name Team is Required
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button
+        *ngIf="!selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Add Teams
+      </button>
+      <button
+        *ngIf="selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Update Teams
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Add User Form"
+  [(visible)]="displayFormUser"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm2()"
+>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit2()" #formUser="ngForm">
+    <!-- -------------------------------- name --------------------------------- -->
+    <div class="form-group">
+      <label for="Name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Enter User Name.."
+        formControlName="fullName"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="UserName.hasError('required') && formUser.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name is Required
+      </div>
+    </div>
+    <!-- ------------------------------email----------------------------------------- -->
+    <div class="form-group">
+      <label for="Email">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        name="Email"
+        id="Email"
+        placeholder="Enter Email Name.."
+        formControlName="email"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Email.hasError('required') && formUser.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Email is Required
+      </div>
+    </div>
+    <!-- -------------------------------- phone -------------------------------- -->
+    <div class="form-group">
+      <label for="PhoneNumber">Phone Number</label>
+      <input
+        type="text"
+        class="form-control"
+        name="PhoneNumber"
+        id="PhoneNumber"
+        placeholder="Enter PhoneNumber Name.."
+        formControlName="phoneNumber"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="PhoneNumber.hasError('required') && formUser.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Phone Number is Required
+      </div>
+    </div>
+    <!-- -------------------------------- role --------------------------------- -->
+    <div class="form-group">
+      <p-dropdown
+        [options]="teamRoles"
+        formControlName="roleName"
+        optionLabel="appRole.name"
+        [autoDisplayFirst]="false"
+        placeholder="select role"
+        optionValue="appRole.name"
+      ></p-dropdown>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button
+        *ngIf="!selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Add
+      </button>
+      <button
+        *ngIf="selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+</p-dialog>

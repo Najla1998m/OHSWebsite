@@ -1,0 +1,25 @@
+.custom-size {
+  width: 45px;
+  height: 45px;
+  padding: 2ex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+agm-map {
+  height: 250px;
+  transition: none !important;
+  border-radius: 0.5rem;
+}
+
+.small-window {
+  height: 500px;
+}
+
+// :host ::ng-deep {
+//   .small-window .agm-map-container-inner {
+//     border-radius: 10px;
+//     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.322);
+//   }
+// }

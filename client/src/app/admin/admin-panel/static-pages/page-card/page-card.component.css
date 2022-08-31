@@ -1,0 +1,34 @@
+.lines-3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.gap {
+  gap: 16px;
+}
+
+.setting {
+  border-radius: 5rem;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  color: black;
+}
+
+.setting:hover,
+.setting:focus {
+  color: black !important;
+}
+
+.card-title {
+  text-transform: capitalize;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}

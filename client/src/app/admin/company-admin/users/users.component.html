@@ -1,0 +1,214 @@
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <button
+      pButton
+      pRipple
+      label="New"
+      icon="pi pi-plus"
+      class="p-button-success p-mr-2"
+      (click)="openNew()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      [label]="'Delete'"
+      icon="pi pi-trash"
+      class="p-button-danger"
+      (click)="deleteSelectedUsers()"
+      [disabled]="!selectedUsers || !selectedUsers.length"
+    ></button>
+  </ng-template>
+
+  <!-- <ng-template pTemplate="right">
+        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block"></p-fileUpload>
+        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+    </ng-template> -->
+</p-toolbar>
+
+<p-table
+  #dt
+  [lazy]="true"
+  (onLazyLoad)="loadUsers($event)"
+  [value]="users"
+  [rows]="pageSize"
+  [paginator]="true"
+  [totalRecords]="totalCount"
+  [globalFilterFields]="['fullName', 'email']"
+  [(selection)]="selectedUsers"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+  sortMode="multiple"
+>
+  <ng-template pTemplate="caption">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      <h5 class="p-m-0">Manage Users</h5>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="filterGlobal($event, 'contains')"
+          placeholder="Search..."
+        />
+        <!-- <input pInputText type="text"  placeholder="Search..." /> -->
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th pSortableColumn="fullName">
+        Name <p-sortIcon field="fullName"></p-sortIcon>
+      </th>
+      <th pSortableColumn="Email">
+        Email <p-sortIcon field="Email"></p-sortIcon>
+      </th>
+      <th pSortableColumnDisabled="true">Phone Number</th>
+      <th pSortableColumn="IsActive">
+        Status <p-sortIcon field="IsActive"></p-sortIcon>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="user"></p-tableCheckbox>
+      </td>
+      <td>{{ user.fullName }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.phoneNumber }}</td>
+      <td>
+        <!-- <span class="p-column-title">Status</span> -->
+        <span [class]="'customer-badge status-' + user.isActive">{{
+          user.isActive
+        }}</span>
+      </td>
+      <td>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-success p-mr-2"
+          (click)="editUser(user)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-danger"
+          (click)="deleteUser(user)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      In total there are {{ totalCount }} users.
+    </div>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="productDialog"
+  [style]="{ width: '450px' }"
+  header="User Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="name">Name</label>
+      <input
+        type="text"
+        pInputText
+        id="name"
+        [(ngModel)]="user.fullName"
+        required
+        autofocus
+      />
+      <small class="p-error" *ngIf="submitted && !user.fullName"
+        >Name is required.</small
+      >
+    </div>
+
+    <div class="p-field">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        pInputText
+        id="name"
+        [(ngModel)]="user.email"
+        required
+        autofocus
+      />
+      <small class="p-error" *ngIf="submitted && !user.email"
+        >Email is required.</small
+      >
+    </div>
+    <div class="p-field">
+      <label for="phoneNumber">Phone Number</label>
+      <input
+        type="tel"
+        pInputText
+        id="name"
+        [(ngModel)]="user.phoneNumber"
+        required
+        autofocus
+      />
+      <small class="p-error" *ngIf="submitted && !user.phoneNumber"
+        >Phone Number is required.</small
+      >
+    </div>
+    <div *ngIf="!user.id" class="p-field">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        pInputText
+        id="password"
+        [(ngModel)]="user.password"
+        required
+        autofocus
+      />
+      <small class="p-error" *ngIf="submitted && !user.password"
+        >Password is required.</small
+      >
+    </div>
+    <div class="p-field">
+      <label for="password">Role</label>
+      <ng-multiselect-dropdown
+        [settings]="dropdownSettings"
+        [data]="dropdownList"
+        [(ngModel)]="selectedItems"
+        (onSelect)="onItemSelect($event)"
+        (onSelectAll)="onSelectAll($event)"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveUser()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

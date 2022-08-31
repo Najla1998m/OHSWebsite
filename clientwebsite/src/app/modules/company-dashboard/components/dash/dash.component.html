@@ -1,0 +1,390 @@
+<div id="dash">
+  <div class="container">
+    <!-- -------------------------------- dash --------------------------------- -->
+    <div *ngIf="isCompanyAdmin()" class="row-gap-3 mb-5 row mb-md-4">
+      <div class="col-lg-9">
+        <!-- -------------------------------- main --------------------------------- -->
+        <div id="main-card" class="border-0 card rounded-8 h-100">
+          <div class="card-body">
+            <div class="row row-cols-lg-2 row-cols-1">
+              <div class="gap-2 d-flex flex-column">
+                <div class="gap-3 d-flex align-items-center">
+                  <div
+                    class="fs-lg-40 fs-24 font-w-500 font-default text-d7be69 lh-base"
+                  >
+                    {{ tasksCounts }}
+                  </div>
+                  <div class="fs-lg-24 fs-20">المهام الحالية</div>
+                </div>
+                <div class="row row-cols-2">
+                  <p-dropdown
+                    [options]="menu1"
+                    [(ngModel)]="selected1"
+                    placeholder="الإدارة"
+                    optionLabel="name"
+                    optionValue="id"
+                    (ngModelChange)="loadDeptsByManagementId($event)"
+                  >
+                  </p-dropdown>
+                  <p-dropdown
+                    [options]="menu2"
+                    [(ngModel)]="selected2"
+                    placeholder="القسم"
+                    optionLabel="name"
+                    (ngModelChange)="onDeptSelected($event)"
+                  >
+                  </p-dropdown>
+                </div>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div dir="ltr">
+                <ngx-charts-advanced-pie-chart
+                  [results]="saleData"
+                  [scheme]="'vivid'"
+                ></ngx-charts-advanced-pie-chart>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div dir="ltr" style="height: 220px">
+                <div class="px-0 w-100 h-100">
+                  <ngx-charts-bar-horizontal
+                    [results]="staked"
+                    [scheme]="'picnic'"
+                    [gradient]="true"
+                    [legend]="false"
+                    [legendPosition]="position"
+                    [yAxis]="true"
+                    [xAxis]="true"
+                    [showGridLines]="false"
+                    [showXAxisLabel]="true"
+                    [legendTitle]="'السنة'"
+                    [xAxisLabel]="'عدد المهام الموجوده فى كل شهر'"
+                  >
+                  </ngx-charts-bar-horizontal>
+                </div>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div style="height: 220px">
+                <div id="line-chart" class="px-0 w-100 h-100" dir="ltr">
+                  <ngx-charts-bar-vertical
+                    [results]="line"
+                    [xAxis]="true"
+                    [showGridLines]="false"
+                    [rotateXAxisTicks]="true"
+                    [scheme]="'vivid'"
+                    [roundDomains]="true"
+                    [showXAxisLabel]="true"
+                    [legend]="false"
+                    [legendPosition]="position"
+                    [yAxis]="true"
+                    [xAxis]="true"
+                    [xAxisLabel]="'عدد الملاحظات في اخر شهر'"
+                  ></ngx-charts-bar-vertical>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="px-2 row g-3 px-lg-0">
+          <!-- ----------------------------- first card ------------------------------ -->
+          <div
+            id="dept-card"
+            class="border-0 cursor-pointer card rounded-8"
+            (click)="navigateToDepartments()"
+          >
+            <div class="card-body">
+              <div class="fs-18">أقسام الشركة</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">
+                {{ statisticsData?.departementsCount.departementsCount }}
+              </div>
+            </div>
+          </div>
+
+          <!-- ------------------------------- second -------------------------------- -->
+          <div
+            id="managments-card"
+            class="border-0 cursor-pointer card rounded-8"
+            (click)="navigateToManagements()"
+          >
+            <div class="card-body">
+              <div class="fs-18">إدارات الشركة</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">
+                {{ statisticsData?.departementsCount.managementsCount }}
+              </div>
+            </div>
+          </div>
+
+          <!-- -------------------------------- third -------------------------------- -->
+          <div
+            id="requests-card"
+            class="border-0 cursor-pointer card rounded-8"
+            (click)="navigateToRequests()"
+          >
+            <div class="card-body">
+              <div class="fs-18">مهام الشركة</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">{{ tasksCounts }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- -------------------------------- dash for manager --------------------------------- -->
+    <div *ngIf="isManager()" class="row-gap-3 mb-5 row mb-md-4">
+      <div class="col-lg-9">
+        <!-- -------------------------------- main --------------------------------- -->
+        <div id="main-card" class="border-0 card rounded-8 h-100">
+          <div class="card-body">
+            <div class="row row-cols-lg-2 row-cols-1">
+              <div class="gap-2 d-flex flex-column">
+                <div class="gap-3 d-flex align-items-center">
+                  <div
+                    class="fs-lg-40 fs-24 font-w-500 font-default text-d7be69 lh-base"
+                  >
+                    {{ tasksCounts }}
+                  </div>
+                  <div class="fs-lg-24 fs-20">المهام الحالية</div>
+                </div>
+                <div class="row row-cols-2">
+                  <p-dropdown
+                    [options]="menu3"
+                    [(ngModel)]="selected1"
+                    placeholder="الأقسام"
+                    optionLabel="name"
+                    (ngModelChange)="onDeptSelected($event)"
+                  >
+                  </p-dropdown>
+                </div>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div dir="ltr">
+                <ngx-charts-advanced-pie-chart
+                  [results]="saleData"
+                  [scheme]="'vivid'"
+                ></ngx-charts-advanced-pie-chart>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div dir="ltr" style="height: 220px">
+                <div class="px-0 w-100 h-100">
+                  <ngx-charts-bar-horizontal
+                    [results]="staked"
+                    [scheme]="'picnic'"
+                    [gradient]="true"
+                    [legend]="false"
+                    [yAxis]="true"
+                    [xAxis]="true"
+                    [showGridLines]="false"
+                    [showXAxisLabel]="true"
+                    [legendTitle]="'السنة'"
+                    [xAxisLabel]="'عدد المهام الموجوده فى كل قسم'"
+                  >
+                  </ngx-charts-bar-horizontal>
+                </div>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div style="height: 220px">
+                <div id="line-chart" class="px-0 w-100 h-100" dir="ltr">
+                  <ngx-charts-bar-vertical
+                    [results]="line"
+                    [xAxis]="true"
+                    [showGridLines]="false"
+                    [rotateXAxisTicks]="true"
+                    [scheme]="'vivid'"
+                    [roundDomains]="true"
+                    [legend]="false"
+                    [showXAxisLabel]="true"
+                    [yAxis]="true"
+                    [xAxis]="true"
+                    [xAxisLabel]="
+                      'عدد الملاحظات العامة الموجوده خلال اخر 10 أيام'
+                    "
+                  ></ngx-charts-bar-vertical>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="px-2 row g-3 px-lg-0">
+          <!-- ----------------------------- first card ------------------------------ -->
+          <div
+            id="dept-card"
+            class="border-0 cursor-pointer card rounded-8"
+            (click)="navigateToDepartments()"
+          >
+            <div class="card-body">
+              <div class="fs-18">أقسام الإدارة</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">
+                {{ menu3?.length }}
+              </div>
+            </div>
+          </div>
+
+          <!-- ------------------------------- second -------------------------------- -->
+          <div
+            id="managments-card"
+            class="border-0 cursor-pointer card rounded-8"
+          >
+            <div class="card-body">
+              <div class="fs-18">طلبات الإدارة</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">
+                {{ statisticsData?.ordersCount }}
+              </div>
+            </div>
+          </div>
+
+          <!-- -------------------------------- third -------------------------------- -->
+          <div
+            id="requests-card"
+            class="border-0 cursor-pointer card rounded-8"
+            [routerLink]="['/company-dashboard/management-task']"
+          >
+            <div class="card-body">
+              <div class="fs-18">مهام الإدارة</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">
+                {{ tasksCounts }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- -------------------------------- dash for Dept Manager --------------------------------- -->
+    <div *ngIf="isDeptMang()" class="row-gap-3 mb-5 row mb-md-4">
+      <div class="col-lg-9">
+        <!-- -------------------------------- main --------------------------------- -->
+        <div id="main-card" class="border-0 card rounded-8 h-100">
+          <div class="card-body">
+            <div class="row row-cols-lg-2 row-cols-1">
+              <div class="gap-2 d-flex flex-column">
+                <div class="gap-3 d-flex align-items-center">
+                  <div
+                    class="fs-lg-40 fs-24 font-w-500 font-default text-d7be69 lh-base"
+                  >
+                    {{ tasksCounts }}
+                  </div>
+                  <div class="fs-lg-24 fs-20">المهام الحالية</div>
+                </div>
+                <div class="row row-cols-2">
+                  <p-dropdown
+                    [options]="menu3"
+                    [(ngModel)]="selected1"
+                    placeholder="اختر"
+                    optionLabel="name"
+                    (ngModelChange)="onDeptSelected($event)"
+                  >
+                  </p-dropdown>
+                </div>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div dir="ltr">
+                <ngx-charts-advanced-pie-chart
+                  [results]="saleData"
+                  [scheme]="'vivid'"
+                ></ngx-charts-advanced-pie-chart>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div dir="ltr" style="height: 220px">
+                <div class="px-0 w-100 h-100">
+                  <ngx-charts-bar-horizontal
+                    [results]="staked"
+                    [scheme]="'picnic'"
+                    [gradient]="true"
+                    [legend]="false"
+                    [yAxis]="true"
+                    [xAxis]="true"
+                    [showGridLines]="false"
+                    [showXAxisLabel]="true"
+                    [legendTitle]="'السنة'"
+                    [xAxisLabel]="'عدد المهام الموجوده فى كل قسم'"
+                  >
+                  </ngx-charts-bar-horizontal>
+                </div>
+              </div>
+
+              <!-- ------------------------------- section ------------------------------- -->
+              <div style="height: 220px">
+                <div id="line-chart" class="px-0 w-100 h-100" dir="ltr">
+                  <ngx-charts-bar-vertical
+                    [results]="line"
+                    [xAxis]="true"
+                    [showGridLines]="false"
+                    [rotateXAxisTicks]="true"
+                    [scheme]="'vivid'"
+                    [roundDomains]="true"
+                    [legend]="false"
+                    [showXAxisLabel]="true"
+                    [yAxis]="true"
+                    [xAxis]="true"
+                    [xAxisLabel]="
+                      'عدد الملاحظات العامة الموجوده خلال اخر 10 أيام'
+                    "
+                  ></ngx-charts-bar-vertical>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="px-2 row g-3 px-lg-0">
+          <!-- ----------------------------- first card ------------------------------ -->
+          <div
+            id="dept-card"
+            class="border-0 cursor-pointer card rounded-8"
+            [routerLink]="['/company-dashboard/department-manager/tasks']"
+          >
+            <div class="card-body">
+              <div class="fs-18">مهام القسم</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">{{ tasksCounts }}</div>
+            </div>
+          </div>
+
+          <!-- ------------------------------- second -------------------------------- -->
+          <div
+            id="managments-card"
+            class="border-0 cursor-pointer card rounded-8"
+          >
+            <div class="card-body">
+              <div class="fs-18">طلبات القسم</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">
+                {{
+                  statisticsData?.ordersCount ? statisticsData.ordersCount : "0"
+                }}
+              </div>
+            </div>
+          </div>
+
+          <!-- -------------------------------- third -------------------------------- -->
+          <div
+            id="requests-card"
+            class="border-0 cursor-pointer card rounded-8"
+            (click)="navigateToEmployees()"
+          >
+            <div class="card-body">
+              <div class="fs-18">فرق القسم</div>
+              <div class="fs-lg-44 fs-24 text-d7be69">
+                {{
+                  statisticsData?.departementsCount?.teamsCount
+                    ? statisticsData?.departementsCount.teamsCount
+                    : "0"
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

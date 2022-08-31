@@ -1,0 +1,180 @@
+<nav class="
+    bg-white
+    shadow-sm
+    navbar navbar-expand-lg navbar-light
+    droid-font
+    fixed-top
+  ">
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/home']">
+      <img src="assets/images/logo.png" class="logo" alt="" />
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="mb-2 navbar-nav ms-auto mb-lg-0 gap-lg-3 align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']" routerLinkActive="active">
+            {{ "navbar.home" | translate }}
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false" routerLinkActive="active">
+            {{ "navbar.about" | translate }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li *ngFor="let item of list">
+              <a class="dropdown-item" [routerLink]="['/about', item.id]" routerLinkActive="active">{{ item.title }}</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item" *ngIf="showPackages">
+          <a class="nav-link" [routerLink]="['/packages']" routerLinkActive="active">{{ "navbar.quotas" | translate
+            }}</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="modal" data-bs-target="#joinUs">{{
+            "navbar.joinUs" | translate
+            }}</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="onLangChange()">{{
+            "navbar.lang" | translate
+            }}</a>
+        </li>
+        <li class="nav-item d-block d-lg-none" [routerLink]="['/auth/login']" routerLinkActive="active"
+          *ngIf="!isAuthenticated">
+          <a class="nav-link">{{ "navbar.login" | translate }}</a>
+        </li>
+        <li class="nav-item d-block d-lg-none" (click)="onLogout()" routerLinkActive="active" *ngIf="isAuthenticated">
+          <a class="nav-link">{{ "تسجيل خروج" | translate }}</a>
+        </li>
+        <li *ngIf="!isAuthenticated" class="nav-item d-block d-lg-none border-bottom-0">
+          <a class="nav-link">{{ "navbar.subscribe" | translate }}</a>
+        </li>
+        <li *ngIf="!isAuthenticated" class="nav-item d-none d-lg-block">
+          <a class="btn btn-outline-gold" [routerLink]="['/auth/login']">{{
+            "navbar.login" | translate
+            }}</a>
+        </li>
+
+        <li *ngIf="!isAuthenticated" class="nav-item d-none d-lg-block">
+          <a class="gap-2 px-4 btn btn-gold d-flex" [routerLink]="['/packages']">
+            <span>{{ "navbar.subscribe" | translate }}</span>
+            <svg-icon src="assets/images/icons/arrow.svg" svgClass="arrow"></svg-icon>
+          </a>
+        </li>
+
+        <!-- ----------------------------------------------------------------------- -->
+        <li class="nav-item position-relative text-w-800" *ngIf="isAuthenticated">
+          <a class="
+              gap-3
+              px-0
+              align-items-center
+              nav-link
+              underLine
+              dropdown-toggle
+              hide-arrow
+              d-flex
+            " routerLinkActive="active" tabindex="-1" aria-disabled="true" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="assets/images/icons/profile.png" width="35" />
+            <div class="text-capitalize">
+              {{ userDetails?.fullName }}
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-at-navbar" aria-labelledby="navbarDropdown">
+            <li (click)="navigateToDash()" *ngIf="userDetails">
+              <a class="dropdown-item" routerLinkActive="active">{{
+                "لوحة المعلومات" | translate
+                }}</a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="onLogout()" routerLinkActive="active" style="cursor: pointer">
+                {{ "تسجيل الخروج" | translate }}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal fade" id="joinUs" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">نوع الاشتراك</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="accountsForm" (ngSubmit)="navigateToForms()" #accounts="ngForm">
+          <div class="mx-auto row w-100 g-3">
+            <div class="form-check col-md">
+              <input type="radio" class="form-check-input" name="type" id="joinUsProvider" value="provider"
+                formControlName="type" />
+              <label for="joinUsProvider" class="form-check-label w-100">
+                <div class="
+                    py-3
+                    border-0
+                    card
+                    w-100
+                    rounded-16
+                    account-type
+                    py-sm-5
+                  ">
+                  <div class="text-center card-body">
+                    <div class="d-flex justify-content-center">
+                      <svg-icon src="assets/images/auth/individual2.svg" svgClass="account-icon"></svg-icon>
+                    </div>
+                    <div class="mt-3">مزود خدمات (شركات)</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div class="form-check col-md">
+              <input type="radio" class="form-check-input" name="type" id="joinUsIndividual" value="individual"
+                formControlName="type" />
+              <label for="joinUsIndividual" class="form-check-label w-100">
+                <div class="
+                    py-3
+                    border-0
+                    card
+                    w-100
+                    rounded-16
+                    account-type
+                    py-sm-5
+                  ">
+                  <div class="text-center card-body">
+                    <div class="d-flex justify-content-center">
+                      <svg-icon src="assets/images/auth/individual.svg" svgClass="account-icon"></svg-icon>
+                    </div>
+                    <div class="mt-3">مزود خدمات (أفراد)</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div *ngIf="Type.hasError('required') && accounts.submitted" class="p-1 error-msg small" role="alert">
+            <i class="fas fa-times-circle me-2"></i>
+            برجاء اختيار نوع الحساب
+          </div>
+          <div class="border-0 modal-footer">
+            <button [disabled]="!accountsForm.valid" type="submit" class="m-auto btn btn-gold" data-bs-dismiss="modal">
+              التالي
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex justify-content-between flex-wrap">
+      <div class="text-primary font-weight-bold">Users in Teams</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="employees"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Username">
+            Username <p-sortIcon field="Username"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Email">
+            Email <p-sortIcon field="Email"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Phone">
+            Phone <p-sortIcon field="Phone"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Role">
+            Role <p-sortIcon field="Role"></p-sortIcon>
+          </th>
+          <th pSortableColumn="IsActive">
+            IsActive <p-sortIcon field="IsActive"></p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-employee>
+        <tr>
+          <td>{{ employee?.fullName }}</td>
+          <td>{{ employee?.email }}</td>
+          <td>{{ employee?.phoneNumber }}</td>
+          <td>{{ employee?.userRoles[0]?.name }}</td>
+          <td>
+            <div class="d-flex align-items-center gap-5">
+              <i
+                class="fas fa-circle"
+                [ngClass]="{
+                  'text-danger': !employee?.isActive,
+                  'text-success': employee?.isActive
+                }"
+              ></i>
+              <span> {{ !employee?.isActive ? "غير مفعل" : "مفعل" }}</span>
+            </div>
+          </td>
+          <td>
+            <button
+              pButton
+              pRipple
+              (click)="onDelete(employee?.id)"
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ employees ? employees.length : 0 }} employees.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Karla:wght@400&display=swap");
+
+* {
+  text-align: initial;
+}
+
+html:lang(ar) .sidebar .nav-item .collapse {
+  position: absolute;
+  right: calc(6.5rem + 1.5rem / 2);
+  left: auto;
+  z-index: 1;
+  top: 2px;
+}
+
+.me-2 {
+  margin-inline-end: 0.5rem !important;
+}
+
+.ms-2 {
+  margin-inline-start: 0.5rem !important;
+}
+
+.p-dropdown {
+  width: 100% !important;
+}
+p-dropdown {
+  width: 100% !important;
+}
+
+.p-multiselect {
+  width: 100% !important;
+}
+p-multiselect {
+  width: 100% !important;
+}
+.p-dialog-content {
+  overflow: visible !important;
+}
+.error-msg {
+  color: #dc3545 !important;
+  margin-top: 1px;
+  text-align: start;
+}
+
+.w-fit {
+  width: fit-content;
+}
+
+.card-header {
+  text-align: initial !important;
+}
+
+html:lang(ar) .mr-3 {
+  margin-left: 1rem !important;
+}
+
+@media (min-width: 768px) {
+  html:lang(ar)
+    .sidebar
+    .nav-item
+    .nav-link[data-toggle="collapse"].collapsed::after {
+    float: left;
+    transform: rotate(90deg);
+  }
+
+  html:lang(ar) .sidebar .nav-item .nav-link[data-toggle="collapse"]::after {
+    width: 1rem;
+    text-align: center;
+    float: left;
+    vertical-align: 0;
+    border: 0;
+    font-weight: 900;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+  }
+
+  html:lang(ar) .sidebar .nav-item .collapse {
+    position: relative;
+    left: auto;
+    right: 0;
+    z-index: 1;
+    top: 0;
+    -webkit-animation: none;
+    animation: none;
+  }
+}
+
+@media (min-width: 573px) {
+  html:lang(ar) .topbar .dropdown .dropdown-menu {
+    right: -17.5rem;
+  }
+}
+
+.p-fileupload-row button {
+  background-color: #dc3545;
+  border-radius: 5rem;
+  padding: 0;
+  width: 35px;
+  height: 35px;
+  border-color: #dc3545;
+}
+
+.p-fileupload-row button:focus {
+  background-color: #dc3545 !important;
+
+  border-color: #dc3545 !important;
+}
+
+.p-fileupload-row button:hover {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+.p-fileupload .p-fileupload-buttonbar {
+  padding: 0.5rem;
+}
+
+.rounded-16 {
+  border-radius: 16px;
+}
+
+.gap {
+  gap: 12px;
+}

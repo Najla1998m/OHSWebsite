@@ -1,0 +1,25 @@
+.row-gap {
+  row-gap: 25px;
+}
+.min-h-117 {
+  min-height: 117px !important;
+}
+/* .dept {
+  background-color: dodgerblue;
+  border: 2px solid dodgerblue;
+} */
+
+.selected {
+  box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
+}
+
+.nodept {
+  background-color: white !important;
+  border: none !important;
+}
+
+@media screen and (max-width: 768px) {
+  .w-sm-100 {
+    width: 100% !important;
+  }
+}

@@ -1,0 +1,29 @@
+<div
+  *ngIf="data"
+  class="
+    card
+    text-center
+    border-0
+    rounded-16
+    text-white
+    position-relative
+    droid-font
+  "
+  style="height: 190px;"
+>
+  <img class="card-img-top" [src]="data.image" alt="" />
+  <div class="card-body py-2 px-0 bg-b58d2e position-absolute">
+    <h4 class="card-title fs-18">{{ data.title }}</h4>
+  </div>
+</div>
+
+<div
+  *ngIf="!data"
+  class="card text-center rounded-16 text-white w-250px position-relative"
+>
+  <p-skeleton width="100%" height="9rem" styleClass="img-skeleton"></p-skeleton>
+  <div class="card-body position-absolute bg-white pt-0">
+    <p-skeleton width="85%" height="1rem" styleClass="mt-3"></p-skeleton>
+    <p-skeleton width="65%" height="1rem" styleClass="mt-2"></p-skeleton>
+  </div>
+</div>

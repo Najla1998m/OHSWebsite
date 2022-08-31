@@ -1,0 +1,271 @@
+.logo-preview {
+  height: 110px;
+  width: 280px;
+  background-color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.img-fluid {
+  height: 100%;
+}
+
+@media (min-width: 400px) {
+  .d-xsm-inline {
+    display: inline !important;
+  }
+}
+
+.btn-outline-dark:hover .add-icon {
+  fill: white !important;
+}
+
+.mat-icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notify-badge {
+  width: 18px;
+  height: 18px;
+  background-color: #f74d4d;
+  border-radius: 5rem;
+  position: absolute;
+  color: black;
+  top: 2px;
+  right: 1px;
+  text-align: center;
+  padding: 0;
+  font-size: smaller;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-weight: 500;
+}
+
+::ng-deep {
+  html:lang(ar) #closeModel {
+    margin: -0.5rem auto -0.5rem -0.5rem !important;
+  }
+
+  html:lang(ar) #closeModel {
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: translate(-35%, -35%);
+  }
+}
+#closeModel :focus,
+#closeModel :hover {
+  opacity: 1 !important;
+}
+
+.phone {
+  fill: #d7be69;
+}
+
+.text-black {
+  color: black;
+}
+
+#nav-tabContent {
+  margin-top: 1rem;
+  border-top: 1px dashed #cecece;
+}
+
+.nav-link {
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: black;
+  z-index: 1;
+}
+
+.nav-link.active {
+  background-color: transparent;
+  background-color: transparent;
+}
+
+.nav-link .num {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  border-radius: 20px;
+  padding: 6px;
+  color: white;
+  background-color: #eeeeee;
+}
+
+.line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1px;
+  height: 2px;
+  width: 370%;
+  background-color: #eeeeee;
+  transform: translate(0, -50%);
+  z-index: -1;
+}
+
+.finished .num {
+  background-color: #77d656 !important;
+}
+
+.finished .num::after {
+  background-color: #77d656;
+}
+
+.nav-link.active {
+  color: #d7be69 !important;
+}
+
+.nav-link.active .num {
+  background-color: #d7be69 !important;
+}
+
+.nav-link.active .num::after {
+  background-color: #eeeeee;
+}
+
+::ng-deep {
+  .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+    background: #d7be69 !important;
+  }
+}
+
+.row-gap {
+  row-gap: 1rem;
+}
+
+.flip-r {
+  transform: scale(-1);
+}
+
+.flip-l {
+  transform: scale(1);
+}
+
+::ng-deep {
+  html:lang(ar) .flip-r {
+    transform: scale(1);
+  }
+
+  html:lang(ar) .flip-l {
+    transform: scale(-1);
+  }
+}
+
+.flip-r {
+  transform: scale(-1);
+}
+
+.flip-l {
+  transform: scale(1);
+}
+
+::ng-deep {
+  html:lang(ar) .flip-r {
+    transform: scale(1);
+  }
+
+  html:lang(ar) .flip-l {
+    transform: scale(-1);
+  }
+}
+
+::ng-deep {
+  .slide {
+    height: 100%;
+  }
+}
+
+.slider {
+  scroll-behavior: smooth !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  scroll-behavior: smooth;
+}
+
+.arrow-button {
+  padding: 1.5ex;
+}
+
+.slide .active * {
+  svg-icon {
+    fill: #b58d2e !important;
+  }
+
+  color: #b58d2e !important;
+  background-color: #fff8e1;
+}
+
+.slide .active {
+  border-color: #d7be69;
+  position: relative;
+}
+
+.slide .active::before {
+  position: absolute;
+  content: "";
+  width: 25px;
+  height: 25px;
+  background: url("../../../../../assets/images/icons/checked.svg");
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 3px;
+}
+
+.quap {
+  border-radius: 0;
+  width: 200px;
+}
+
+.bg-3db39e {
+  background-color: #3db39e;
+}
+
+.bg-77d656 {
+  background-color: #77d656;
+}
+
+::ng-deep {
+  #numbo .p-knob-text {
+    color: gray !important;
+  }
+
+  text {
+    color: gray !important;
+    fill: gray !important;
+  }
+}
+
+agm-map {
+  height: 250px;
+  transition: none !important;
+  border-radius: 0.5rem;
+}
+
+.custom-size {
+  width: 45px;
+  height: 45px;
+  padding: 2ex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

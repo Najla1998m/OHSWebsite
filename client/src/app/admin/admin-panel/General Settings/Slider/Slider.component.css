@@ -1,0 +1,7 @@
+.gap {
+  gap: 12px;
+}
+
+::ng-deep .p-fileupload .p-fileupload-buttonbar {
+  padding: 0.5rem;
+}

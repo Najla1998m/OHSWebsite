@@ -1,0 +1,729 @@
+<div class="border-0 shadow-sm card rounded-8 droid-font">
+  <div class="p-0 card-body">
+    <!-- ------------------------------- header -------------------------------- -->
+    <div
+      class="flex-wrap gap-3 d-flex justify-content-center justify-content-md-between align-items-center border-bottom"
+    >
+      <div class="gap-3 d-flex">
+        <svg-icon src="assets/images/icons/file.svg"></svg-icon>
+        <div class="fs-18">مهماتي</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <!-- <a href="" class="text-decoration-none text-b58d2e">استعراض الكل</a> -->
+        <button
+          type="button"
+          class="btn btn-gold custom-size rounded-3"
+          (click)="loadData()"
+        >
+          <i class="fas fa-redo-alt"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-gold custom-size rounded-3"
+          (click)="navigationService.back()"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="overflow-auto mb-3">
+        <table class="table text-nowrap">
+          <thead class="thead-dark">
+            <tr>
+              <th>رقم المهمه</th>
+              <th>منشئ المهمة</th>
+              <th>تفويض إلى</th>
+              <th>تاريخ الانشاء</th>
+              <th>وقت الانشاء</th>
+              <th>حالة المهمة</th>
+              <th>تصنيف المهمة</th>
+              <th>وصف المهمة</th>
+              <th>التاريخ المستهدف</th>
+              <th>الوقت المستهدف</th>
+              <th>الموقع</th>
+              <th class="d-flex justify-content-end">استعراض</th>
+            </tr>
+          </thead>
+          <tbody class="tbody">
+            <tr
+              *ngFor="
+                let item of tasks
+                  | paginate
+                    : {
+                        itemsPerPage: 10,
+                        currentPage: pageNumber,
+                        id: 'first'
+                      }
+              "
+            >
+              <td>
+                <a
+                  class="cursor-p"
+                  [routerLink]="['/company-dashboard/task-details', item?.id]"
+                  class="text-decoration-none"
+                  >{{ item.number }}</a
+                >
+              </td>
+              <td>
+                {{ item?.creator ? item?.creator.fullName : "غير متوفر" }}
+              </td>
+              <td>
+                {{ item?.assignedTo ? item?.assignedTo.fullName : "غير متوفر" }}
+              </td>
+              <td>{{ convertDateToLocal(item.createdAt) }}</td>
+              <td>{{ item.createdAt | date: "hh:mm a" }}</td>
+              <td>
+                <span
+                  class="px-3 badge"
+                  [ngClass]="{
+                    'bg-success': item.tasksStatusId == 6,
+                    'bg-primary': item.tasksStatusId == 5,
+                    ' bg-warning': item.tasksStatusId == 4,
+                    'bg-danger': item.tasksStatusId == 8,
+                    'bg-secondary': item.tasksStatusId == 7
+                  }"
+                >
+                  {{ getStatus(item.tasksStatusId) }}
+                </span>
+              </td>
+              <td>{{ getTaskLevel(item.tasksLevelId) }}</td>
+              <td>{{ item.description }}</td>
+              <td>
+                {{
+                  item?.targetDate
+                    ? convertDateToLocal(item?.targetDate)
+                    : "غير متوفر"
+                }}
+              </td>
+              <td>
+                {{
+                  item?.targetTime
+                    ? (item?.targetTime | date: "h:mm a")
+                    : "غير متوفر"
+                }}
+              </td>
+              <td>
+                <span *ngIf="!item?.taskLocation">غير متوفر</span>
+                <agm-map
+                  class="small-window"
+                  *ngIf="item?.taskLocation"
+                  [latitude]="item?.taskLocation.latitude"
+                  [longitude]="item?.taskLocation.longitude"
+                  [zoom]="item?.taskLocation.zoom"
+                  [fullscreenControl]="true"
+                  [fullscreenControl]="true"
+                  [scaleControl]="true"
+                  [panControl]="true"
+                  [lang]="'ar'"
+                >
+                  <agm-marker
+                    [latitude]="item?.taskLocation.latitude"
+                    [longitude]="item?.taskLocation.longitude"
+                    [markerDraggable]="false"
+                  ></agm-marker>
+                </agm-map>
+              </td>
+              <td>
+                <div class="d-flex justify-content-end">
+                  <button
+                    type="button"
+                    (click)="onTaskPreview(item)"
+                    class="px-3 py-1 btn btn-gold rounded-3 d-flex justify-content-center align-items-center"
+                  >
+                    <svg-icon src="assets/images/icons/ellipsis.svg"></svg-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="flex-wrap d-flex justify-content-center justify-content-md-between align-itmes-center"
+      >
+        <pagination-controls
+          id="prevVisits"
+          class="mt-3 align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+          previousLabel="السابق"
+          nextLabel="التالي"
+          (pageChange)="paginate($event)"
+          [autoHide]="true"
+        ></pagination-controls>
+
+        <div class="gap-3 d-flex align-items-center">
+          <button
+            type="button"
+            (click)="print()"
+            class="gap-3 px-4 btn rounded-8 btn-danger d-flex"
+          >
+            <span> تصدير <span class="font-default">PDF</span></span>
+            <svg-icon src="assets/images/icons/pdf.svg"></svg-icon>
+          </button>
+          <button
+            type="button"
+            (click)="exportAsXLSX()"
+            class="gap-3 px-4 btn rounded-8 btn-success d-flex"
+          >
+            <span> تصدير <span class="font-default">Excel</span></span>
+            <svg-icon src="assets/images/icons/excel-file.svg"></svg-icon>
+          </button>
+          <button
+            type="button"
+            class="btn btn-gold flex-grow-1 rounded-8"
+            (click)="onTaskFormOpen()"
+          >
+            أضف مهمه
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#taskCreate"
+  #taskCreate
+  hidden
+></button>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="taskCreate"
+  tabindex="-1"
+  aria-labelledby="taskCreateLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="taskCreateLabel">إضافة مهمه</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #close
+          (click)="resetForm()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" #form="ngForm">
+          <div class="gap-3 d-flex flex-column">
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="name"> اسم المهمه</label>
+
+              <div class="form-group col-md-8">
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  class="form-control"
+                />
+                <div
+                  *ngIf="Name.errors?.required && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="assignedToId">
+                تفويض إلي</label
+              >
+
+              <div class="form-group col-md-8">
+                <p-dropdown
+                  [options]="assignList"
+                  placeholder="اختر"
+                  optionLabel="displayName"
+                  [filter]="true"
+                  formControlName="assignedToId"
+                ></p-dropdown>
+                <div
+                  *ngIf="AssignedToId.errors?.required && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="tasksLevelId">
+                مستوي المهمه</label
+              >
+
+              <div class="form-group col-md-8">
+                <p-dropdown
+                  [options]="taskLevels"
+                  placeholder="اختر"
+                  optionLabel="optionLabel"
+                  optionLabel="name"
+                  optionValue="id"
+                  [filter]="true"
+                  id="tasksLevelId"
+                  formControlName="tasksLevelId"
+                ></p-dropdown>
+                <div
+                  *ngIf="TasksLevelId.errors?.required && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="tasksStatusId">
+                حالة المهمه</label
+              >
+
+              <div class="form-group col-md-8">
+                <p-dropdown
+                  [options]="taskStatus"
+                  placeholder="اختر"
+                  optionLabel="optionLabel"
+                  optionLabel="name"
+                  id="tasksStatusId"
+                  optionValue="id"
+                  [filter]="true"
+                  formControlName="tasksStatusId"
+                ></p-dropdown>
+                <div
+                  *ngIf="TasksStatusId.errors?.required && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="description">
+                وصف المهمه</label
+              >
+
+              <div class="form-group col-md-8">
+                <textarea
+                  class="form-control"
+                  name=""
+                  id="description"
+                  rows="4"
+                  formControlName="description"
+                ></textarea>
+                <div
+                  *ngIf="Description.errors?.required && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="tasksStatusId">
+                التاريخ المستهدف</label
+              >
+
+              <div class="form-group col-md-8">
+                <input
+                  type="text"
+                  [placeholder]="'اختر' | translate"
+                  class="form-control"
+                  formControlName="targetDate"
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  #dp="bsDatepicker"
+                  bsDatepicker
+                  [attr.bsConfig]="{
+                    dateInputFormat: 'YYYY-MM-DD',
+                    containerClass: 'theme-default',
+                    isAnimated: true,
+                    showWeekNumbers: false
+                  }"
+                />
+                <div
+                  *ngIf="targetDate?.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <div class="row align-items-start">
+              <label class="col-md-6 text-dark" for="tasksStatusId">
+                توقيت المهمه</label
+              >
+
+              <div class="form-group col-md-6">
+                <timepicker
+                  dir="ltr"
+                  [formControlName]="'targetTime'"
+                ></timepicker>
+                <div
+                  *ngIf="targetTime?.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <!-- ------------------------------ location ------------------------------- -->
+            <div class="row align-items-start">
+              <label class="col-4" for="loaction">الموقع الخاص بها</label>
+              <div class="form-group col-md-8">
+                <input
+                  #location
+                  type="text"
+                  class="form-control"
+                  name="location"
+                  id="location"
+                  (keydown.enter)="$event.preventDefault()"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="off"
+                  type="text"
+                />
+                <div
+                  *ngIf="taskLocation?.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+              <div class="col-4"></div>
+              <div class="col-md-8 mt-3">
+                <agm-map
+                  [latitude]="latitude"
+                  [longitude]="longitude"
+                  [zoom]="zoom"
+                  [fullscreenControl]="true"
+                  [mapTypeControl]="true"
+                  [scaleControl]="true"
+                  [panControl]="true"
+                  [lang]="'ar'"
+                >
+                  <agm-marker
+                    [latitude]="latitude"
+                    [longitude]="longitude"
+                    [markerDraggable]="true"
+                    (dragEnd)="markerDragEnd($event)"
+                  ></agm-marker>
+                </agm-map>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="mt-3 btn btn-dark w-100">إنشاء</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#taskDetails"
+  #taskDetails
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="taskDetails"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="taskDetailsLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl droid-font modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="taskDetailsLabel">تفاصيل</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closeUpdate
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          [formGroup]="updateForm"
+          (ngSubmit)="onTaskUpdated()"
+          #tform="ngForm"
+        >
+          <div class="row">
+            <div class="overflow-auto col-lg-5">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr class="table-light">
+                    <td>اسم المهمه</td>
+                    <td>{{ selectedTask?.number }}</td>
+                  </tr>
+                  <tr>
+                    <td>المسؤول</td>
+                    <td>
+                      {{
+                        selectedTask?.creator
+                          ? selectedTask?.creator.fullName
+                          : "هذه المعلومة غير متوفرة"
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>تفويض إلي</td>
+                    <td>
+                      <p-dropdown
+                        [options]="assignList"
+                        [filter]="true"
+                        optionLabel="displayName"
+                        placeholder="اختر"
+                        formControlName="assignedToId"
+                      ></p-dropdown>
+
+                      <div
+                        *ngIf="
+                          AssignedToId2.hasError('required') && tform.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>تاريخ المهمه</td>
+                    <td>{{ convertDateToLocal(selectedTask?.createdAt) }}</td>
+                  </tr>
+                  <tr>
+                    <td>تفاصيل المهمه</td>
+                    <td>
+                      <textarea
+                        class="form-control"
+                        name="Recommendation"
+                        id="Recommendation"
+                        rows="4"
+                        formControlName="description"
+                      ></textarea>
+                      <div
+                        *ngIf="
+                          Description2.hasError('required') && tform.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>التاريخ المستهدف</td>
+                    <td>
+                      {{
+                        selectedTask?.targetDate
+                          ? convertDateToLocal(selectedTask?.targetDate)
+                          : "غير متوفر"
+                      }}
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>الوقت المستهدف</td>
+                    <td>
+                      {{
+                        selectedTask?.targetTime
+                          ? (selectedTask.targetTime | date: "h:mm a")
+                          : "غير متوفر"
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>الحالة</td>
+                    <td>
+                      <p-dropdown
+                        [options]="taskStatus"
+                        [filter]="true"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="اختر"
+                        formControlName="tasksStatusId"
+                      ></p-dropdown>
+
+                      <div
+                        *ngIf="
+                          TasksStatusId2.hasError('required') && tform.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>موقع المهمه</td>
+                    <td>
+                      {{
+                        selectedTask?.taskLocation
+                          ? selectedTask?.taskLocation.address
+                          : "غير متوفر"
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="overflow-auto col-lg-7">
+              <img
+                *ngIf="
+                  isEmpty(selectedTask?.extraFields) ||
+                  !selectedTask?.extraFields
+                "
+                src="assets/images/icons/No-data-amico.png"
+                class="p-5 m-auto img-fluid d-block col-8"
+                alt=""
+              />
+              <table
+                class="table"
+                *ngIf="
+                  !isEmpty(selectedTask?.extraFields) &&
+                  selectedTask?.extraFields
+                "
+              >
+                <thead class="thead-dark">
+                  <tr>
+                    <th>#</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="tbody">
+                  <tr
+                    *ngFor="
+                      let item of selectedTask?.extraFields
+                        | keyvalue
+                        | paginate
+                          : {
+                              itemsPerPage: 5,
+                              currentPage: pageNumber2,
+                              id: 'second'
+                            }
+                    "
+                  >
+                    <td>{{ item?.key }}</td>
+                    <td *ngIf="item?.value != true && item?.value != false">
+                      {{ item?.value }}
+                    </td>
+
+                    <td *ngIf="item?.value == true">نعم</td>
+                    <td *ngIf="item?.value == false">لا</td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls
+                id="second"
+                class="mt-3 align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+                previousLabel="السابق"
+                nextLabel="التالي"
+                (pageChange)="pageNumber2 = $event"
+                [autoHide]="true"
+              ></pagination-controls>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-dark w-100 rounded-pill">
+              تحديث
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="d-none" id="empPayslip">
+  <table dir="rtl" class="table table-bordered table-striped text-nowrap">
+    <thead class="thead-dark">
+      <tr>
+        <th>رقم المهمه</th>
+        <th>أرسلت بواسطة</th>
+        <th>تفويض إلي</th>
+        <th>تاريخ الانشاء</th>
+        <th>مستوي المهمة</th>
+        <th>الحالة</th>
+        <th>التاريخ المستهدف</th>
+        <th>الوقت المستهدف</th>
+        <th>الموقع</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tasks">
+        <td>{{ item.number }}</td>
+        <td>
+          <span *ngIf="item?.creator">{{ item?.creator?.fullName }}</span>
+          <span *ngIf="!item?.creator">غير متوفر</span>
+        </td>
+        <td>
+          {{ item?.assignedTo ? item?.assignedTo.fullName : "غير متوفر" }}
+        </td>
+        <td>{{ convertDateToLocal(item.createdAt) }}</td>
+        <td>{{ getTaskLevel(item.tasksLevelId) }}</td>
+        <td>
+          {{ getStatus(item.tasksStatusId) }}
+        </td>
+        <td>
+          {{
+            item?.targetDate
+              ? convertDateToLocal(item?.targetDate)
+              : "غير متوفر"
+          }}
+        </td>
+        <td>
+          {{
+            item?.targetTime ? (item?.targetTime | date: "h:mm a") : "غير متوفر"
+          }}
+        </td>
+        <td>
+          <span *ngIf="!item?.taskLocation">غير متوفر</span>
+          <span *ngIf="item?.taskLocation">{{
+            item?.taskLocation.address
+          }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

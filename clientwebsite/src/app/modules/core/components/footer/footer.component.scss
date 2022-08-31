@@ -1,0 +1,62 @@
+#footer {
+  background: url("../../../../../assets/images/home/bg4.jpg");
+  background-size: cover;
+  background-position: left center;
+}
+
+#social .nav-link {
+  color: white;
+  background-color: #b58d2e;
+  border-radius: 5rem;
+  height: 45px;
+  width: 45px;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-link {
+  color: #bcbcbc;
+}
+
+.nav-link:hover {
+  color: white;
+  cursor: pointer;
+}
+
+.row-gap {
+  row-gap: 16px;
+}
+
+.btn-second-gold {
+  padding: 1.3ex 3rem !important;
+}
+
+hr {
+  background-color: #ffffff !important;
+}
+
+.font-sans-serif {
+  font-family: sans-serif;
+}
+
+.me-2 {
+  margin-inline-end: 0.5rem;
+}
+
+.secondaryTheme {
+  background: rgba(0, 0, 0, 0.8) !important;
+  padding: 2ex 0;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+#social .nav-link:hover {
+  background-color: #d7be69 !important;
+}

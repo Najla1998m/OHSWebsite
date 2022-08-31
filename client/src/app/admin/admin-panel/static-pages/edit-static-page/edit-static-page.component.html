@@ -1,0 +1,212 @@
+<div class="card shadow mb-3">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Edit Page</div>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="onEdit()" #addForm="ngForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              name="title"
+              id="title"
+              placeholder="title..."
+              formControlName="title"
+            />
+
+            <div
+              *ngIf="Title.hasError('required') && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Title is Required
+            </div>
+
+            <div
+              *ngIf="Title.errors?.minlength && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Title minimum length is 3
+            </div>
+
+            <div
+              *ngIf="Title.errors?.maxlength && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Title maximum length is 50
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="order">Order</label>
+            <input
+              type="number"
+              class="form-control"
+              name="order"
+              id="order"
+              placeholder="order..."
+              formControlName="order"
+            />
+
+            <div
+              *ngIf="Order.hasError('required') && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Order is Required
+            </div>
+
+            <div
+              *ngIf="Order.errors?.min && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Order min value is 0
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 my-3">
+          <div class="d-flex gap">
+            <label class="fs-large">Is Visible</label>
+            <p-inputSwitch formControlName="isVisible"></p-inputSwitch>
+          </div>
+
+          <div
+            *ngIf="IsVisible.hasError('required') && addForm.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            is Required
+          </div>
+        </div>
+
+        <!-- -------------------------------- Image -------------------------------- -->
+        <div class="form-group col-12">
+          <label for="Image">Image</label>
+          <p-fileUpload
+            id="Image"
+            url="./upload.php"
+            (onSelect)="onUpload($event)"
+            (onRemove)="onClear()"
+            [multiple]="false"
+            accept="image/*"
+            [showUploadButton]="false"
+            [showCancelButton]="false"
+          >
+            <ng-template pTemplate="content">
+              <img
+                [src]="page?.image"
+                alt=""
+                width="50"
+                height="50"
+                *ngIf="editImg"
+              />
+            </ng-template>
+          </p-fileUpload>
+
+          <div
+            *ngIf="Image?.errors?.required && addForm.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            Image is Required
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="minDesc">Min Description</label>
+            <textarea
+              class="form-control"
+              name="minDesc"
+              id="minDesc"
+              rows="3"
+              formControlName="minDescription"
+            ></textarea>
+
+            <div
+              *ngIf="MinDescription.hasError('required') && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Mini Description is Required
+            </div>
+
+            <div
+              *ngIf="MinDescription.errors?.minlength && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Mini Description minimum length is 20
+            </div>
+
+            <div
+              *ngIf="MinDescription.errors?.maxlength && addForm.submitted"
+              class="error-msg p-1 small"
+              role="alert"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Mini Description maximum length is 250
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="minDesc">Max Description</label>
+          <textarea
+            class="form-control"
+            name="minDesc"
+            id="minDesc"
+            rows="3"
+            formControlName="maxDescription"
+          ></textarea>
+          <!-- <ckeditor
+            formControlName="maxDescription"
+            data="<p>Description</p>"
+            [config]="{  allowedContent: true }"
+          ></ckeditor> -->
+          <div
+            *ngIf="MaxDescription.hasError('required') && addForm.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            Max Description is Required
+          </div>
+        </div>
+        <div
+          style="
+            direction: rtl;
+            height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+          "
+          [innerHtml]="MaxDescription.value"
+        ></div>
+
+        <div class="col-12 d-flex justify-content-center mt-4">
+          <button type="submit" class="btn btn-primary rounded-pill w-200px">
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

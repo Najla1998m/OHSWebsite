@@ -1,0 +1,100 @@
+<p-toast></p-toast>
+
+<div class="row h-100vh no-gutters align-items-center">
+  <div class="col-md-6">
+    <div
+      class="
+        d-flex
+        flex-column
+        justify-content-center
+        align-items-center
+        h-100
+        p-3
+      "
+    >
+      <form
+        class="col-lg-7 d-flex flex-column justify-content-center"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        #loginForm="ngForm"
+      >
+        <div class="text-center fs-24 mb-4">Welcome Back!</div>
+        <div class="form-group">
+          <input
+            formControlName="email"
+            type="email"
+            class="form-control custom-form-control"
+            name="email"
+            id="email"
+            aria-describedby="emailHelpId"
+            placeholder="Enter Email Address..."
+          />
+
+          <div
+            *ngIf="Email.hasError('required') && loginForm.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            Email is Required
+          </div>
+          <div
+            *ngIf="Email.errors?.pattern && loginForm.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            Email is not valid
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            formControlName="password"
+            type="password"
+            class="form-control custom-form-control"
+            name="password"
+            id="password"
+            placeholder="Password"
+          />
+
+          <div
+            *ngIf="Password.hasError('required') && loginForm.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            Password is Required
+          </div>
+          <div
+            *ngIf="Password.errors?.minlength && loginForm.submitted"
+            class="error-msg p-1 small"
+            role="alert"
+          >
+            <i class="fas fa-times-circle me-2"></i>
+            password minimum length is 8 characters
+          </div>
+        </div>
+        <div class="form-check ms-1 d-flex align-items-center">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            name="remember"
+            id="remember"
+            value="checkedValue"
+          />
+          <label class="form-check-label ms-1"> Remember Me </label>
+        </div>
+
+        <button
+          type="submit"
+          name="login"
+          id="login"
+          class="my-4 login rounded-pill btn btn-primary btn-block"
+        >
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-6 bg d-none d-md-block"></div>
+</div>

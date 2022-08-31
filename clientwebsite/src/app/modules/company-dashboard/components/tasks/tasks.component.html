@@ -1,0 +1,847 @@
+<div class="mb-5 droid-font">
+  <div class="border-0 shadow-sm card rounded-8">
+    <div class="p-0 card-body">
+      <!-- ------------------------------- header -------------------------------- -->
+      <div
+        class="flex-wrap gap-3 d-flex justify-content-center justify-content-md-between align-items-center border-bottom"
+      >
+        <div class="gap-3 d-flex">
+          <svg-icon src="assets/images/icons/clipboard.svg"></svg-icon>
+          <div class="fs-18">المهمات</div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <!-- <div id="search" class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="بحث"
+              aria-describedby="button-addon2"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="button-addon2"
+            >
+              <svg-icon src="assets/images/icons/loupe.svg"></svg-icon>
+            </button>
+          </div> -->
+          <button
+            type="button"
+            class="btn btn-gold custom-size rounded-3"
+            (click)="loadData()"
+          >
+            <i class="fas fa-redo-alt"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-gold custom-size rounded-3"
+            (click)="navigationService.back()"
+          >
+            <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <!--========================================== Slider ==========================================-->
+        <div class="gap-2 d-flex">
+          <div
+            class="flex-grow-0 d-flex align-items-center bg-efefef justify-content-center rounded-8 cursor-p arrow-button"
+            (click)="scrollPrev()"
+          >
+            <svg-icon
+              src="assets/images/icons/left-arrow.svg"
+              svgClass="flip-l"
+            ></svg-icon>
+          </div>
+          <div
+            id="slider"
+            class="gap-2 overflow-auto flex-grow-1 d-flex flex-nowrap no-scrollbar"
+          >
+            <!-- ------------------------------- slider -------------------------------- -->
+            <div class="slide" *ngFor="let item of listManagement">
+              <div
+                class="card h-100 text-nowrap rounded-8 cursor-p"
+                (click)="selectManagement(item)"
+                [class.active]="item == selectedManagement"
+              >
+                <div
+                  class="gap-2 card-body d-flex flex-column align-items-center"
+                >
+                  <svg-icon src="assets/images/icons/structure.svg"></svg-icon>
+                  <div class="text-black text-capitalize fs-20">
+                    {{ item.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex-grow-0 d-flex align-items-center bg-efefef justify-content-center rounded-8 cursor-p arrow-button"
+            (click)="scrollNext()"
+          >
+            <svg-icon
+              src="assets/images/icons/left-arrow.svg"
+              svgClass="flip-r"
+            ></svg-icon>
+          </div>
+        </div>
+
+        <!-- ----------------------------------------------------------------------- -->
+        <!-- ----------------------------------------------------------------------- -->
+        <!-- ----------------------------------------------------------------------- -->
+
+        <h4 class="mt-4">
+          {{ selectedManagement?.name }}
+        </h4>
+
+        <div class="mt-4" *ngIf="selectedManagement">
+          <!-- <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <button
+                class="nav-link active"
+                id="nav-home-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-home"
+                type="button"
+                role="tab"
+                aria-controls="nav-home"
+                aria-selected="true"
+              >
+                عدد المهام الجديدة
+              </button>
+              <button
+                class="nav-link"
+                id="nav-profile-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-profile"
+                type="button"
+                role="tab"
+                aria-controls="nav-profile"
+                aria-selected="false"
+              >
+                عدد المهام تحت العمل
+              </button>
+              <button
+                class="nav-link"
+                id="nav-contact-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-contact"
+                type="button"
+                role="tab"
+                aria-controls="nav-contact"
+                aria-selected="false"
+              >
+                عدد المهام المنتهية
+              </button>
+            </div>
+          </nav>
+          <div class="mt-3 tab-content" id="nav-tabContent">
+            <div
+              class="tab-pane fade show active"
+              id="nav-home"
+              role="tabpanel"
+              aria-labelledby="nav-home-tab"
+            >
+              <div>
+             
+                <div>
+                  <div class="overflow-auto">
+                    <table class="table text-nowrap">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th>الموظف</th>
+                          <th>القسم</th>
+                          <th>صلاحية</th>
+                          <th>الحالة</th>
+                          <th class="d-flex justify-content-end">استعراض</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tbody">
+                        <tr
+                          *ngFor="
+                            let item of tasks
+                              | paginate
+                                : {
+                                    itemsPerPage: 10,
+                                    currentPage: p1,
+                                    id: 'first'
+                                  }
+                          "
+                        >
+                          <td>{{ item.employee }}</td>
+                          <td>{{ item.department }}</td>
+                          <td>{{ item.role }}</td>
+                          <td>
+                            <span
+                              class="px-3 badge"
+                              [ngClass]="{
+                                'bg-success': item.status == 1,
+                                ' bg-warning': item.status == 3,
+                                'bg-danger': item.status == 2
+                              }"
+                            >
+                              {{ getStatus(item.status) }}
+                            </span>
+                          </td>
+                          <td class="d-flex justify-content-end">
+                            <button
+                              type="button"
+                              class="px-3 py-1 btn btn-gold rounded-3 d-flex justify-content-center align-items-center"
+                            >
+                              <svg-icon
+                                src="assets/images/icons/ellipsis.svg"
+                              ></svg-icon>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div
+                    class="flex-wrap d-flex justify-content-center justify-content-md-between align-itmes-center"
+                  >
+                    <pagination-controls
+                      id="first"
+                      previousLabel="السابق"
+                      nextLabel="التالي"
+                      (pageChange)="p1 = $event"
+                      [autoHide]="true"
+                      class="mt-3 align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+                    ></pagination-controls>
+
+                    <div class="d-flex align-items-center">
+                      <button
+                        type="button"
+                        class="btn btn-gold flex-grow-1 rounded-8"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addManagement"
+                      >
+                        أضف جديد
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="nav-profile"
+              role="tabpanel"
+              aria-labelledby="nav-profile-tab"
+            >
+              <div>
+                <div>
+                  <div class="overflow-auto">
+                    <table class="table text-nowrap">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th>الموظف</th>
+                          <th>القسم</th>
+                          <th>صلاحية</th>
+                          <th>الحالة</th>
+                          <th class="d-flex justify-content-end">استعراض</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tbody">
+                        <tr
+                          *ngFor="
+                            let item of tasks
+                              | paginate
+                                : {
+                                    itemsPerPage: 10,
+                                    currentPage: p2,
+                                    id: 'second'
+                                  }
+                          "
+                        >
+                          <td>{{ item.employee }}</td>
+                          <td>{{ item.department }}</td>
+                          <td>{{ item.role }}</td>
+                          <td>
+                            <span
+                              class="px-3 badge"
+                              [ngClass]="{
+                                'bg-success': item.status == 1,
+                                ' bg-warning': item.status == 3,
+                                'bg-danger': item.status == 2
+                              }"
+                            >
+                              {{ getStatus(item.status) }}
+                            </span>
+                          </td>
+                          <td class="d-flex justify-content-end">
+                            <button
+                              type="button"
+                              class="px-3 py-1 btn btn-gold rounded-3 d-flex justify-content-center align-items-center"
+                            >
+                              <svg-icon
+                                src="assets/images/icons/ellipsis.svg"
+                              ></svg-icon>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div
+                    class="flex-wrap d-flex justify-content-center justify-content-md-between align-itmes-center"
+                  >
+                    <pagination-controls
+                      id="second"
+                      previousLabel="السابق"
+                      nextLabel="التالي"
+                      (pageChange)="p2 = $event"
+                      [autoHide]="true"
+                      class="mt-3 align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+                    ></pagination-controls>
+
+                    <div class="d-flex align-items-center">
+                      <button
+                        type="button"
+                        class="btn btn-gold flex-grow-1 rounded-8"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addManagement"
+                      >
+                        أضف جديد
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="nav-contact"
+              role="tabpanel"
+              aria-labelledby="nav-contact-tab"
+            >
+              <div>
+             
+                <div>
+                  <div class="overflow-auto">
+                    <table class="table text-nowrap">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th>الموظف</th>
+                          <th>القسم</th>
+                          <th>صلاحية</th>
+                          <th>الحالة</th>
+                          <th class="d-flex justify-content-end">استعراض</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tbody">
+                        <tr
+                          *ngFor="
+                            let item of tasks
+                              | paginate
+                                : {
+                                    itemsPerPage: 10,
+                                    currentPage: p3,
+                                    id: 'third'
+                                  }
+                          "
+                        >
+                          <td>{{ item.employee }}</td>
+                          <td>{{ item.department }}</td>
+                          <td>{{ item.role }}</td>
+                          <td>
+                            <span
+                              class="px-3 badge"
+                              [ngClass]="{
+                                'bg-success': item.status == 1,
+                                ' bg-warning': item.status == 3,
+                                'bg-danger': item.status == 2
+                              }"
+                            >
+                              {{ getStatus(item.status) }}
+                            </span>
+                          </td>
+                          <td class="d-flex justify-content-end">
+                            <button
+                              type="button"
+                              class="px-3 py-1 btn btn-gold rounded-3 d-flex justify-content-center align-items-center"
+                            >
+                              <svg-icon
+                                src="assets/images/icons/ellipsis.svg"
+                              ></svg-icon>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div
+                    class="flex-wrap d-flex justify-content-center justify-content-md-between align-itmes-center"
+                  >
+                    <pagination-controls
+                      id="third"
+                      class="mt-3 align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+                      previousLabel="السابق"
+                      nextLabel="التالي"
+                      (pageChange)="p3 = $event"
+                      [autoHide]="true"
+                    ></pagination-controls>
+
+                    <div class="d-flex align-items-center">
+                      <button
+                        type="button"
+                        class="btn btn-gold flex-grow-1 rounded-8"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addManagement"
+                      >
+                        أضف جديد
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="overflow-auto">
+            <table class="table text-nowrap">
+              <thead class="thead-dark">
+                <tr>
+                  <th>رقم المهمه</th>
+                  <th>منشئ المهمة</th>
+                  <th>تفويض إلى</th>
+                  <th>تاريخ الانشاء</th>
+                  <th>وقت الانشاء</th>
+                  <th>حالة المهمة</th>
+                  <th>تصنيف المهمة</th>
+                  <th>وصف المهمة</th>
+                  <th>التاريخ المستهدف</th>
+                  <th>الوقت المستهدف</th>
+                  <th>الموقع</th>
+                  <th class="d-flex justify-content-end">استعراض</th>
+                </tr>
+              </thead>
+              <tbody class="tbody">
+                <tr
+                  *ngFor="
+                    let item of tasks
+                      | paginate
+                        : {
+                            itemsPerPage: 10,
+                            currentPage: p1,
+                            id: 'first'
+                          }
+                  "
+                >
+                  <td>
+                    <a
+                      class="cursor-p"
+                      [routerLink]="[
+                        '/company-dashboard/task-details',
+                        item?.id
+                      ]"
+                      class="text-decoration-none"
+                      >{{ item.number }}</a
+                    >
+                  </td>
+                  <td>
+                    {{ item?.creator ? item?.creator.fullName : "غير متوفر" }}
+                  </td>
+                  <td>
+                    {{
+                      item?.assignedTo ? item?.assignedTo.fullName : "غير متوفر"
+                    }}
+                  </td>
+                  <td>{{ convertDateToLocal(item.createdAt) }}</td>
+                  <td>{{ item.createdAt | date: "hh:mm a" }}</td>
+                  <td>
+                    <span
+                      class="px-3 badge"
+                      [ngClass]="{
+                        'bg-success': item.tasksStatusId == 6,
+                        'bg-primary': item.tasksStatusId == 5,
+                        ' bg-warning': item.tasksStatusId == 4,
+                        'bg-danger': item.tasksStatusId == 8,
+                        'bg-secondary': item.tasksStatusId == 7
+                      }"
+                    >
+                      {{ getStatus(item.tasksStatusId) }}
+                    </span>
+                  </td>
+                  <td>{{ getTaskLevel(item.tasksLevelId) }}</td>
+                  <td>{{ item.description | slice: 0:40 }}...</td>
+                  <td>
+                    {{
+                      item?.targetDate
+                        ? convertDateToLocal(item?.targetDate)
+                        : "غير متوفر"
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      item?.targetTime
+                        ? (item?.targetTime | date: "h:mm a")
+                        : "غير متوفر"
+                    }}
+                  </td>
+                  <td>
+                    <span *ngIf="!item?.taskLocation">غير متوفر</span>
+                    <agm-map
+                      class="small-window"
+                      *ngIf="item?.taskLocation"
+                      [latitude]="item?.taskLocation.latitude"
+                      [longitude]="item?.taskLocation.longitude"
+                      [zoom]="item?.taskLocation.zoom"
+                      [fullscreenControl]="true"
+                      [fullscreenControl]="true"
+                      [scaleControl]="true"
+                      [panControl]="true"
+                      [lang]="'ar'"
+                    >
+                      <agm-marker
+                        [latitude]="item?.taskLocation.latitude"
+                        [longitude]="item?.taskLocation.longitude"
+                        [markerDraggable]="false"
+                      ></agm-marker>
+                    </agm-map>
+                  </td>
+                  <td>
+                    <div class="d-flex justify-content-end">
+                      <button
+                        type="button"
+                        (click)="onTaskPreview(item)"
+                        class="px-3 py-1 btn btn-gold rounded-3 d-flex justify-content-center align-items-center"
+                      >
+                        <svg-icon
+                          src="assets/images/icons/ellipsis.svg"
+                        ></svg-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <br />
+        <div
+          *ngIf="selectedManagement"
+          class="flex-wrap d-flex justify-content-center justify-content-md-between align-itmes-center"
+        >
+          <pagination-controls
+            id="first"
+            class="align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+            previousLabel="السابق"
+            nextLabel="التالي"
+            (pageChange)="p1 = $event"
+            [autoHide]="true"
+          ></pagination-controls>
+
+          <div class="gap-3 d-flex align-items-center">
+            <button
+              type="button"
+              (click)="print()"
+              class="gap-3 px-4 btn rounded-8 btn-danger d-flex"
+            >
+              <span> تصدير <span class="font-default">PDF</span></span>
+              <svg-icon src="assets/images/icons/pdf.svg"></svg-icon>
+            </button>
+            <button
+              (click)="exportAsXLSX()"
+              type="button"
+              class="gap-3 px-4 btn rounded-8 btn-success d-flex"
+            >
+              <span> تصدير <span class="font-default">Excel</span></span>
+              <svg-icon src="assets/images/icons/excel-file.svg"></svg-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#taskDetails"
+  #taskDetails
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="taskDetails"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="taskDetailsLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl droid-font modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="taskDetailsLabel">تفاصيل</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closeUpdate
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          [formGroup]="updateForm"
+          (ngSubmit)="onTaskUpdated()"
+          #tform="ngForm"
+        >
+          <div class="row">
+            <div class="overflow-auto col-lg-5">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr class="table-light">
+                    <td>اسم المهمه</td>
+                    <td>{{ selectedTask?.number }}</td>
+                  </tr>
+                  <tr>
+                    <td>المسؤول</td>
+                    <td>
+                      {{
+                        selectedTask?.creator
+                          ? selectedTask?.creator.fullName
+                          : "هذه المعلومة غير متوفرة"
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>تفويض إلي</td>
+                    <td>
+                      <p-dropdown
+                        [options]="assignList"
+                        [filter]="true"
+                        optionLabel="displayName"
+                        placeholder="اختر"
+                        formControlName="assignedToId"
+                      ></p-dropdown>
+
+                      <div
+                        *ngIf="
+                          AssignedToId2.hasError('required') && tform.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>تاريخ المهمه</td>
+                    <td>{{ convertDateToLocal(selectedTask?.createdAt) }}</td>
+                  </tr>
+                  <tr>
+                    <td>تفاصيل المهمه</td>
+                    <td>
+                      <textarea
+                        class="form-control"
+                        name="Recommendation"
+                        id="Recommendation"
+                        rows="4"
+                        formControlName="description"
+                        maxlength="50"
+                      ></textarea>
+                      <div
+                        *ngIf="
+                          Description2.hasError('required') && tform.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>التاريخ المستهدف</td>
+                    <td>
+                      {{
+                        selectedTask?.targetDate
+                          ? convertDateToLocal(selectedTask?.targetDate)
+                          : "غير متوفر"
+                      }}
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>الوقت المستهدف</td>
+                    <td>
+                      {{
+                        selectedTask?.targetTime
+                          ? (selectedTask.targetTime | date: "h:mm a")
+                          : "غير متوفر"
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>الحالة</td>
+                    <td>
+                      <p-dropdown
+                        [options]="taskStatus"
+                        [filter]="true"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="اختر"
+                        formControlName="tasksStatusId"
+                        (ngModelChange)="toggleAssignValidator($event)"
+                      ></p-dropdown>
+
+                      <div
+                        *ngIf="
+                          TasksStatusId2.hasError('required') && tform.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>موقع المهمه</td>
+                    <td>
+                      {{
+                        selectedTask?.taskLocation
+                          ? selectedTask?.taskLocation.address
+                          : "غير متوفر"
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="overflow-auto col-lg-7">
+              <img
+                *ngIf="
+                  isEmpty(selectedTask?.extraFields) ||
+                  !selectedTask?.extraFields
+                "
+                src="assets/images/icons/No-data-amico.png"
+                class="p-5 m-auto img-fluid d-block col-8"
+                alt=""
+              />
+              <table
+                class="table"
+                *ngIf="
+                  !isEmpty(selectedTask?.extraFields) &&
+                  selectedTask?.extraFields
+                "
+              >
+                <thead class="thead-dark">
+                  <tr>
+                    <th>#</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="tbody">
+                  <tr
+                    *ngFor="
+                      let item of selectedTask?.extraFields
+                        | keyvalue
+                        | paginate
+                          : {
+                              itemsPerPage: 5,
+                              currentPage: p2,
+                              id: 'second'
+                            }
+                    "
+                  >
+                    <td>{{ item?.key }}</td>
+                    <td *ngIf="item?.value != true && item?.value != false">
+                      {{ item?.value }}
+                    </td>
+
+                    <td *ngIf="item?.value == true">نعم</td>
+                    <td *ngIf="item?.value == false">لا</td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls
+                id="second"
+                class="mt-3 align-items-center pagination justify-content-center font-secondary my-pagination align-self-md-end"
+                previousLabel="السابق"
+                nextLabel="التالي"
+                (pageChange)="p2 = $event"
+                [autoHide]="true"
+              ></pagination-controls>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-dark w-100 rounded-pill">
+              تحديث
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-none" id="empPayslip">
+  <table dir="rtl" class="table table-bordered table-striped text-nowrap">
+    <thead class="thead-dark">
+      <tr>
+        <th>رقم المهمه</th>
+        <th>أرسلت بواسطة</th>
+        <th>تفويض إلي</th>
+        <th>تاريخ الانشاء</th>
+        <th>مستوي المهمة</th>
+        <th>الحالة</th>
+        <th>التاريخ المستهدف</th>
+        <th>الوقت المستهدف</th>
+        <th>الموقع</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tasks">
+        <td>{{ item.number }}</td>
+        <td>
+          <span *ngIf="item?.creator">{{ item?.creator?.fullName }}</span>
+          <span *ngIf="!item?.creator">غير متوفر</span>
+        </td>
+        <td>
+          {{ item?.assignedTo ? item?.assignedTo?.fullName : "غير متوفر" }}
+        </td>
+        <td>{{ convertDateToLocal(item.createdAt) }}</td>
+        <td>{{ getTaskLevel(item.tasksLevelId) }}</td>
+        <td>
+          {{ getStatus(item.tasksStatusId) }}
+        </td>
+        <td>
+          {{
+            item?.targetDate
+              ? convertDateToLocal(item?.targetDate)
+              : "غير متوفر"
+          }}
+        </td>
+        <td>
+          {{
+            item?.targetTime ? (item?.targetTime | date: "h:mm a") : "غير متوفر"
+          }}
+        </td>
+        <td>
+          <span *ngIf="!item?.taskLocation">غير متوفر</span>
+          <span *ngIf="item?.taskLocation">{{
+            item?.taskLocation.address
+          }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

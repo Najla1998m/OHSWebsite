@@ -1,0 +1,51 @@
+<div
+  [class.selected]="selected"
+  class="flex-row-reverse border-0 cursor-pointer  pollAction d-flex rounded-10 bg-b58d2e position-relative h-100"
+>
+  <div class="sidebar-op h-100">
+    <nav
+      id="social"
+      class="py-2 d-none d-md-flex nav flex-column justify-content-center"
+    >
+      <a pTooltip="الدعم الفني" class="nav-link"
+        ><svg-icon
+          src="assets/images/icons/support.svg"
+          svgClass="icons-button"
+          (click)="$event.stopPropagation(); onSupportClicked()"
+        ></svg-icon
+      ></a>
+      <a pTooltip="مهمه داخلية" class="nav-link"
+        ><svg-icon
+          src="assets/images/icons/list.svg"
+          svgClass="icons-button"
+          (click)="$event.stopPropagation(); onTaskClicked()"
+        ></svg-icon
+      ></a>
+      <a pTooltip="التفاصيل" class="nav-link"
+        ><svg-icon
+          src="assets/images/icons/info-2.svg"
+          svgClass="icons-button"
+          (click)="$event.stopPropagation(); onInfoClicked()"
+        ></svg-icon
+      ></a>
+    </nav>
+  </div>
+  <div class="card-body">
+    <div
+      class="gap-3  d-flex flex-column align-items-center justify-content-center h-100"
+    >
+      <svg-icon
+        src="assets/images/icons/process.svg"
+        svgClass="icon"
+      ></svg-icon>
+      <div class="text-center text-white fs-14 text-wrap">{{ data?.name }}</div>
+
+      <!-- <div class="py-1 mb-0 alert alert-primary rounded-pill" role="alert">
+        تم إنشاء مهمة
+      </div> -->
+    </div>
+  </div>
+  <div *ngIf="disabled" class="disabled">
+    <div>{{ data?.name }}</div>
+  </div>
+</div>

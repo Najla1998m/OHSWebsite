@@ -1,0 +1,539 @@
+<div class="mb-5 border-0 card rounded-8">
+  <div class="p-3">
+    <div class="d-flex gap-2 justify-content-end">
+      <button
+        type="button"
+        class="btn btn-gold custom-size rounded-3"
+        (click)="loadData()"
+      >
+        <i class="fas fa-redo-alt"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-gold custom-size rounded-3"
+        (click)="navigationService.back()"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="d-flex flex-row gap-3 flex-wrap">
+      <button
+        type="button"
+        class="gap-2 justify-content-center btn px-2 flex-grow-1 flex-sm-grow-0 btn-gold d-flex align-items-center quap"
+        *ngFor="let item of buttons"
+        (click)="getForm(item)"
+      >
+        {{ item.key }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  hidden
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#DynamicModel"
+  #dynamic
+>
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade droid-font"
+  id="DynamicModel"
+  tabindex="-1"
+  aria-labelledby="DynamicModelLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content overflow-visible">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DynamicModelLabel">
+          {{ dynamicFormModel?.displayNameAr }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          #close
+          aria-label="Close"
+          (click)="resetForm()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div class="fs-18">
+            إحصائيات مهام {{ dynamicFormModel?.displayNameAr }}
+          </div>
+          <hr />
+          <div class="d-flex gap-3 align-items-center">
+            <div>
+              <p-knob
+                [min]="0"
+                [valueColor]="'#77d656'"
+                [max]="100"
+                [(ngModel)]="data"
+                class="m-auto"
+                [size]="150"
+                valueTemplate="{value}%"
+                valueColor="#d7be69"
+                [readonly]="true"
+                id="numbo"
+              ></p-knob>
+            </div>
+            <div class="row w-100">
+              <div
+                class="col-lg-4 col-12"
+                *ngFor="let item of data2; let i = index"
+              >
+                <div
+                  [class.bg-77d656]="i == 1"
+                  class="card border-0 shadow text-white rounded-16 bg-d7be69"
+                >
+                  <div class="card-body">
+                    <h4 class="card-title">{{ item.value }}</h4>
+                    <p class="card-text fs-18">{{ item.name }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+        </div>
+        <form
+          [formGroup]="dFrom"
+          (ngSubmit)="dynamicFormSubmit()"
+          #dynamicForm="ngForm"
+        >
+          <nav *ngIf="slidesNumber?.length > 1">
+            <div
+              class="gap-5 m-auto border-0 nav nav-tabs justify-content-between w-fit"
+              id="nav-tab"
+              role="tablist"
+            >
+              <button
+                *ngFor="
+                  let item of slidesNumber;
+                  let l = last;
+                  let i = index;
+                  let s = first
+                "
+                class="nav-link"
+                [class.active]="s"
+                [id]="'step' + i"
+                data-bs-toggle="tab"
+                [attr.data-bs-target]="'#tab' + i"
+                type="button"
+                role="tab"
+                aria-selected="true"
+              >
+                <div class="num" [class.line]="!l">{{ i + 1 }}</div>
+              </button>
+            </div>
+          </nav>
+          <div
+            class="py-3 tab-content"
+            style="height: fit-content"
+            id="myTabContent"
+          >
+            <div
+              *ngFor="
+                let item of slidesNumber;
+                let i = index;
+                let start = first;
+                let last = last
+              "
+              class="tab-pane fade"
+              [class.active]="start"
+              [class.show]="start"
+              [id]="'tab' + i"
+              role="tabpanel"
+            >
+              <div>
+                <div class="gap-3 d-flex flex-column">
+                  <div class="row align-items-start" *ngIf="i == 0">
+                    <label class="col-md-6 text-dark" for="assignedToId">
+                      تفويض الي</label
+                    >
+
+                    <div class="form-group col-md-6">
+                      <p-dropdown
+                        [options]="companyUsers"
+                        formControlName="assignedToId"
+                        optionLabel="displayName"
+                        placeholder="اختر"
+                      ></p-dropdown>
+
+                      <div
+                        *ngIf="
+                          AssignedToId?.hasError('required') &&
+                          dynamicForm.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row align-items-start" *ngIf="i == 0">
+                    <label class="col-md-6 text-dark" for="tasksLevelId">
+                      مستوي المهمه</label
+                    >
+
+                    <div class="form-group col-md-6">
+                      <p-dropdown
+                        [options]="taskLevels"
+                        formControlName="tasksLevelId"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="اختر"
+                      ></p-dropdown>
+                      <div
+                        *ngIf="
+                          tasksLevelId?.hasError('required') &&
+                          dynamicForm.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row align-items-start" *ngIf="i == 0">
+                    <label class="col-md-6 text-dark" for="tasksStatusId">
+                      حالة المهمه</label
+                    >
+
+                    <div class="form-group col-md-6">
+                      <p-dropdown
+                        [options]="taskStatus"
+                        formControlName="tasksStatusId"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="اختر"
+                      ></p-dropdown>
+                      <div
+                        *ngIf="
+                          tasksStatusId?.hasError('required') &&
+                          dynamicForm.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row align-items-start" *ngIf="i == 0">
+                    <label class="col-md-6 text-dark" for="description">
+                      وصف المهمه</label
+                    >
+
+                    <div class="col-md-6">
+                      <textarea
+                        class="form-control"
+                        rows="3"
+                        formControlName="description"
+                        maxlength="50"
+                      ></textarea>
+                      <div
+                        *ngIf="
+                          description?.hasError('required') &&
+                          dynamicForm.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row align-items-start" *ngIf="i == 0">
+                    <label class="col-md-6 text-dark" for="tasksStatusId">
+                      التاريخ المستهدف</label
+                    >
+
+                    <div class="form-group col-md-6">
+                      <input
+                        type="text"
+                        [placeholder]="'اختر' | translate"
+                        class="form-control"
+                        formControlName="targetDate"
+                        [minDate]="minDate"
+                        [maxDate]="maxDate"
+                        #dp="bsDatepicker"
+                        bsDatepicker
+                        [attr.bsConfig]="{
+                          dateInputFormat: 'YYYY-MM-DD',
+                          containerClass: 'theme-default',
+                          isAnimated: true,
+                          showWeekNumbers: false
+                        }"
+                      />
+                      <div
+                        *ngIf="
+                          targetDate?.hasError('required') &&
+                          dynamicForm.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row align-items-start" *ngIf="i == 0">
+                    <label class="col-md-6 text-dark" for="tasksStatusId">
+                      توقيت المهمه</label
+                    >
+
+                    <div class="form-group col-md-6">
+                      <timepicker
+                        dir="ltr"
+                        [formControlName]="'targetTime'"
+                      ></timepicker>
+                      <div
+                        *ngIf="
+                          targetTime?.hasError('required') &&
+                          dynamicForm.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ------------------------------ location ------------------------------- -->
+                  <div class="row align-items-start" *ngIf="i == 0">
+                    <label class="col-6" for="loaction">الموقع الخاص بها</label>
+                    <div class="form-group col-md-6">
+                      <input
+                        #location
+                        type="text"
+                        class="form-control"
+                        name="location"
+                        id="location"
+                        (keydown.enter)="$event.preventDefault()"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="off"
+                        type="text"
+                      />
+                      <div
+                        *ngIf="
+                          taskLocation?.hasError('required') &&
+                          dynamicForm.submitted
+                        "
+                        class="p-1 error-msg small"
+                        role="alert"
+                      >
+                        <i class="fas fa-times-circle me-2"></i>
+                        مطلوب
+                      </div>
+                    </div>
+                    <div class="col-6"></div>
+                    <div class="col-md-6 mt-3">
+                      <agm-map
+                        [latitude]="latitude"
+                        [longitude]="longitude"
+                        [zoom]="zoom"
+                        [fullscreenControl]="true"
+                        [mapTypeControl]="true"
+                        [scaleControl]="true"
+                        [panControl]="true"
+                        [lang]="'ar'"
+                      >
+                        <agm-marker
+                          [latitude]="latitude"
+                          [longitude]="longitude"
+                          [markerDraggable]="true"
+                          (dragEnd)="markerDragEnd($event)"
+                        ></agm-marker>
+                      </agm-map>
+                    </div>
+                  </div>
+
+                  <div
+                    formGroupName="ExtraFields"
+                    class="gap-3 d-flex flex-column"
+                  >
+                    <!-- ------------------------------- dynamic ------------------------------- -->
+                    <div
+                      class="row align-items-start"
+                      *ngFor="let item of dynamicFormModel?.formItems"
+                      [class.d-none]="item?.value != i + 1"
+                    >
+                      <label
+                        class="col-md-6 text-dark"
+                        [for]="item?.displayNameAr"
+                        *ngIf="item?.value == i + 1"
+                      >
+                        {{ item.displayNameAr }}</label
+                      >
+
+                      <div class="col-md-6" *ngIf="item?.value == i + 1">
+                        <!-- ------------------------------- number -------------------------------- -->
+                        <input
+                          *ngIf="item?.formItemType?.name == 'Number'"
+                          type="number"
+                          class="form-control"
+                          [name]="item?.displayNameAr"
+                          [id]="item?.displayNameAr"
+                          [defaultValue]="item?.defaultValue"
+                          [formControlName]="item?.name"
+                        />
+
+                        <!-- -------------------------------- text --------------------------------- -->
+                        <input
+                          *ngIf="item?.formItemType?.name == 'Text'"
+                          type="text"
+                          class="form-control"
+                          [name]="item?.displayNameAr"
+                          [id]="item?.displayNameAr"
+                          [placeholder]="item?.defaultValue"
+                          [formControlName]="item?.name"
+                        />
+
+                        <!-- ------------------------------ textarea ------------------------------- -->
+                        <textarea
+                          *ngIf="item?.formItemType?.name == 'LongText'"
+                          class="form-control"
+                          rows="3"
+                          [name]="item?.displayNameAr"
+                          [id]="item?.displayNameAr"
+                          [formControlName]="item?.name"
+                        ></textarea>
+
+                        <!-- ------------------------------ dropdown ------------------------------- -->
+                        <p-dropdown
+                          *ngIf="item?.formItemType?.name == 'Drop Down'"
+                          [options]="item?.formOptionSet?.formOptionSetItems"
+                          [name]="item?.displayNameAr"
+                          [id]="item?.displayNameAr"
+                          [formControlName]="item?.name"
+                          optionLabel="valueAR"
+                          optionValue="valueAR"
+                          [placeholder]="'اختر'"
+                        ></p-dropdown>
+
+                        <input
+                          *ngIf="item?.formItemType?.name == 'Date'"
+                          type="text"
+                          [placeholder]="'اختر' | translate"
+                          class="form-control"
+                          bsDatepicker
+                          #datepickerMDY="bsDatepicker"
+                          [formControlName]="item?.name"
+                          [attr.bsConfig]="{
+                            dateInputFormat: 'MMMM Do YYYY, h:mm:ss a',
+                            containerClass: 'theme-default',
+                            isAnimated: true,
+                            showWeekNumbers: true
+                          }"
+                        />
+
+                        <div class="d-flex justify-content-end">
+                          <p-inputSwitch
+                            *ngIf="item?.formItemType?.name == 'Bool'"
+                            [name]="item?.displayNameAr"
+                            [id]="item?.displayNameAr"
+                            [formControlName]="item?.name"
+                          ></p-inputSwitch>
+                        </div>
+
+                        <div
+                          *ngIf="
+                            ExtraFields?.get(item?.name)?.hasError(
+                              'required'
+                            ) && dynamicForm.submitted
+                          "
+                          class="p-1 error-msg small"
+                          role="alert"
+                        >
+                          <i class="fas fa-times-circle me-2"></i>
+                          مطلوب
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <button *ngIf="last" type="submit" class="btn btn-dark w-100">
+                  إضافة
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  #parentForm
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#parentFormButton"
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal"
+  id="parentFormButton"
+  tabindex="-1"
+  aria-labelledby="parentFormButtonLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog droid-font modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="parentFormButtonLabel">الفورم الاساسية</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <button
+          type="button"
+          class="gap-2 mt-3 w-100 justify-content-center text-nowrap btn flex-grow-1 flex-sm-grow-0 btn-dark d-flex align-items-center"
+          *ngFor="let item of subForms"
+          (click)="getForm(item)"
+        >
+          {{ item.key }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

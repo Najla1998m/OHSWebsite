@@ -1,0 +1,57 @@
+@media (min-width: 992px) {
+  .custom-size {
+    width: 50%;
+  }
+}
+
+#subscriptions {
+  background-image: url("../../../../assets/images/home/bg2.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: left;
+}
+
+@media screen and (max-width: 1024px) {
+  #subscriptions {
+    background-size: cover;
+  }
+}
+
+.form-check-input[type="radio"] {
+  display: none;
+}
+
+.account-type {
+  background-color: #303030;
+  color: white;
+  font-family: "Droid Arabic Kufi";
+  cursor: pointer;
+}
+
+.account-icon {
+  fill: #d7be69;
+  margin: auto;
+}
+
+@media (max-width: 550px) {
+  .account-icon {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+input[type="radio"]:checked + label .account-type {
+  background-color: #d7be69;
+  .account-icon {
+    fill: white;
+  }
+}
+
+.modal .form-check {
+  padding: 0 1ex !important;
+}
+
+.modal .form-check label,
+.modal .form-check label .card {
+  height: 100%;
+}

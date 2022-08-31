@@ -1,0 +1,235 @@
+<section
+  id="footer"
+  [class.pt-5]="!secondaryTheme"
+  [class.pb-3]="!secondaryTheme"
+  [class.secondaryTheme]="secondaryTheme"
+  [class.bottom]="makeItFixed"
+>
+  <div class="container">
+    <div *ngIf="!secondaryTheme" class="row row-cols-1 row-cols-lg-2 row-gap">
+      <div class="gap-2 d-flex flex-column">
+        <div>
+          <img src="assets/images/light-logo.png" class="img-fluid" alt="ohs" />
+        </div>
+        <div class="text-b58d2e fs-28 font-w-500 droid-font">
+          {{ siteInfo?.mainHeadline }}
+        </div>
+        <div class="text-white droid-font">
+          {{ siteInfo?.mainBrief }}
+        </div>
+        <div class="text-b58d2e fs-28 font-w-500">
+          {{ siteInfo?.companyPhone }}
+        </div>
+        <div>
+          <ul
+            id="social"
+            class="gap-2 p-0 nav justify-content-center justify-content-lg-start"
+          >
+            <ng-container *ngFor="let item of social">
+              <li class="nav-item" *ngIf="item?.isVisible">
+                <a class="nav-link" [href]="item.value" target="_blank">
+                  <i [class]="'fab ' + item.key"></i>
+                </a>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ---------------------------- contact form ----------------------------- -->
+      <div>
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" #form="ngForm">
+          <div class="row row-gap">
+            <div class="form-group col-12">
+              <input
+                type="text"
+                class="form-control custom-control"
+                name="company-name"
+                id="company-name"
+                placeholder="اسم الشركة"
+                formControlName="username"
+              />
+              <div
+                *ngIf="CompanyName.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اسم الشركة مطلوب
+              </div>
+
+              <div
+                *ngIf="CompanyName.errors?.minlength && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اقل عدد للأحرف هو
+                <span class="mx-1">{{
+                  CompanyName.errors?.minlength.requiredLength
+                }}</span>
+              </div>
+
+              <div
+                *ngIf="CompanyName.errors?.maxlength && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                اكثر عدد للأحرف هو
+                <span class="mx-1">{{
+                  CompanyName.errors?.maxlength.requiredLength
+                }}</span>
+              </div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <input
+                type="number"
+                class="form-control custom-control"
+                name="phone"
+                id="phone"
+                placeholder="رقم الجوال"
+                formControlName="mobile"
+              />
+
+              <div
+                *ngIf="Phone.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                رقم الجوال مطلوب
+              </div>
+
+              <div
+                *ngIf="Phone.errors?.pattern && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                رقم الجوال غير صحيح
+              </div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <input
+                type="text"
+                class="form-control custom-control"
+                name="email"
+                id="email"
+                placeholder="البريد الألكتروني"
+                formControlName="email"
+              />
+
+              <div
+                *ngIf="Email.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                البريد الألكتروني مطلوب
+              </div>
+
+              <div
+                *ngIf="Email.errors?.pattern && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                من فضلك ادخل بريد الالكترونى صحيح
+              </div>
+            </div>
+
+            <div class="form-group">
+              <textarea
+                class="form-control custom-control"
+                name="request"
+                id="request"
+                rows="5"
+                placeholder="ملخص الطلب"
+                formControlName="message"
+              ></textarea>
+
+              <div
+                *ngIf="Message.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                محتوي الرسالة مطلوب
+              </div>
+            </div>
+
+            <div
+              class="mt-3 d-flex justify-content-center justify-content-lg-start"
+            >
+              <button type="submit" class="btn btn-second-gold">ارسال</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <hr *ngIf="!secondaryTheme" />
+
+    <div
+      class="gap-1 align-items-center d-flex flex-column flex-lg-row gap-lg-0 justify-content-between"
+    >
+      <!-- <div class="flex-wrap gap-3 d-flex">
+      </div> -->
+      <nav class="nav justify-content-center droid-font">
+        <a hidden class="nav-link active">شاركنا برأيك</a>
+        <a
+          class="nav-link"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          hidden
+          >الشروط و الأحكام</a
+        >
+        <a class="nav-link" [href]="policy?.value" target="_blank"
+          >خصوصية الموقع</a
+        >
+        <a class="nav-link" [href]="siteInfo?.mapUrl" target="_blank"
+          >شاركنا برأيك</a
+        >
+      </nav>
+      <div class="text-center text-white fs-16">
+        <span class="text-b58d2e">OHSJOEQ</span> © {{ date | date: "yyyy" }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog droid-font modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">الشروط والأحكام</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" [innerHtml]="terms?.value"></div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="m-auto btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

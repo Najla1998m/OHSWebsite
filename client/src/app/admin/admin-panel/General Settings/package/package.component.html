@@ -1,0 +1,410 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Packages</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="packages"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Name">
+            <div class="d-flex">
+              <span>Name</span> <p-sortIcon field="Name"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="symbol">
+            <div class="d-flex">
+              <span>Symbol</span> <p-sortIcon field="symbol"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="employeesNumbers">
+            <div class="d-flex">
+              <span>Employees Numbers</span>
+              <p-sortIcon field="employeesNumbers"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="duration">
+            <div class="d-flex">
+              <span>Duration</span> <p-sortIcon field="duration"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="allowedDays">
+            <div class="d-flex">
+              <span>Allowed Days</span>
+              <p-sortIcon field="allowedDays"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="pricePerEmployee">
+            <div class="d-flex">
+              <span>Price Per Employee</span>
+              <p-sortIcon field="pricePerEmployee"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="isVisible">
+            <div class="d-flex">
+              <span>Is Visible</span>
+              <p-sortIcon field="isVisible"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="forVendors">
+            <div class="d-flex flex-nowrap">
+              <span>For Vendor</span>
+              <p-sortIcon field="forVendors"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="forClients">
+            <div class="d-flex">
+              <span>For Client</span>
+              <p-sortIcon field="forClients"></p-sortIcon>
+            </div>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-package>
+        <tr>
+          <td>{{ package.name }}</td>
+          <td>{{ package.symbol }}</td>
+
+          <td>{{ package.employeesNumbers }}</td>
+          <td>{{ package.duration }}</td>
+          <td>{{ package.allowedDays }}</td>
+          <td>{{ package.pricePerEmployee }}</td>
+          <td>
+            <i
+              *ngIf="package.isVisible"
+              class="fa fa-eye text-success fs-20"
+              aria-hidden="true"
+            ></i>
+
+            <i
+              *ngIf="!package.isVisible"
+              class="fa fa-eye-slash text-danger fs-20"
+              aria-hidden="true"
+            ></i>
+          </td>
+
+          <td>
+            <i
+              *ngIf="package.forVendors"
+              class="fa fa-check-circle fs-20 text-success"
+              aria-hidden="true"
+            ></i>
+
+            <i
+              *ngIf="!package.forVendors"
+              class="fa fa-times-circle fs-20 text-danger"
+              aria-hidden="true"
+            ></i>
+          </td>
+          <td>
+            <i
+              *ngIf="package.forClients"
+              class="fa fa-check-circle fs-20 text-success"
+              aria-hidden="true"
+            ></i>
+
+            <i
+              *ngIf="!package.forClients"
+              class="fa fa-times-circle fs-20 text-danger"
+              aria-hidden="true"
+            ></i>
+          </td>
+          <td class="d-flex gap">
+            <button
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              (click)="showForm(package)"
+              class="p-button-rounded p-button-warning p-mr-2"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              (click)="onDelete(package.id)"
+              class="p-button-rounded p-button-danger"
+            ></button>
+
+            <button
+              pButton
+              pRipple
+              icon="pi pi-book"
+              [routerLink]="['package-details', package?.id]"
+              class="p-button-rounded p-button-primary"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ packages ? packages.length : 0 }} Packages.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Package"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="packageForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="row">
+      <!-- -------------------------------- name --------------------------------- -->
+      <div class="form-group col">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          placeholder="name..."
+          formControlName="name"
+        />
+
+        <!--! error Message --->
+        <div
+          *ngIf="Name.errors?.required && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Name is Required
+        </div>
+        <div
+          *ngIf="Name.errors?.minlength && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Name minimum length is
+          {{ Name.errors.minlength.requiredLength }} character
+        </div>
+        <div
+          *ngIf="Name.errors?.maxlength && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Name maximum length is
+          {{ Name.errors.minlength.requiredLength }} character
+        </div>
+      </div>
+
+      <!-- ------------------------------- symbol -------------------------------- -->
+      <div class="form-group col">
+        <label for="symbol">Symbol</label>
+        <input
+          type="text"
+          class="form-control"
+          name="symbol"
+          id="symbol"
+          placeholder="symbol..."
+          formControlName="symbol"
+        />
+
+        <!--! error Message --->
+        <div
+          *ngIf="Symbol.errors?.required && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Symbol is Required
+        </div>
+      </div>
+    </div>
+
+    <!-- ----------------------- is Deleted & Is Visible ----------------------- -->
+    <div class="row">
+      <div class="col-6 my-3">
+        <div class="d-flex gap">
+          <label class="fs-large">Is Visible</label>
+          <p-inputSwitch formControlName="isVisible"></p-inputSwitch>
+        </div>
+      </div>
+    </div>
+
+    <!-- ----------------------- for vendor & for client ----------------------- -->
+    <div class="row">
+      <div class="col-6 my-3">
+        <div class="d-flex gap">
+          <label class="fs-large">For Vendor</label>
+          <p-inputSwitch formControlName="forVendors"></p-inputSwitch>
+        </div>
+      </div>
+
+      <div class="col-6 my-3">
+        <div class="d-flex gap">
+          <label class="fs-large">For Client</label>
+          <p-inputSwitch formControlName="forClients"></p-inputSwitch>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- -------------------------- employeesNumbers --------------------------- -->
+      <div class="form-group col">
+        <label for="employeesNumbers">Employees Number</label>
+        <input
+          type="text"
+          class="form-control"
+          name="employeesNumbers"
+          id="employeesNumbers"
+          formControlName="employeesNumbers"
+          placeholder="Employees Num..."
+        />
+
+        <!--! error Message --->
+        <div
+          *ngIf="EmployeesNumbers.errors?.required && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Employees Numbers is Required
+        </div>
+
+        <div
+          *ngIf="EmployeesNumbers.errors?.min && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Employees Numbers minimum value
+          {{ EmployeesNumbers.errors.min.value }}
+        </div>
+      </div>
+
+      <!-- ------------------------------ duration ------------------------------- -->
+      <div class="form-group col">
+        <label for="duration">Duration</label>
+        <input
+          type="text"
+          class="form-control"
+          name="duration"
+          id="duration"
+          formControlName="duration"
+          placeholder="duration..."
+        />
+
+        <!--! error Message --->
+        <div
+          *ngIf="Duration.errors?.required && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Duration is Required
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- ----------------------------- allowedDays ----------------------------- -->
+      <div class="form-group col">
+        <label for="allowedDays">Allowed Days</label>
+        <input
+          type="text"
+          class="form-control"
+          name="allowedDays"
+          id="allowedDays"
+          formControlName="allowedDays"
+          placeholder="Allowed Days..."
+        />
+
+        <!--! error Message --->
+        <div
+          *ngIf="AllowedDays.errors?.required && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Allowed Days is Required
+        </div>
+      </div>
+
+      <!-- -------------------------- pricePerEmployee --------------------------- -->
+
+      <div class="form-group col">
+        <label for="pricePerEmployee">Price Per Employee</label>
+        <input
+          type="text"
+          class="form-control"
+          name="pricePerEmployee"
+          id="pricePerEmployee"
+          formControlName="pricePerEmployee"
+          placeholder="price..."
+        />
+
+        <!--! error Message --->
+        <div
+          *ngIf="PricePerEmployee.errors?.required && form.submitted"
+          class="error-msg p-1 small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          Price is Required
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="d-flex justify-content-center mt-3">
+      <button
+        *ngIf="!selected"
+        type="submit"
+        class="btn btn-success rounded-pill px-4"
+      >
+        Add
+      </button>
+
+      <button
+        *ngIf="selected"
+        type="submit"
+        class="btn btn-primary rounded-pill px-4"
+      >
+        Edit
+      </button>
+    </div>
+  </form>
+</p-dialog>
+<!--
+<p-dialog
+  header="Add Package Details"
+  [(visible)]="displayFormDetails"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+</p-dialog> -->

@@ -1,0 +1,254 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Form Fields</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      [value]="listFields"
+      #dt
+      [rows]="10"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="id">
+            Id
+            <p-sortIcon field="id"></p-sortIcon>
+            <p-columnFilter
+              type="number"
+              field="id"
+              display="menu"
+              class="p-ml-auto"
+            ></p-columnFilter>
+          </th>
+          <th pSortableColumn="Name">
+            Name
+            <p-sortIcon field="Name"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              field="name"
+              display="menu"
+              class="p-ml-auto"
+            ></p-columnFilter>
+          </th>
+          <th>Display NameAr</th>
+          <th>Display NameEn</th>
+          <th>DefaultValue</th>
+          <th>Form Name</th>
+          <th>Field Type</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-field>
+        <tr>
+          <td>{{ field?.id }}</td>
+          <td>{{ field?.name }}</td>
+          <td>{{ field?.displayNameAr }}</td>
+          <td>{{ field?.displayNameEn }}</td>
+          <td>
+            {{ field?.defaultValue }}
+          </td>
+          <td>{{ field?.form?.name }}</td>
+          <td>{{ field?.formItemType?.name }}</td>
+          <td>
+            <div class="d-flex gap justify-content-end">
+              <button
+                pButton
+                pRipple
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-warning p-mr-2"
+                (click)="showForm(field)"
+              ></button>
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger"
+                (click)="onDelete(field.id)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listFields ? listFields.length : 0 }} listMainForm.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Fields Form"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="fieldForm" (ngSubmit)="onSubmit()" #form2="ngForm">
+    <div class="form-group">
+      <label for="Name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Enter  Name.."
+        formControlName="name"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Name.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name For Dropdown Form is Required
+      </div>
+    </div>
+
+    <!---Name AR-->
+    <div class="form-group">
+      <label for="displayNameAr"> Arabic Name </label>
+      <input
+        type="text"
+        class="form-control"
+        name="displayNameAr"
+        id="displayNameAr"
+        placeholder="Enter Dropdown Form Arabic Name.."
+        formControlName="displayNameAr"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="NameAr.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name with Arabic For Dropdown Form is Required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="displayNameEn">English Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="displayNameEn"
+        id="displayNameEn"
+        placeholder="Enter Dropdown Form Name.."
+        formControlName="displayNameEn"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="NameEn.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name With English For Dropdown Form is Required
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="">Filed Type </label>
+      <p-dropdown
+        [options]="listFieldTypes"
+        optionLabel="name"
+        optionValue="id"
+        formControlName="formItemTypeId"
+        placeholder="Select field type"
+        (ngModelChange)="load($event)"
+      ></p-dropdown>
+    </div>
+
+    <div *ngIf="displayDropdown">
+      <div class="form-group">
+        <label for="">Options </label>
+        <p-dropdown
+          [options]="listOptions"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="formOptionSetId"
+          placeholder="Select Options"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div *ngIf="displayMainForm">
+      <div class="form-group">
+        <label for="">Choose Form </label>
+        <p-dropdown
+          [options]="listForms"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="formId"
+          placeholder="Select Form "
+        ></p-dropdown>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="defaultValue">Defualt Value</label>
+      <input
+        type="text"
+        class="form-control"
+        name="defaultValue"
+        id="defaultValue"
+        placeholder="Enter defaultValue.."
+        formControlName="defaultValue"
+      />
+    </div>
+
+    <div class="form-group" *ngIf="selected">
+      <label for="value"> Step Number </label>
+      <input
+        type="text"
+        class="form-control"
+        name="value"
+        id="value"
+        placeholder="Enter Step Number in Form.."
+        formControlName="value"
+      />
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button
+        *ngIf="!selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Add
+      </button>
+      <button
+        *ngIf="selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+</p-dialog>

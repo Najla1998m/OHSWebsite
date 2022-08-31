@@ -1,0 +1,79 @@
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+        class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row row-gap">
+    <div class="row col-12">
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-3 col-md-6 mb-4" *ngFor="let item of listDepts; let i=index">
+        <button class="btn btnActive p-0 w-100 " [class.selected]="selectedIndex == i"
+          (click)="selectedIndex=i ;loadChart(i)">
+          <div class="card border-left-primary shadow min-h-117 w-100 py-2 ">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="
+                                  text-xs
+                                  font-weight-bold
+                                  text-primary text-uppercase
+                                  mb-1
+                                ">
+                    Department
+                  </div>
+                  <div class="h6 mb-0 font-weight-bold text-gray-800">
+                    {{item?.name}}
+                  </div>
+                </div>
+                <div class="col-auto">
+
+                  <i class="far fa-building fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+
+
+    </div>
+
+    <!-- --------------------------------- Donets --------------------------------- -->
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header">
+          <div class="text-primary font-weight-bold">Bar Charts</div>
+        </div>
+        <div class="card-body d-flex justify-content-center">
+          <div class="px-0 w-100 h-100">
+            <ngx-charts-bar-vertical [view]="[400,400]" [scheme]="'picnic'" [results]="listBar" [gradient]="gradient"
+              [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel">
+            </ngx-charts-bar-vertical>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- --------------------------------- pie --------------------------------- -->
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header">
+          <div class="text-primary font-weight-bold">Pie Charts</div>
+        </div>
+        <div class="card-body d-flex justify-content-center">
+          <div class="px-0 w-100 h-100 ">
+            <ngx-charts-pie-grid [view]="[500,400]" [scheme]="'picnic'" [results]="listChart">
+            </ngx-charts-pie-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.container-fluid -->

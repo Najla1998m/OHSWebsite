@@ -1,0 +1,87 @@
+#common-questions {
+  background: url("../../../../assets/images/home/bg3.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  color: black;
+}
+
+#common-questions .nav-item .active::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 50%;
+  height: 110%;
+  transform: translate(-50%, 0);
+  width: 60%;
+  border-bottom: 4.5px solid #d7be69;
+  color: #b58d2e;
+}
+
+.active {
+  color: #b58d2e;
+}
+
+.accordion-item {
+  border: 0;
+  border-radius: 8px;
+}
+
+.accordion-item button {
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(124, 123, 123, 0.26);
+}
+
+.accordion-button:not(.collapsed) {
+  color: black;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* -------------------------------- for plus -------------------------------- */
+.accordion-button::after {
+  background-image: url("../../../../assets/images/icons/plus.png");
+  background-position: center;
+}
+
+/* --------------------------------- for sub -------------------------------- */
+.accordion-button:not(.collapsed)::after {
+  background-image: url("../../../../assets/images/icons/minus.png");
+}
+
+::ng-deep {
+  html:lang(ar) .accordion-button::after {
+    margin-right: auto !important;
+    margin-left: 0;
+  }
+}
+
+.accordion-body {
+  box-shadow: 0 1px 5px rgba(124, 123, 123, 0.26);
+  border-end-end-radius: 8px;
+  border-end-start-radius: 8px;
+  color: #676767;
+}
+
+.accordion-button:not(.collapsed) {
+  border-end-end-radius: 0 !important;
+  border-end-start-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: #e7f1ff;
+}
+
+.accordion-button {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .accordion-button {
+    padding: 1ex;
+  }
+}

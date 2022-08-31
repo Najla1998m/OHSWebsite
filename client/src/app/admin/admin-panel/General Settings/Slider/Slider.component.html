@@ -1,0 +1,307 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Sliders</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="sliderArray"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Name">
+            Name <p-sortIcon field="Name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Image">
+            Image <p-sortIcon field="Image"></p-sortIcon>
+          </th>
+          <th pSortableColumn="AltHeadline">
+            AltHeadline <p-sortIcon field="AltHeadline"></p-sortIcon>
+          </th>
+          <th pSortableColumn="AltBody">
+            AltBody <p-sortIcon field="AltBody"></p-sortIcon>
+          </th>
+
+          <th pSortableColumn="IsVisible">
+            IsVisible <p-sortIcon field="IsVisible"></p-sortIcon>
+          </th>
+          <!-- <th pSortableColumn="IsDeleted">
+            IsDeleted <p-sortIcon field="IsDeleted"></p-sortIcon>
+          </th> -->
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-slide>
+        <tr>
+          <td>{{ slide.name }}</td>
+          <td>
+            <p-image
+              [src]="slide.image"
+              alt="Image"
+              height="80"
+              width="80"
+              [preview]="true"
+            ></p-image>
+          </td>
+          <td>{{ slide.altHeadline }}</td>
+          <td>{{ slide.altBody }}</td>
+
+          <td>
+            <i
+              *ngIf="slide?.isVisible"
+              class="fa fa-eye text-success fs-20"
+              aria-hidden="true"
+            ></i>
+
+            <i
+              *ngIf="!slide?.isVisible"
+              class="fa fa-eye-slash text-danger fs-20"
+              aria-hidden="true"
+            ></i>
+          </td>
+          <!-- <td>{{ slide.IsDeleted }}</td> -->
+          <td>
+            <div class="d-flex gap">
+              <button
+                pButton
+                pRipple
+                icon="pi pi-pencil"
+                (click)="showForm(slide)"
+                class="p-button-rounded p-button-warning p-mr-2"
+              ></button>
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                (click)="onDelete(slide.id)"
+                class="p-button-rounded p-button-danger"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ sliderArray ? sliderArray.length : 0 }} Sliders.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Image Slide"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="sliderForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <!-- -------------------------------- Name --------------------------------- -->
+    <div class="form-group">
+      <label for="question">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Name"
+        formControlName="name"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Name.errors?.required && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name is Required
+      </div>
+
+      <div
+        *ngIf="Name.errors?.minlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name minimum length is {{ Name.errors.minlength.requiredLength }}
+      </div>
+
+      <div
+        *ngIf="Name.errors?.maxlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name maximum length is {{ Name.errors.maxlength.requiredLength }}
+      </div>
+    </div>
+
+    <!-- ------------------------------ Headline ------------------------------- -->
+    <div class="form-group">
+      <label for="headline">Headline</label>
+      <input
+        type="text"
+        class="form-control"
+        name="headline"
+        id="headline"
+        placeholder="Headline"
+        formControlName="altHeadline"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="AltHeadline.errors?.required && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Headline is Required
+      </div>
+
+      <div
+        *ngIf="AltHeadline.errors?.minlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Headline minimum length is
+        {{ AltHeadline.errors.minlength.requiredLength }}
+      </div>
+
+      <div
+        *ngIf="AltHeadline.errors?.maxlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Headline maximum length is
+        {{ AltHeadline.errors.maxlength.requiredLength }}
+      </div>
+    </div>
+
+    <!-- -------------------------------- Body --------------------------------- -->
+    <div class="form-group">
+      <label for="AltBody">Body</label>
+      <textarea
+        class="form-control"
+        name="AltBody"
+        id="AltBody"
+        rows="3"
+        placeholder="body"
+        formControlName="altBody"
+      ></textarea>
+
+      <!--! error Message --->
+      <div
+        *ngIf="AltBody.errors?.required && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Body is Required
+      </div>
+
+      <div
+        *ngIf="AltBody.errors?.minlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Body minimum length is
+        {{ AltBody.errors.minlength.requiredLength }}
+      </div>
+
+      <div
+        *ngIf="AltBody.errors?.maxlength && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Body maximum length is
+        {{ AltBody.errors.maxlength.requiredLength }}
+      </div>
+    </div>
+
+    <!-- -------------------------------- Image -------------------------------- -->
+    <div class="form-group">
+      <label for="Image">Image</label>
+      <p-fileUpload
+        *ngIf="displayForm"
+        id="Image"
+        url="./upload.php"
+        (onSelect)="onUpload($event)"
+        (onRemove)="onClear()"
+        [multiple]="false"
+        accept="image/*"
+        #image
+        [showUploadButton]="false"
+        [showCancelButton]="false"
+      >
+        <ng-template pTemplate="content">
+          <img
+            [src]="selected?.image"
+            alt=""
+            width="55"
+            height="55"
+            *ngIf="editImg"
+          />
+        </ng-template>
+      </p-fileUpload>
+
+      <div
+        *ngIf="Image.errors?.required && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Image is Required
+      </div>
+    </div>
+
+    <!-- ----------------------- is Deleted & Is Visible ----------------------- -->
+    <div class="row">
+      <div class="col-6 my-3">
+        <div class="d-flex gap">
+          <label class="fs-large">Is Visible</label>
+          <p-inputSwitch formControlName="isVisible"></p-inputSwitch>
+        </div>
+      </div>
+
+      <!-- <div class="col-6 my-3">
+        <div class="d-flex gap">
+          <label class="fs-large">Is Deleted</label>
+          <p-inputSwitch formControlName="isDeleted"></p-inputSwitch>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-success mt-3 rounded-pill py-2 px-4">
+        Add Slider
+      </button>
+    </div>
+  </form>
+</p-dialog>

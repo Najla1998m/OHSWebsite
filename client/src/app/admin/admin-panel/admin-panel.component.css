@@ -1,0 +1,54 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.4/css/sb-admin-2.css");
+
+#searchBtn {
+  border-radius: 0;
+  border-start-end-radius: 5px;
+  border-end-end-radius: 5px;
+}
+
+.navbar-nav {
+  padding: 0;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+.active {
+  font-weight: 700;
+  color: white !important;
+}
+
+.active i {
+  color: white !important;
+}
+
+.active2 {
+  color: #3f65d4 !important;
+  font-weight: 700;
+}
+
+::ng-deep html:lang(ar) .sidebar .nav-item .nav-link .badge-counter,
+::ng-deep html:lang(ar) .topbar .nav-item .nav-link .badge-counter {
+  transform-origin: top left !important;
+  left: 0.25rem !important;
+  right: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .hide {
+    width: 0;
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 768px) {
+  .sidebar .nav-item .nav-link {
+    text-align: initial !important;
+  }
+
+  html:lang(ar) .sidebar .nav-item .nav-link i {
+    margin-left: 0.25rem !important;
+    margin-right: 0;
+  }
+}

@@ -1,0 +1,28 @@
+<div class="container" *ngIf="!hide">
+  <div class="flex-row flex-wrap d-flex card rounded-8 border-ffb7b7">
+    <div
+      class="
+        px-3
+        py-2
+        bg-f74d4d
+        d-flex
+        align-items-center
+        justify-content-center
+      "
+    >
+      <svg-icon src="assets/images/icons/alert.svg"></svg-icon>
+    </div>
+    <div class="card-body flex-grow-1">
+      <ng-container [ngTemplateOutlet]="content"></ng-container>
+    </div>
+    <div *ngIf="hasAction">
+      <button
+        type="button"
+        class="m-2 btn btn-gold rounded-8"
+        (click)="onClick()"
+      >
+        {{ actionName }}
+      </button>
+    </div>
+  </div>
+</div>

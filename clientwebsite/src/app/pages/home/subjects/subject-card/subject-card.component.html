@@ -1,0 +1,30 @@
+<div *ngIf="data" class="card position-relative droid-font overflow-hidden h-100 ">
+
+  <div class="cover-bg" [style.background-image]="'linear-gradient(to left, #d7be69, transparent ),url(\'' + data?.image +'\')'">
+
+  </div>
+  <div class="card-body">
+    <h4 class="card-title">{{ data.title }}</h4>
+    <p class="card-text w-75 mt-1 mt-md-4 fs-lg-16 fs-14">
+      {{ data.minDescription }}
+    </p>
+
+
+
+    <a class="btn btn-second-gold mt-1 mt-md-5 mb-2" [routerLink]="['/about', data?.id]" role="button">
+      المزيد
+    </a>
+  </div>
+</div>
+
+<!-- <div *ngIf="loading"></div> -->
+<div class="card border-0" *ngIf="!data">
+  <div class="card-body">
+    <p-skeleton width="35%" height="2rem"></p-skeleton>
+    <p-skeleton width="75%" height="1rem" styleClass="mt-4"></p-skeleton>
+    <p-skeleton width="75%" height="1rem" styleClass="mt-2"></p-skeleton>
+    <p-skeleton width="75%" height="1rem" styleClass="mt-2"></p-skeleton>
+    <p-skeleton width="50%" height="1rem" styleClass="mt-2"></p-skeleton>
+    <p-skeleton width="25%" height="2.5rem" styleClass="mt-5 rounded-pill"></p-skeleton>
+  </div>
+</div>

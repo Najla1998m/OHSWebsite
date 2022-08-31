@@ -1,0 +1,80 @@
+.icon {
+  width: 34px;
+  height: 34px;
+}
+
+.pollAction {
+  width: 180px;
+  height: 153px !important;
+}
+
+.sidebar-op {
+  display: none;
+}
+
+.selected .sidebar-op {
+  display: block;
+  width: 40px;
+  height: 100%;
+  background-color: #d7be69;
+  * {
+    color: white;
+  }
+
+  .nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    cursor: pointer;
+    width: 100%;
+
+    * {
+      transition: all 0.2s ease-in-out;
+    }
+  }
+
+  .nav-link:not(:last-child) {
+    border-bottom: 2px solid #c9b05a;
+  }
+
+  .nav-link:not(:first-child) {
+    border-top: 2px solid #dfc671;
+  }
+}
+
+::ng-deep {
+  html:lang(ar) .selected .sidebar-op {
+    height: 100%;
+    width: 40px;
+    background-color: #d7be69;
+  }
+}
+.icons-button {
+  width: 19px;
+  height: 19px;
+}
+
+.disabled {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e3d8b3;
+  color: white;
+}
+
+::ng-deep {
+  p-tooltip-text {
+    font-family: "Droid Arabic Kufi" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

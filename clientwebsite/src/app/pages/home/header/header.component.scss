@@ -1,0 +1,71 @@
+.header {
+  background: url("../../../../assets/images/home/bg1-en.jpg");
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 565px;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    height: calc(100vh - 65px);
+    max-height: fit-content;
+    background-size: cover;
+    background-position: left;
+  }
+}
+
+.phone {
+  width: 30px;
+  height: 30px;
+  fill: white;
+}
+
+::ng-deep {
+  @media screen and (max-width: 768px) {
+    html:lang(ar) .header {
+      height: calc(100vh - 65px);
+      max-height: fit-content;
+      background-size: cover;
+      background-position: right;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .w-custom-75 {
+    width: 75% !important;
+  }
+}
+
+.silder {
+  position: absolute;
+  bottom: -48px;
+  z-index: 2;
+}
+
+.row-gap {
+  row-gap: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .silder {
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .silder {
+    width: 75%;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    margin-bottom: 50px;
+  }
+}
+
+.z-index-high {
+  z-index: 50;
+}

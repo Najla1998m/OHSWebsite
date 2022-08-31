@@ -1,0 +1,37 @@
+::ng-deep .notRead {
+  font-weight: bold !important;
+  background-color: #f7f7f7 !important;
+}
+
+::ng-deep.p-dialog .p-dialog-header {
+  padding: 2px;
+}
+
+::ng-deep .p-dialog {
+  max-height: 97% !important;
+}
+
+.table thead th {
+  border-bottom: none !important;
+  border-color: transparent !important;
+}
+.avatar {
+  height: 60px;
+  width: 60px;
+  background-color: #efefef;
+  margin: auto;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  text-transform: uppercase;
+  background-size: cover;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.fs-12 {
+  font-size: 12px;
+}

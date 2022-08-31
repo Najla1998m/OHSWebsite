@@ -1,0 +1,56 @@
+<div class="card border-0 shadow">
+  <div class="card-body">
+    <div class="row r-gap">
+      <div class="col-12 col-lg-6" *ngFor="let item of listCompanyVendors">
+        <div class="card bg-gray shadow-sm rounded-16">
+          <div class="card-body">
+            <!-- ----------------------------------------------------------------------- -->
+            <div class="row">
+              <div class="col-6 col-lg-9">
+                <div class="d-flex gap-5">
+                  <div *ngIf="item?.userPhoto">
+                    <p-image [src]=" item?.userPhoto ? item?.userPhoto  :'assets/images/log.png'" alt="Image"
+                      height="90" width="90" [preview]="true">
+                    </p-image>
+                  </div>
+                  <div *ngIf="!item?.userPhoto">
+                    <img src="assets/images/log.png" class="img-fluid " width="90" height="100" alt="">
+                  </div>
+                  <div class="name">
+                    <h5>{{ item?.fullName }}</h5>
+                    <div class="text-muted">{{ item?.email }}</div>
+                    <div class="d-flex align-items-center gap">
+                      <i class="fas fa-circle mt-1" [ngClass]="{
+                          'text-danger': !item?.isActive,
+                          'text-success': item?.isActive
+                        }" aria-hidden="true"></i>
+                      <span class="m-0">
+                        {{ item?.isActive ? "active" : "inactive" }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-lg-3">
+                <!-- <button type="button" class="btn btn-outline-primary w-108"
+                  (click)="showDepartments(item?.company?.id)">
+                  Department
+                </button>
+                <button type="button" class="btn btn-outline-warning w-108 my-3"
+                  (click)="showMangers(item?.company?.id)">
+                  Managers
+                </button> -->
+                <button *ngIf=" !item?.isActive" type="button" class="btn btn-outline-success  w-108"
+                  (click)="showAttachment(item?.id)">
+                  Attachment
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

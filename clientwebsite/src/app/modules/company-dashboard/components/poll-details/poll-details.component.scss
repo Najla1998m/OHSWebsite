@@ -1,0 +1,54 @@
+.bg-danger {
+  background-color: #ff0000 !important;
+  color: white;
+}
+
+.bg-warning {
+  background-color: #fdd100 !important;
+  color: #000000;
+}
+
+.bg-secondary {
+  background-color: #b5b5b5 !important;
+  color: #000;
+}
+
+td svg-icon {
+  cursor: pointer;
+}
+
+::ng-deep {
+  #poll-details .p-dropdown {
+    width: 180px;
+  }
+
+  text {
+    fill: #000000;
+    color: #000;
+  }
+}
+
+.icon {
+  width: 30px;
+}
+
+.not-icon {
+  width: 30px;
+  height: 20px;
+}
+
+.custom-size {
+  width: 45px;
+  height: 45px;
+  padding: 2ex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:host ::ng-deep {
+  .p-knob-text {
+    font-size: 1.6rem;
+    color: black !important;
+  }
+}

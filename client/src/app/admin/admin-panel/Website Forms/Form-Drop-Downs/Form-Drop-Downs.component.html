@@ -1,0 +1,235 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Drop Downs Form</div>
+  </div>
+  <div class="card-body">
+    <!-- <form [formGroup]="AllForms" class="">
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 pb-4">
+          <p-dropdown
+            [options]="listAllForms"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="id"
+            placeholder="Select Form"
+            (onChange)="load()"
+          ></p-dropdown>
+        </div>
+      </div>
+    </form> -->
+
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="listDropForms"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Id">
+            <div class="d-flex">
+              <span>Id</span>
+              <p-sortIcon field="Id"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="Name">
+            <div class="d-flex">
+              <span>Name</span>
+              <p-sortIcon field="Name"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="NameAr">
+            <div class="d-flex">
+              <span>Arabic Name</span>
+              <p-sortIcon field="NameAr"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="NameEn">
+            <div class="d-flex">
+              <span>English Name</span>
+              <p-sortIcon field="NameEn"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="DefaultValue">
+            <div class="d-flex">
+              <span>Default Value</span>
+              <p-sortIcon field="DefaultValue"></p-sortIcon>
+            </div>
+          </th>
+
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-drop>
+        <tr>
+          <td>{{ drop?.id }}</td>
+          <td>{{ drop?.name }}</td>
+          <td>{{ drop?.displayNameAr }}</td>
+          <td>{{ drop?.displayNameEn }}</td>
+          <td>{{ drop?.defaultValue }}</td>
+          <td>
+            <div class="d-flex gap justify-content-end">
+              <button
+                pButton
+                pRipple
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-warning p-mr-2"
+                (click)="showForm(drop)"
+              ></button>
+
+              <button
+                pButton
+                pRipple
+                icon="pi pi-plus"
+                class="p-button-rounded p-button-success p-mr-2"
+                [routerLink]="['options', drop?.id]"
+              ></button>
+
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger"
+                (click)="onDelete(drop?.id)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listDropForms ? listDropForms.length : 0 }} Forms.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Dropdown Form"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="dropDownForm" (ngSubmit)="onSubmit()" #form2="ngForm">
+    <div class="form-group">
+      <label for="Name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Enter  Name.."
+        formControlName="name"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Name.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name For Dropdown Form is Required
+      </div>
+    </div>
+
+    <!---Name AR-->
+    <div class="form-group">
+      <label for="displayNameAr"> Arabic Name </label>
+      <input
+        type="text"
+        class="form-control"
+        name="displayNameAr"
+        id="displayNameAr"
+        placeholder="Enter Dropdown Form Arabic Name.."
+        formControlName="displayNameAr"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="NameAr.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name with Arabic For Dropdown Form is Required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="displayNameEn">English Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="displayNameEn"
+        id="displayNameEn"
+        placeholder="Enter Dropdown Form Name.."
+        formControlName="displayNameEn"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="NameEn.hasError('required') && form2.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name With English For Dropdown Form is Required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="defaultValue">Default Value</label>
+      <input
+        type="text"
+        class="form-control"
+        name="defaultValue"
+        id="defaultValue"
+        placeholder="Enter Dropdown Form defaultValue.."
+        formControlName="defaultValue"
+      />
+    </div>
+    <div class="d-flex justify-content-center">
+      <button
+        *ngIf="!selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Add
+      </button>
+      <button
+        *ngIf="selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+</p-dialog>

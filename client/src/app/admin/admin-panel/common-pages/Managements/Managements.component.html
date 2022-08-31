@@ -1,0 +1,240 @@
+<div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Mangements</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [value]="listMangement"
+      [rows]="10"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-between overflow-auto">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="showForm(null)"
+          >
+            Add
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Name">
+            Name <p-sortIcon field="Name"></p-sortIcon>
+          </th>
+
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-mangement>
+        <tr>
+          <td>{{ mangement.name }}</td>
+
+          <td class="d-flex gap justify-content-end">
+            <button
+              pButton
+              pRipple
+              (click)="showFormUser(mangement)"
+              icon="pi pi-user"
+              class="p-button-rounded p-button-success p-mr-2"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-info"
+              class="p-button-rounded p-button-info p-mr-2"
+              (click)="showDetails(mangement?.id)"
+            ></button>
+            <button
+              pButton
+              pRipple
+              (click)="showForm(mangement)"
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-warning p-mr-2"
+            ></button>
+            <button
+              pButton
+              pRipple
+              (click)="onDelete(mangement.id)"
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are
+          {{ listMangement ? listMangement.length : 0 }} Mangements.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Mangement Form"
+  [(visible)]="displayForm"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <form [formGroup]="ManegementForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-group">
+      <label for="Name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Enter Mangement Name.."
+        formControlName="name"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Name.hasError('required') && form.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name Mangement is Required
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button
+        *ngIf="!selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Add Mangement
+      </button>
+      <button
+        *ngIf="selected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Update Mangement
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Add User Form"
+  [(visible)]="displayFormUser"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm2()"
+>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit2()" #formUser="ngForm">
+    <!-- -------------------------------- name --------------------------------- -->
+    <div class="form-group">
+      <label for="Name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="Name"
+        id="Name"
+        placeholder="Enter User Name.."
+        formControlName="fullName"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="UserName.hasError('required') && formUser.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Name is Required
+      </div>
+    </div>
+    <!-- ------------------------------email----------------------------------------- -->
+    <div class="form-group">
+      <label for="Email">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        name="Email"
+        id="Email"
+        placeholder="Enter Email Name.."
+        formControlName="email"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="Email.hasError('required') && formUser.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Email is Required
+      </div>
+    </div>
+    <!-- -------------------------------- phone -------------------------------- -->
+    <div class="form-group">
+      <label for="PhoneNumber">Phone Number</label>
+      <input
+        type="text"
+        class="form-control"
+        name="PhoneNumber"
+        id="PhoneNumber"
+        placeholder="Enter PhoneNumber Name.."
+        formControlName="phoneNumber"
+      />
+
+      <!--! error Message --->
+      <div
+        *ngIf="PhoneNumber.hasError('required') && formUser.submitted"
+        class="error-msg p-1 small"
+        role="alert"
+      >
+        <i class="fas fa-times-circle me-2"></i>
+        Phone Number is Required
+      </div>
+    </div>
+    <!-- -------------------------------- role --------------------------------- -->
+    <div class="form-group">
+      <p-dropdown
+        [options]="mangementRoles"
+        formControlName="roleName"
+        optionLabel="appRole.name"
+        [autoDisplayFirst]="false"
+        placeholder="select role"
+        optionValue="appRole.name"
+      ></p-dropdown>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button
+        *ngIf="!userSelected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Add
+      </button>
+      <button
+        *ngIf="userSelected"
+        type="submit"
+        class="btn btn-success mt-3 rounded-pill py-2 px-4"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+</p-dialog>

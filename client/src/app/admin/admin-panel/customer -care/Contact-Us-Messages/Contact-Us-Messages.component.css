@@ -1,0 +1,32 @@
+.avatar {
+  height: 60px;
+  width: 60px;
+  background-color: #efefef;
+  margin: auto;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  text-transform: uppercase;
+  background-size: cover;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+/*
+.avatar::before {
+  width: 107%;
+  height: 107%;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 3px solid #5b59d8;
+} */

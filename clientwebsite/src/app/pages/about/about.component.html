@@ -1,0 +1,20 @@
+<div class="bg-efefef droid-font">
+  <div class="bg-header">
+    <div class="fs-lg-36 fs-24 text-center text-white droid-font">
+      عن الشركة
+    </div>
+  </div>
+
+  <div class="container py-5">
+    <div class="card bg-efefef bg-white border-0">
+      <div class="card-body p-4">
+        <div class="text-b58d2e fs-lg-28">{{ page?.title }}</div>
+
+        <div class="mt-4 lh-lg fs-20">
+          <img [src]="page?.image" class="img-fluid col-lg-6 float-start img" />
+          <div class="d-inline" [innerHtml]="page?.maxDescription"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

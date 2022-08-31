@@ -1,0 +1,11 @@
+<section id="subjects" class="py-5 droid-font">
+  <div class="container">
+    <div class="text-center fs-28 mb-5">
+      <span class="text-b58d2e">موضوعات</span> تهمك
+    </div>
+
+    <div class="row row-cols-md-2 row-cols-1 g-4 ">
+      <app-subject-card *ngFor="let item of list" [data]="item"></app-subject-card>
+    </div>
+  </div>
+</section>

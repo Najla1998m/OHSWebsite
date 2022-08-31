@@ -1,0 +1,116 @@
+<div class="container mb-5">
+  <div class="card border-0 rounded-8 shadow-sm">
+    <div class="card-body p-0">
+      <!-- ------------------------------- header -------------------------------- -->
+      <div
+        class="
+          d-flex
+          flex-wrap
+          justify-content-center justify-content-md-between
+          align-items-center
+          border-bottom
+          gap-3
+        "
+      >
+        <div class="d-flex gap-3">
+          <svg-icon src="assets/images/icons/attachments.svg"></svg-icon>
+          <div>
+            <div class="fs-18 text-black">رفع الشهادات المطلوبة</div>
+            <div>
+              <ul class="mt-2">
+                <li *ngFor="let item of listOfRequiredAttachments">
+                  {{ item?.attachment?.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <form
+              [formGroup]="attachmentsForm"
+              (ngSubmit)="onSubmit()"
+              #form="ngForm"
+            >
+              <div class="d-flex flex-column gap-3">
+                <!-- ------------------------------- upload -------------------------------- -->
+                <div
+                  class="
+                    position-relative
+                    d-flex
+                    px-4
+                    flex-wrap
+                    justify-content-between
+                    align-items-center
+                    dashed-borders
+                  "
+                  id="upload-docs"
+                >
+                  <input
+                    type="file"
+                    #dropFiles
+                    id="dropFiles"
+                    formControlName="files"
+                    (change)="onFilesUploaded($event)"
+                    multiple
+                  />
+                  <svg-icon
+                    src="assets/images/icons/cloud-computing.svg"
+                    svgClass="upload-icon"
+                  ></svg-icon>
+
+                  <div class="fs-18 text-center">
+                    <div>اسحب و أفلت المرفقات هنا</div>
+                    <div>- أو -</div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="btn btn-dark mt-2 py-2 px-4 rounded-3"
+                  >
+                    استعراض
+                  </button>
+                </div>
+
+                <!-- ------------------------------- preview ------------------------------- -->
+                <div class="d-flex flex-column gap-3">
+                  <app-file-card
+                    *ngFor="let item of attachments; let i = index"
+                    [info]="item"
+                  ></app-file-card>
+                </div>
+              </div>
+
+              <button
+                class="btn btn-dark btn py-2-5 w-100 mt-3"
+                type="submit"
+                [disabled]="
+                  !attachmentsForm.valid && model.length < numberOfFiles
+                "
+              >
+                رفع المرفقات
+              </button>
+            </form>
+          </div>
+          <div class="col-md-6 d-none d-md-block">
+            <div class="d-flex flex-column align-items-center gap-3">
+              <div class="fs-lg-22 text-center px-4">
+                هذه الشهادات الإجبارية و سيتم مراجعتها من فريق OHSJOEQ لتفعيل
+                حسابك
+              </div>
+              <div>
+                <img
+                  src="assets/images/bgs/Add files-pana.png"
+                  class="img-fluid"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

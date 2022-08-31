@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19.502" height="19.49" viewBox="0 0 19.502 19.49">
+  <g id="info_1_" data-name="info (1)" transform="translate(-5.999 -6.036)">
+    <g id="LINE_57_" transform="translate(14.998 13.19)">
+      <g id="Group_700" data-name="Group 700" transform="translate(0)">
+        <path id="Path_628" data-name="Path 628" d="M30.74,32.534a.75.75,0,0,1-.75-.75V25.859a.75.75,0,1,1,1.5,0v5.925a.75.75,0,0,1-.75.75Z" transform="translate(-29.99 -25.109)" fill="#fff"/>
+      </g>
+    </g>
+    <g id="POINT_1_" transform="translate(14.998 10.95)">
+      <g id="Group_701" data-name="Group 701" transform="translate(0)">
+        <path id="Path_629" data-name="Path 629" d="M30.74,20.627a.748.748,0,0,1-.529-1.279.772.772,0,0,1,1.058,0,.752.752,0,0,1,.221.533.756.756,0,0,1-.75.75Z" transform="translate(-29.99 -19.136)" fill="#fff"/>
+      </g>
+    </g>
+    <g id="CIRCLE_3_" transform="translate(5.999 6.036)">
+      <g id="Group_702" data-name="Group 702">
+        <path id="Path_630" data-name="Path 630" d="M15.723,25.526a9.674,9.674,0,0,1-2.514-.33,9.811,9.811,0,1,1,2.514.33Zm.047-17.99A8.247,8.247,0,0,0,13.6,23.747a8.187,8.187,0,0,0,2.124.279h0A8.251,8.251,0,0,0,19.435,8.393a8.233,8.233,0,0,0-3.665-.856Z" transform="translate(-5.999 -6.036)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+export enum Roles {
+  'OHS Employee' = 1,
+  'Individual Vendor' = 2,
+  'Company Employee' = 3,
+  'Company Vendor' = 4,
+  'OHS Customer Care' = 5,
+  'OHS Department Manager' = 6,
+  'OHS Delegated Admin' = 7,
+  'Company Supervisor' = 8,
+  'OHS Admin' = 9,
+  'OHS IT' = 10,
+  'Company Admin' = 11,
+  'Company Departement Manager' = 12,
+  'OHS Supervisor' = 13,
+  'Company Delegated Admin' = 14,
+}

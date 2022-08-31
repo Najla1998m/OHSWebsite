@@ -1,0 +1,39 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  height: fit-content;
+ 
+}
+
+.cover-bg {
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  background-position: center;
+  background-size: cover;
+}
+
+// .cover-bg{
+//   z-index: 1;
+// }
+
+.card-body {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  padding: 4ex;
+  color:white;
+  z-index: 1;
+}
+
+.card:hover .cover-bg {
+  transform: scale(1.2);
+}
+
+.btn-second-gold {
+  padding: 1.3ex 4rem;
+}

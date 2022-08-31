@@ -1,0 +1,291 @@
+<div class="mb-5">
+  <div class="border-0 shadow-sm card rounded-8 droid-font">
+    <div class="p-0 card-body">
+      <!-- ------------------------------- header -------------------------------- -->
+      <div
+        class="flex-wrap gap-3 d-flex justify-content-center justify-content-md-between align-items-center border-bottom"
+      >
+        <div class="gap-3 d-flex">
+          <svg-icon src="assets/images/icons/alert2.svg"></svg-icon>
+          <div class="fs-18">جدول استبيانات الموظفين</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="overflow-auto">
+        <table class="table text-nowrap">
+          <thead class="thead-dark">
+            <tr>
+              <th>الخطر</th>
+              <th>النسبة</th>
+              <th>الإجراء</th>
+            </tr>
+          </thead>
+          <tbody class="tbody">
+            <tr *ngFor="let item of pollDetails">
+              <td>
+                {{ item.item?.name }}
+              </td>
+              <td>
+                <p-knob
+                  [min]="0"
+                  [valueColor]="'#D7BE69'"
+                  [max]="100"
+                  [(ngModel)]="item.agreeRate"
+                  [size]="60"
+                  [readonly]="true"
+                ></p-knob>
+              </td>
+              <td>
+                <div class="gap-3 d-flex justify-content-end">
+                  <app-poll-action-card
+                    *ngFor="let action of pollActionsArr; let s = first"
+                    [data]="action"
+                    (click)="onSelected(action, item)"
+                    [disabled]="!s && item.remove"
+                    [selected]="isSelected(action, item)"
+                    (task)="onTaskCreate(action, item)"
+                    (support)="onSupportTaskCreate(action, item)"
+                  ></app-poll-action-card>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--======================================================================-->
+<!-- -------------------------------- task --------------------------------- -->
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#task"
+  #task
+  hidden
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="task"
+  tabindex="-1"
+  aria-labelledby="taskLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 #taskTitle class="modal-title" id="taskLabel"></h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="resetForm()"
+          #close
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="actionForm" (ngSubmit)="onSubmit()" #form="ngForm">
+          <div class="gap-3 d-flex flex-column">
+            <!-- ------------------------------ task name ------------------------------ -->
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="taskName">
+                اسم المهمة</label
+              >
+
+              <div class="form-group col-md-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="taskName"
+                  [formControl]="TaskName"
+                />
+
+                <div
+                  *ngIf="TaskName.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <!-- ----------------------------- assigned to ----------------------------- -->
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="assignedToId">
+                تفويض الي</label
+              >
+
+              <div class="form-group col-md-8">
+                <p-dropdown
+                  [options]="team"
+                  [filter]="true"
+                  optionLabel="displayName"
+                  placeholder="اختر"
+                  [formControl]="AssignedToId"
+                ></p-dropdown>
+
+                <div
+                  *ngIf="AssignedToId.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <!-- --------------------------- Recommendation ---------------------------- -->
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="Recommendation">
+                التوصيات
+              </label>
+
+              <div class="form-group col-md-8">
+                <textarea
+                  class="form-control"
+                  name="Recommendation"
+                  id="Recommendation"
+                  rows="4"
+                  [formControl]="Recommendation"
+                ></textarea>
+                <div
+                  *ngIf="Recommendation.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <!-- --------------------------- task details ---------------------------- -->
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="taskDet">
+                تفاصيل المهمة
+              </label>
+
+              <div class="form-group col-md-8">
+                <textarea
+                  class="form-control"
+                  name="Recommendation"
+                  id="Recommendation"
+                  rows="4"
+                  [formControl]="Description"
+                ></textarea>
+                <div
+                  *ngIf="Description.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <!-- --------------------------- Date ---------------------------- -->
+            <div class="row align-items-start">
+              <label class="col-md-4 text-dark" for="taskDet">
+                التاريخ المستهدف
+              </label>
+
+              <div class="form-group col-md-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  bsDatepicker
+                  #dp="bsDatepicker"
+                  placement="bottom"
+                  [bsConfig]="{
+                    dateInputFormat: 'YYYY-MM-DD',
+                    containerClass: 'theme-orange',
+                    isAnimated: true,
+                    showWeekNumbers: false,
+                    adaptivePosition: true
+                  }"
+                  [formControl]="TargetDate"
+                />
+                <div
+                  *ngIf="TargetDate.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <div class="row align-items-start">
+              <label class="col-md-6 text-dark" for="tasksStatusId">
+                توقيت المهمه</label
+              >
+
+              <div class="form-group col-md-6">
+                <timepicker
+                  dir="ltr"
+                  [formControlName]="'targetTime'"
+                ></timepicker>
+                <div
+                  *ngIf="targetTime?.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+
+            <!-- --------------------------- task details ---------------------------- -->
+            <div *ngIf="!isInternalTask" class="row align-items-start">
+              <label class="col-md-4 text-dark" for="taskDet">
+                توصيات ال OHSJOEQ
+              </label>
+
+              <div class="form-group col-md-8">
+                <textarea
+                  class="form-control"
+                  name="Recommendation"
+                  id="Recommendation"
+                  rows="4"
+                  [formControl]="OhsRec"
+                  readonly
+                ></textarea>
+
+                <div
+                  *ngIf="OhsRec.hasError('required') && form.submitted"
+                  class="p-1 error-msg small"
+                  role="alert"
+                >
+                  <i class="fas fa-times-circle me-2"></i>
+                  مطلوب
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="m-auto mt-4 btn btn-dark rounded-pill d-block w-100"
+          >
+            إنشاء
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="mb-5">
+  <div class="border-0 shadow-sm card rounded-8 droid-font">
+    <div class="p-0 card-body">
+      <!-- ------------------------------- header -------------------------------- -->
+      <div
+        class="flex-wrap gap-3  d-flex justify-content-center justify-content-md-between align-items-center border-bottom"
+      >
+        <div class="gap-3 d-flex">
+          <svg-icon src="assets/images/icons/alert2.svg"></svg-icon>
+          <div class="fs-18">تحديد المخاطر الموجودة</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" #form="ngForm">
+        <div>
+          الرجاء إختيار المخاطر المحتمله في مقر عملك , ثم اضغط
+          <span class="text-b58d2e">إرسال</span>
+        </div>
+
+        <div
+          id="polls"
+          class="mt-2 row g-4 row-cols-lg-6 row-cols-md-4 row-cols-2"
+          formArrayName="polls"
+        >
+          <div *ngFor="let item of pollItems; let i = index">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                [id]="'op' + i"
+                [formControlName]="i"
+              />
+              <label class="form-check-label w-100" [for]="'op' + i">
+                <div class="card h-100 w-100">
+                  <div class="card-body">
+                    <div>
+                      <img
+                        src="assets/images/icons/checked.png"
+                        class="m-auto mb-2 col-6 img-fluid d-none"
+                        alt=""
+                      />
+                      <span>{{ item?.name }}</span>
+                    </div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="!pollForm.valid && form.submitted"
+          class="p-1 error-msg small"
+          role="alert"
+        >
+          <i class="fas fa-times-circle me-2"></i>
+          مطلوب
+        </div>
+
+        <button type="submit" class="m-auto mt-4 d-block btn btn-gold">
+          إرسال الإستبيان
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

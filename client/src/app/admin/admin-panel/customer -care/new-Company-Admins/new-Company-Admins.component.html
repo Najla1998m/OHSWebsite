@@ -1,0 +1,144 @@
+<!-- <div class="card shadow border-0">
+  <div class="card-header">
+    <div class="text-primary font-weight-bold">Companies</div>
+  </div>
+  <div class="card-body">
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="listCompany"
+      [paginator]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+      [globalFilterFields]="['name']"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Logo</th>
+          <th>Name</th>
+
+          <th>Email</th>
+          <th>Phone Number</th>
+
+          <th>City</th>
+          <th></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>
+            <p-columnFilter type="text" field="name"></p-columnFilter>
+          </th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-company>
+        <tr>
+          <td>
+            <div
+              class="d-flex flex-column align-content-center align-items-center"
+            >
+              <div
+                class="stauts active"
+                [style.backgroundImage]="
+                  'url(' +
+                  (company?.logo ? company?.logo : 'assets/images/log.png') +
+                  ')'
+                "
+              ></div>
+            </div>
+          </td>
+          <td>{{ company?.name }}</td>
+          <td>{{ company?.email ? company?.email : "غير متاح" }}</td>
+          <td>
+            {{ company?.phoneNumber ? company?.phoneNumber : "غير متاح" }}
+          </td>
+          <td>
+            {{ company?.city }}
+          </td>
+          <td>
+            <div class="d-flex gap">
+              <button
+                pButton
+                pRipple
+                icon="pi pi-info"
+                class="p-button-rounded p-button-info p-mr-2"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No customers found.</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{ listCompany ? listCompany.length : 0 }} Clients.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div> -->
+
+<div class="card border-0 shadow">
+  <div class="card-body">
+    <div class="row r-gap">
+      <div class="col-12 col-lg-6" *ngFor="let item of listCompany">
+        <div class="card bg-gray shadow-sm rounded-16">
+          <div class="card-body">
+            <!-- ----------------------------------------------------------------------- -->
+            <div class="row">
+              <div class="col-6 col-lg-9">
+                <div class="d-flex gap-5">
+
+                  <p-image [src]=" item?.company.logo ? item?.company.logo  :'assets/images/log.png'" alt="Image"
+                    height="120" width="120" [preview]="true">
+                  </p-image>
+                  <div class="name">
+                    <h5>{{ item?.company?.name }}</h5>
+                    <div class="text-muted">{{ item?.company?.email }}</div>
+                    <div class="d-flex align-items-center gap">
+                      <i class="fas fa-circle mt-1" [ngClass]="{
+                          'text-danger': !item?.isActive,
+                          'text-success': item?.isActive
+                        }" aria-hidden="true"></i>
+                      <span class="m-0">
+                        {{ item?.isActive ? "active" : "inactive" }}
+                        {{item?.isActive}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6  col-lg-3">
+                <button type="button" class="btn btn-outline-primary d-block"
+                  (click)="showDepartments(item?.company?.id)">
+                  Department
+                </button>
+                <button type="button" class="btn btn-outline-warning w-108 my-3"
+                  (click)="showMangers(item?.company?.id)">
+                  Managers
+                </button>
+                <div *ngIf="!item?.isActive ">
+                  <button type="button" class="btn btn-outline-success " (click)="showAttachment(item?.id)">
+                    Attachment
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<div
+  id="container"
+  class="px-2 py-5  d-flex flex-column justify-content-center align-items-center bg h-100 px-sm-0"
+>
+  <div class="px-3 col-lg-4 col-12 col-md-6 droid-font">
+    <div class="py-3 card rounded-16">
+      <div class="px-4 card-body">
+        <div class="text-center text-black fs-lg-30 fs-20 font-w-500">
+          التحقق من حسابك
+        </div>
+        <form [formGroup]="accountForm" (ngSubmit)="onSubmit()" #form="ngForm">
+          <div class="mt-5">
+            <div class="form-group">
+              <input
+                type="email"
+                class="form-control"
+                name="account"
+                id="account"
+                formControlName="email"
+                placeholder="ادخل رقم الجوال/ البريد الالكتروني المسجل لدينا"
+              />
+
+              <div
+                *ngIf="Email.hasError('required') && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                البريد الألكتروني مطلوب
+              </div>
+
+              <div
+                *ngIf="Email.errors?.pattern && form.submitted"
+                class="p-1 error-msg small"
+                role="alert"
+              >
+                <i class="fas fa-times-circle me-2"></i>
+                من فضلك ادخل بريد الالكترونى صحيح
+              </div>
+            </div>
+            <div class="gap-3 mt-4 d-grid">
+              <button class="btn btn-dark py-2-5" type="submit">إرسال</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <a
+      href="tel:+920000000"
+      class="py-1 text-black bg-white btn btn-second-gold"
+    >
+      <div class="gap-3 d-flex align-items-center hover-revers">
+        <svg-icon
+          src="assets/images/icons/phone.svg"
+          svgClass="phone"
+        ></svg-icon>
+        <div class="d-flex flex-column align-items-start">
+          <div class="fs-12 font-w-600">اتصل بنا 24/7</div>
+          <div class="fs-18 font-w-600">{{ site?.companyPhone }}</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>

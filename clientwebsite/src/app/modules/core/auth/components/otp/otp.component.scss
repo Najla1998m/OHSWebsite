@@ -1,0 +1,96 @@
+#container {
+  height: 100vh;
+}
+
+.form-control::placeholder {
+  color: #0000005e;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  #container {
+    height: 90vh;
+  }
+  .col-lg-4 {
+    flex: 0 0 auto;
+    width: 50%;
+  }
+}
+
+@media (min-width: 767px) and (max-width: 768px) {
+  .col-lg-4 {
+    flex: 0 0 auto;
+    width: 65%;
+  }
+
+  #container {
+    height: 89vh;
+  }
+}
+
+@media (max-width: 350px) {
+  #container {
+    margin: 4rem 0;
+  }
+}
+
+.phone {
+  fill: #b58d2e;
+}
+
+.text-black {
+  color: black !important;
+}
+
+.form-check-input[type="radio"] {
+  display: none;
+}
+
+.account-type {
+  background-color: #303030;
+  color: white;
+  font-family: "Droid Arabic Kufi";
+  cursor: pointer;
+}
+
+.account-icon {
+  fill: #d7be69;
+  margin: auto;
+}
+
+@media (max-width: 550px) {
+  .account-icon {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+input[type="radio"]:checked + label .account-type {
+  background-color: #d7be69;
+  .account-icon {
+    fill: white;
+  }
+}
+
+.py-2-5 {
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+}
+
+.modal .form-check {
+  padding: 0 1ex;
+}
+
+.modal .form-check label,
+.modal .form-check label .card {
+  height: 100%;
+}
+
+.digit {
+  width: 45px;
+  height: 45px;
+  padding: 5px;
+}
+
+input {
+  text-align: center;
+}

@@ -1,0 +1,19 @@
+.h-84 {
+  min-height: 84vh;
+}
+
+::ng-deep .p-speeddial-button.p-button.p-button-icon-only .p-button-icon {
+  font-size: medium;
+}
+
+::ng-deep .p-speeddial-button.p-button.p-button-icon-only {
+  width: 40px;
+  height: 40px;
+}
+.row-gap {
+  row-gap: 1.5rem;
+}
+::ng-deep .p-speeddial-direction-right .p-speeddial-list {
+  --item-diff-x: 0px !important;
+  --item-diff-y: 4px;
+}

@@ -1,0 +1,31 @@
+<div class="overflow-visible text-center bg-transparent border-0 shadow card position-relative">
+  <button type="button" class="px-4 btn btn-dark">
+    {{ data.isVisible ? "اشتراك" : "غير متاح حاليا" }}
+  </button>
+  <div class="py-3 card-header bg-d7be69">{{ data.name }}</div>
+  <div class="card-body">
+    <ul class="px-0 list-group">
+      <li *ngFor="let item of data.packageDetails" class="list-group-item">
+        <span *ngIf="item.columnType === type[1]">{{ item.value }}</span>
+        <span *ngIf="item.columnType === type[2]">
+          <svg-icon *ngIf="item.value.toLowerCase() == 'true'" src="assets/images/icons/check.svg"></svg-icon>
+          <svg-icon *ngIf="item.value.toLowerCase() == 'false'" src="assets/images/icons/close.svg"></svg-icon>
+        </span>
+      </li>
+      <li class="list-group-item">
+        <div class="form-group">
+          <label for="empNumber" class="my-2">عدد الموظفين</label>
+          <input type="text" class="form-control" name="empNumber" id="empNumber" [(ngModel)]="val" />
+          <p-slider [(ngModel)]="val" [min]="10" [max]="500"></p-slider>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="pt-3 pb-5 card-footer flex-column bg-d7be69 fs-22">
+    <div>{{ data.pricePerEmployee * val }}<sub class="mx-2">ريال</sub></div>
+    <div class="badge bg-b58d2e">
+      تكلفة الموظف في الشهر
+      {{ (data.pricePerEmployee *30 ) / data.duration | number }} ريال
+    </div>
+  </div>
+</div>

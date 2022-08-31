@@ -1,0 +1,106 @@
+.flip-r {
+  transform: scale(-1);
+}
+
+.flip-l {
+  transform: scale(1);
+}
+
+::ng-deep {
+  html:lang(ar) .flip-r {
+    transform: scale(1);
+  }
+
+  html:lang(ar) .flip-l {
+    transform: scale(-1);
+  }
+}
+
+.flip-r {
+  transform: scale(-1);
+}
+
+.flip-l {
+  transform: scale(1);
+}
+
+::ng-deep {
+  html:lang(ar) .flip-r {
+    transform: scale(1);
+  }
+
+  html:lang(ar) .flip-l {
+    transform: scale(-1);
+  }
+}
+
+::ng-deep {
+  .slide {
+    height: 100%;
+  }
+}
+
+.slider {
+  scroll-behavior: smooth !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  scroll-behavior: smooth;
+}
+
+.arrow-button {
+  padding: 1.5ex;
+}
+
+.nav-tabs {
+  gap: 12px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  color: black;
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom: 2px solid #d7be69;
+  color: #d7be69;
+}
+
+.slide .active * {
+  svg-icon {
+    fill: #b58d2e !important;
+  }
+
+  color: #b58d2e !important;
+  background-color: #fff8e1;
+}
+
+.slide .active {
+  border-color: #d7be69;
+  position: relative;
+}
+
+.slide .active::before {
+  position: absolute;
+  content: "";
+  width: 25px;
+  height: 25px;
+  background: url("../../../../../assets/images/icons/checked.svg");
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 3px;
+}
+
+.badge {
+  background-color: #303030;
+}

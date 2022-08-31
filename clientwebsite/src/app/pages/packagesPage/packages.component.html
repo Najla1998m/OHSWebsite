@@ -1,0 +1,83 @@
+<div class="bg-efefef droid-font h-100">
+  <div class="bg-header">
+    <div class="text-center text-white fs-lg-36 fs-24 droid-font">الباقات</div>
+  </div>
+
+  <div class="container my-5">
+    <div class="p-4 pb-5 border-0 card rounded-8">
+      <div class="card-body">
+        <div class="text-center fs-28">
+          مقارنة خطط وأسعار باقات الاشتراك للعملاء
+        </div>
+
+        <div
+          class="gap-3 p-3 my-3  align-items-center d-flex justify-content-between basic-package-bacckground"
+        >
+          <div class="fs-20">او طلب عرض تجريبي</div>
+          <div>
+            <a
+              name=""
+              id=""
+              class="btn btn-gold"
+              role="button"
+              [routerLink]="['/auth/register/company-owner']"
+              >من هنا</a
+            >
+          </div>
+        </div>
+        <div class="row row-cols-4">
+          <!-- ------------------------------ Criteria ------------------------------- -->
+          <div class="mt-custom">
+            <div class="list-group">
+              <a
+                class="list-group-item list-group-item-action"
+                *ngFor="let item of packageCriteria"
+              >
+                <div class="gap-3 d-flex align-items-center">
+                  <svg-icon
+                    src="assets/images/icons/info.svg"
+                    svgClass="icon"
+                  ></svg-icon>
+                  <span class="text-black text-nowrap">{{ item.name }}</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- ------------------------------ packages ------------------------------- -->
+          <app-package-card
+            [data]="item"
+            *ngFor="let item of packages; let i = index"
+          ></app-package-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-5 my-5 d-flex justify-content-center">
+      <div class="gap-3 d-none d-lg-flex align-items-center">
+        <svg-icon src="assets/images/icons/help.svg"></svg-icon>
+        <span
+          >هل مازالت تحتاج استفسارت او تساؤلات بخصوص الباقات يمكنكك التواصل
+          معنا</span
+        >
+      </div>
+      <div>
+        <a
+          href="tel:+920000000"
+          class="py-2 text-black bg-white btn btn-second-gold"
+        >
+          <div class="gap-3 d-flex align-items-center hover-revers">
+            <svg-icon
+              src="assets/images/icons/phone.svg"
+              svgClass="phone"
+            ></svg-icon>
+            <div class="d-flex flex-column align-items-start">
+              <div class="fs-12 font-w-600">اتصل بنا 24/7</div>
+              <div class="fs-18 font-w-600">{{ siteInfo.companyPhone }}</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
